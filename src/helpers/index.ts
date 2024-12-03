@@ -6,8 +6,7 @@ export const checkJSONchecker = (str: string) => {
   try {
     JSON.parse(str)
     return true
-  } catch (e: any) {
-    console.log(e)
+  } catch {
     return false
   }
 }
