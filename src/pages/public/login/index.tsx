@@ -32,7 +32,7 @@ export default function LoginPage() {
       if (response.status === HttpStatusCode.Ok) {
         message.success('Đăng nhập thành công')
       } else {
-        message.error('Đăng nhập thất bại')
+        message.error('Đăng nhập thất bại!')
       }
     } catch (error: any) {
       message.error(error.message)
