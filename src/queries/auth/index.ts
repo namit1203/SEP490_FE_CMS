@@ -3,7 +3,7 @@ import { HttpStatusCode } from '../../constants/httpStatusCode.enum'
 import { useAuth } from '../../context/AuthContext'
 import authApiRequest from '../../services/auth'
 import { TLoginAuth } from '../../types/auth'
-import { useCookieServices } from '../../utils/cookies/cookieServices'
+import { useLocalStorage } from '../../utils/localStorage/localStorageService'
 
 export const useLoginMutation = (options?: UseMutationOptions<any, unknown, TLoginAuth, unknown>) => {
   const { setIsAuthenticated } = useAuth()
@@ -13,7 +13,7 @@ export const useLoginMutation = (options?: UseMutationOptions<any, unknown, TLog
     onSuccess(data) {
       if (data.status === HttpStatusCode.Ok) {
         setIsAuthenticated(true)
-        useCookieServices.setCookie('token', data.data, 7)
+        useLocalStorage.setLocalStorageData('token', data.data)
       }
     }
   })
