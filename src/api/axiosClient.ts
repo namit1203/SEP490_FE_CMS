@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, Method } from 'axios'
+import { useLocalStorage } from '../utils/localStorage/localStorageService'
 
 interface ApiClientConfig {
   method?: Method
@@ -55,6 +56,14 @@ export class ApiClient {
     } catch (error: any) {
       if (error.response) {
         // Axios specific error handling
+
+        const { status } = error.response
+
+        // Check for 401 Unauthorized status
+        if (status === 401) {
+          useLocalStorage.removeLocalStorageData('token')
+        }
+
         return error.response.data
       }
       // Other errors

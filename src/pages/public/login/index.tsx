@@ -6,6 +6,7 @@ import LoginForm from '../../../components/auth/LoginForm'
 import getStyles from '../../../components/auth/styles'
 import { HttpStatusCode } from '../../../constants/httpStatusCode.enum'
 import { useLoginMutation } from '../../../queries/auth'
+import { useNavigate } from 'react-router-dom'
 
 const { useToken } = theme
 const { useBreakpoint } = Grid
@@ -16,6 +17,8 @@ export default function LoginPage() {
   const styles = getStyles(token, screens)
   const [loading, setLoading] = useState(false)
   const loginMutation = useLoginMutation()
+
+  const navigate = useNavigate()
 
   const onFinish = async (values: any) => {
     setLoading(true)
@@ -31,8 +34,9 @@ export default function LoginPage() {
       const response = await loginMutation.mutateAsync(updatedData)
       if (response.status === HttpStatusCode.Ok) {
         message.success('Đăng nhập thành công')
+        navigate('/')
       } else {
-        message.error('Đăng nhập thất bại!')
+        message.error('Đăng nhập thất bại')
       }
     } catch (error: any) {
       message.error(error.message)
