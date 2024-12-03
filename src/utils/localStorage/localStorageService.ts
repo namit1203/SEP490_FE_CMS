@@ -1,4 +1,4 @@
-import { checkJSONchecker } from "@/helpers"
+import { checkJSONchecker } from '../../helpers/index'
 
 export class useLocalStorage {
   static setLocalStorageData(key: string, value: any) {
