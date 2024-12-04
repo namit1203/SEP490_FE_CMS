@@ -4,6 +4,7 @@ import CostTypePage from './pages/private/CostType'
 import DriverPage from './pages/private/Driver'
 import FixedCostPage from './pages/private/FixedCost'
 import PromotionPage from './pages/private/Promotion'
+import RequestPage from './pages/private/Request'
 import TripsPages from './pages/private/trips'
 import UserProfilePage from './pages/private/UserProfile'
 import VehiclesPage from './pages/private/Vehicles'
@@ -37,6 +38,10 @@ export const routesConfig = [
       {
         path: '/fixed-cost',
         element: <FixedCostPage />
+      },
+      {
+        path: '/request',
+        element: <RequestPage />
       },
       {
         path: '/user-profile',
