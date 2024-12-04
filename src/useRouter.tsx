@@ -2,6 +2,9 @@ import { useRoutes } from 'react-router-dom'
 import LoginPage from './pages/public/login'
 import TripsPages from './pages/private/trips'
 import PrivateLayout from './pages/private'
+import UserProfilePage from './pages/private/UserProfile'
+import VehiclesPage from './pages/private/Vehicles'
+import PromotionPage from './pages/private/Promotion'
 
 export const routesConfig = [
   {
@@ -11,6 +14,18 @@ export const routesConfig = [
       {
         path: '/trips',
         element: <TripsPages />
+      },
+      {
+        path: '/vehicles',
+        element: <VehiclesPage />
+      },
+      {
+        path: '/promotion',
+        element: <PromotionPage />
+      },
+      {
+        path: '/user-profile',
+        element: <UserProfilePage />
       }
     ]
   },

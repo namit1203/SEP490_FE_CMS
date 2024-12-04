@@ -1,17 +1,19 @@
-import React from 'react'
-import { Layout, Menu, Badge } from 'antd'
 import {
-  DashboardOutlined,
   AppstoreOutlined,
-  SettingOutlined,
   BarChartOutlined,
+  CarOutlined,
+  DashboardOutlined,
   FileTextOutlined,
+  GiftOutlined,
+  SettingOutlined,
   ToolOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
+import { Badge, Layout, Menu } from 'antd'
+import React from 'react'
 
-import logo from '../../assets/logo.png'
 import { Link } from 'react-router-dom'
+import logo from '../../assets/logo.png'
 
 interface SidebarProps {
   collapsed: boolean
@@ -30,6 +32,16 @@ const items: MenuProps['items'] = [
         key: 'trips',
         icon: <DashboardOutlined />,
         label: <Link to='/trips'>Trips</Link> // Link added
+      },
+      {
+        key: 'vehicles',
+        icon: <CarOutlined />,
+        label: <Link to='/vehicles'>Vehicles</Link> // Link added
+      },
+      {
+        key: 'promotion',
+        icon: <GiftOutlined />,
+        label: <Link to='/promotion'>Promotions</Link> // Link added
       }
     ]
   },

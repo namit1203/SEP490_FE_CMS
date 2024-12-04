@@ -32,8 +32,10 @@ export class ApiClient {
 
   private getHeaders(config: ApiClientConfig): Record<string, string> {
     const headers: Record<string, string> = { ...this.headers }
-    if (config.token) {
-      headers.Authorization = `Bearer ${config.token}`
+    const token = useLocalStorage.getLocalStorageData('token')
+
+    if (token || config.token) {
+      headers.Authorization = `Bearer ${token || config.token}`
     }
     return headers
   }

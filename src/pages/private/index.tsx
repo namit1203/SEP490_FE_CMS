@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Breadcrumb, Button, Layout, theme } from 'antd'
+import { Breadcrumb, Layout, theme } from 'antd'
 import Sidebar from '../../layout/Sidebar'
 import { Outlet, useLocation } from 'react-router-dom'
 import { routesConfig } from '../../useRouter'
+import HeaderLayout from '../../layout/Header'
 
-const { Header, Content, Footer } = Layout
+const { Content, Footer } = Layout
 
 const PrivateLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false)
@@ -23,18 +23,7 @@ const PrivateLayout: React.FC = () => {
     <Layout style={{ minHeight: '100vh' }}>
       <Sidebar collapsed={collapsed}></Sidebar>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          <Button
-            type='text'
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64
-            }}
-          />
-        </Header>
+        <HeaderLayout collapsed={collapsed} setCollapsed={setCollapsed} />
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumb style={{ margin: '16px 0' }} items={breadcrumbItems} />
           <div

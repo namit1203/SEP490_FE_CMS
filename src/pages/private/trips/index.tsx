@@ -6,27 +6,38 @@ import { useQueryTrips } from '../../../queries/trip'
 interface DataType {
   key: string
   name: string
-  description: string
+  startTime: number
   price: number
-  tags: string[]
+  status: boolean
 }
 
 const columns: TableProps<DataType>['columns'] = [
   {
-    title: 'Name',
+    title: 'Tên chuyến đi',
     dataIndex: 'name',
     key: 'name',
-    render: (text) => <a>{text}</a>
+    render: (text) => <a>{text}</a>,
+    width: '25%'
   },
   {
-    title: 'Description',
-    dataIndex: 'description',
-    key: 'description'
+    title: 'Thời gian khởi hành',
+    dataIndex: 'startTime',
+    key: 'startTime',
+    width: '25%'
   },
   {
-    title: 'Price',
+    title: 'Giá vé',
     dataIndex: 'price',
-    key: 'price'
+    key: 'price',
+    sorter: (a, b) => a.price - b.price,
+    width: '20%'
+  },
+  {
+    title: 'Trạng thái',
+    dataIndex: 'status',
+    key: 'status',
+    render: (status) => <p>{status === true ? 'Khả dụng' : 'Không khả dụng'}</p>,
+    width: '20%'
   },
   {
     title: 'Action',
