@@ -7,6 +7,7 @@ import {
   FileTextOutlined,
   GiftOutlined,
   SettingOutlined,
+  ShoppingFilled,
   ToolOutlined,
   TruckFilled,
   UserOutlined
@@ -60,6 +61,11 @@ const items: MenuProps['items'] = [
         key: 'fixed-cost',
         icon: <TruckFilled />,
         label: <Link to='/fixed-cost'>Fixed Cost</Link> // Link added
+      },
+      {
+        key: 'request',
+        icon: <ShoppingFilled />,
+        label: <Link to='/request'>Request</Link> // Link added
       }
     ]
   },
