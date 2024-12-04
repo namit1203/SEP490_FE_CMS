@@ -1,42 +1,44 @@
 import type { TableProps } from 'antd'
 import { Button, Popconfirm, Space, Table } from 'antd'
 import React from 'react'
-import { useQueryTrips } from '../../../queries/trip'
+import { formatTime } from '../../../helpers'
+import { useQueryLossCost } from '../../../queries/fixed-cost'
 
 interface DataType {
   key: string
-  name: string
-  startTime: number
+  description: string
+  licensePlate: string
   price: number
-  status: boolean
+  dateIncurred: string
 }
 
 const columns: TableProps<DataType>['columns'] = [
   {
-    title: 'Tên chuyến đi',
-    dataIndex: 'name',
-    key: 'name',
+    title: 'Tên chi phí',
+    dataIndex: 'description',
+    key: 'description',
     render: (text) => <a>{text}</a>,
     width: '25%'
   },
   {
-    title: 'Thời gian khởi hành',
-    dataIndex: 'startTime',
-    key: 'startTime',
+    title: 'Biển số xe',
+    dataIndex: 'licensePlate',
+    key: 'licensePlate',
     width: '25%'
   },
   {
-    title: 'Giá vé',
+    title: 'Chi phí',
     dataIndex: 'price',
     key: 'price',
     sorter: (a, b) => a.price - b.price,
     width: '20%'
   },
   {
-    title: 'Trạng thái',
-    dataIndex: 'status',
-    key: 'status',
-    render: (status) => <p>{status === true ? 'Khả dụng' : 'Không khả dụng'}</p>,
+    title: 'Ngày phát sinh',
+    dataIndex: 'dateIncurred',
+    key: 'dateIncurred',
+    sorter: (a, b) => Date.parse(a.dateIncurred) - Date.parse(b.dateIncurred),
+    render: (date) => <span>{formatTime(date)}</span>,
     width: '20%'
   },
   {
@@ -55,8 +57,8 @@ const columns: TableProps<DataType>['columns'] = [
   }
 ]
 
-const TripPage: React.FC = () => {
-  const { data } = useQueryTrips()
+const FixedCostPage: React.FC = () => {
+  const { data } = useQueryLossCost()
 
   // Add `key` to each record if not present
   const dataSource = data?.map((item: any) => ({
@@ -66,4 +68,4 @@ const TripPage: React.FC = () => {
 
   return <Table<DataType> columns={columns} dataSource={dataSource} />
 }
-export default TripPage
+export default FixedCostPage

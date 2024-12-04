@@ -1,43 +1,38 @@
 import type { TableProps } from 'antd'
 import { Button, Popconfirm, Space, Table } from 'antd'
 import React from 'react'
-import { useQueryTrips } from '../../../queries/trip'
+import { formatDate } from '../../../helpers'
+import { useQueryCostType } from '../../../queries/cost-type'
 
 interface DataType {
   key: string
-  name: string
-  startTime: number
-  price: number
+  description: string
+  createdAt: number
+  updateAt: number
   status: boolean
 }
 
 const columns: TableProps<DataType>['columns'] = [
   {
-    title: 'Tên chuyến đi',
-    dataIndex: 'name',
-    key: 'name',
+    title: 'Loại chi phí',
+    dataIndex: 'description',
+    key: 'description',
     render: (text) => <a>{text}</a>,
+    width: '30%'
+  },
+  {
+    title: 'Thời gian tạo',
+    dataIndex: 'createdAt',
+    key: 'createdAt',
+    render: (date) => <span>{formatDate(date)}</span>,
+    width: '30%'
+  },
+  {
+    title: 'Thời gian cập nhật',
+    dataIndex: 'updateAt',
+    key: 'updateAt',
+    render: (date) => <span>{formatDate(date)}</span>,
     width: '25%'
-  },
-  {
-    title: 'Thời gian khởi hành',
-    dataIndex: 'startTime',
-    key: 'startTime',
-    width: '25%'
-  },
-  {
-    title: 'Giá vé',
-    dataIndex: 'price',
-    key: 'price',
-    sorter: (a, b) => a.price - b.price,
-    width: '20%'
-  },
-  {
-    title: 'Trạng thái',
-    dataIndex: 'status',
-    key: 'status',
-    render: (status) => <p>{status === true ? 'Khả dụng' : 'Không khả dụng'}</p>,
-    width: '20%'
   },
   {
     title: 'Action',
@@ -55,8 +50,8 @@ const columns: TableProps<DataType>['columns'] = [
   }
 ]
 
-const TripPage: React.FC = () => {
-  const { data } = useQueryTrips()
+const CostTypePage: React.FC = () => {
+  const { data } = useQueryCostType()
 
   // Add `key` to each record if not present
   const dataSource = data?.map((item: any) => ({
@@ -66,4 +61,4 @@ const TripPage: React.FC = () => {
 
   return <Table<DataType> columns={columns} dataSource={dataSource} />
 }
-export default TripPage
+export default CostTypePage
