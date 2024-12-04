@@ -1,4 +1,4 @@
-import { Space, Table, TableProps } from 'antd'
+import { Button, Popconfirm, Space, Table, TableProps } from 'antd'
 import React from 'react'
 import { useQueryPromotion } from '../../../queries/promotions'
 
@@ -44,8 +44,12 @@ const columns: TableProps<DataType>['columns'] = [
     key: 'action',
     render: () => (
       <Space size='middle'>
-        <a>Edit</a>
-        <a>Delete</a>
+        <Button type='primary'>Edit</Button>
+        <Popconfirm title='Are you sure to delete this item?' okText='Yes' cancelText='No'>
+          <Button type='primary' danger>
+            Delete
+          </Button>
+        </Popconfirm>
       </Space>
     )
   }
