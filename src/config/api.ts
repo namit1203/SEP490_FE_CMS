@@ -35,6 +35,11 @@ export const APP_API_ENDPOINT = Object.freeze({
     DELETE_COST_TYPE: ({ id }: { id: string | number | null }) => `/api/LossCostType/deleteLossCostType/${id}`,
     UPDATE_COST_TYPE: ({ id }: { id: string | number | null }) => `/api/LossCostType/updateLossCostType/${id}`
   },
+  REQUEST: {
+    GET_REQUEST: '/api/Request',
+    REQUEST_DETAILS: ({ id }: { id: string | number | null }) => `/api/Request/${id}`,
+    ACCEPT_CANCLE_REQUEST: ({ id }: { id: string | number | null }) => `/api/Request/acceptCancleTicket/${id}`
+  },
   USER_PROFILE: {
     GET_DATA: '/api/Auth/userProfile'
   }
