@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { Breadcrumb, Layout, theme } from 'antd'
 import Sidebar from '../../layout/Sidebar'
 import { Outlet, useLocation } from 'react-router-dom'
-import { routesConfig } from '../../useRouter'
 import HeaderLayout from '../../layout/Header'
+import { routesConfig } from '../../useRouter'
 
 const { Content, Footer } = Layout
 
@@ -12,12 +12,31 @@ const PrivateLayout: React.FC = () => {
   const {
     token: { colorBgContainer }
   } = theme.useToken()
-
   const location = useLocation()
-  const childrenOfRootPath = routesConfig[0]?.children?.map((child) => child.path) || []
-  const isChildRoute = childrenOfRootPath.some((path) => location.pathname.startsWith(path))
 
-  const breadcrumbItems = [{ title: 'User' }, { title: 'Bill' }]
+  // Helper functions
+  const getChildrenOfRootPath = () => {
+    return routesConfig[0]?.children?.map((child) => child.path) || []
+  }
+
+  const isChildRoute = () => {
+    const childrenPaths = getChildrenOfRootPath()
+    return childrenPaths.some((path) => location.pathname.startsWith(path))
+  }
+
+  const getBreadcrumbItems = () => {
+    const baseBreadcrumb = [{ title: 'Dashboard' }]
+    const pathSegments = location.pathname.split('/').filter((segment) => segment)
+
+    const dynamicBreadcrumbs = pathSegments.map((segment) => ({
+      title: segment.charAt(0).toUpperCase() + segment.slice(1)
+    }))
+
+    return [...baseBreadcrumb, ...dynamicBreadcrumbs]
+  }
+
+  // Rendered items
+  const breadcrumbItems = getBreadcrumbItems()
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -33,7 +52,7 @@ const PrivateLayout: React.FC = () => {
               background: colorBgContainer
             }}
           >
-            {isChildRoute ? <Outlet /> : <p>Private Layout</p>}
+            {isChildRoute() ? <Outlet /> : <p>Private Layout</p>}
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>VeXeRe CMS ©{new Date().getFullYear()}</Footer>
