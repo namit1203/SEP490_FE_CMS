@@ -1,0 +1,8 @@
+.header-test{
+    display: flex;
+    align-items: center;
+}
+.header-test .avatar{
+    margin-left:auto;
+    margin-right:25px;
+}
