@@ -9,15 +9,15 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ allowedRoles, children }) => {
   const token = useLocalStorage.getLocalStorageData('token')
   const user = {
-    role: 'Staff' //Admin,Staff ,VehicleOwner,User
+    role: 'Staff' //Admin,Staff,VehicleOwner,User
   }
 
-  if (!token) {
+  if (!token && window.location.pathname !== '/login') {
     return <Navigate to='/login' />
   }
 
-  if (!allowedRoles.includes(user.role)) {
-    return <Navigate to='/unauthorized' replace />
+  if (token && !allowedRoles.includes(user.role)) {
+    return <Navigate to='/unauthorized' />
   }
 
   return <>{children}</>

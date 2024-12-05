@@ -16,108 +16,43 @@ import UserProfilePage from './pages/private/UserProfile'
 import VehiclesPage from './pages/private/Vehicles'
 import LoginPage from './pages/public/login'
 
+const staffRoutes = [
+  { path: '/trips', component: <TripsPages />, allowedRoles: ['Staff'] },
+  { path: '/vehicles', component: <VehiclesPage />, allowedRoles: ['Staff'] },
+  { path: '/promotion', component: <PromotionPage />, allowedRoles: ['Staff'] },
+  { path: '/driver', component: <DriverPage />, allowedRoles: ['Staff'] },
+  { path: '/cost-type', component: <CostTypePage />, allowedRoles: ['Staff'] },
+  { path: '/fixed-cost', component: <FixedCostPage />, allowedRoles: ['Staff'] },
+  { path: '/request', component: <RequestPage />, allowedRoles: ['Staff'] },
+  { path: '/ticket', component: <TicketPage />, allowedRoles: ['Staff'] },
+  { path: '/reviews', component: <ReviewsPage />, allowedRoles: ['Staff'] },
+  { path: '/user-profile', component: <UserProfilePage />, allowedRoles: ['Admin', 'Staff', 'VehicleOwner', 'User'] }
+]
+
+const adminRoutes = [
+  { path: '/account', component: <AccountPage />, allowedRoles: ['Admin'] },
+  { path: '/role', component: <RolePage />, allowedRoles: ['Admin'] }
+]
+
+const routeGenerator = (routes: { path: string; component: React.ReactNode; allowedRoles: string[] }[]) =>
+  routes.map((route) => ({
+    path: route.path,
+    element: <PrivateRoute allowedRoles={route.allowedRoles}>{route.component}</PrivateRoute>
+  }))
+
 export const routesConfig = [
   {
     path: '/',
     element: <PrivateLayout />,
-    children: [
-      {
-        path: '/trips',
-        element: (
-          <PrivateRoute allowedRoles={['Staff']}>
-            <TripsPages />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/vehicles',
-        element: (
-          <PrivateRoute allowedRoles={['Staff']}>
-            <VehiclesPage />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/promotion',
-        element: (
-          <PrivateRoute allowedRoles={['Staff']}>
-            <PromotionPage />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/driver',
-        element: (
-          <PrivateRoute allowedRoles={['Staff']}>
-            <DriverPage />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/cost-type',
-        element: (
-          <PrivateRoute allowedRoles={['Staff']}>
-            <CostTypePage />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/fixed-cost',
-        element: (
-          <PrivateRoute allowedRoles={['Staff']}>
-            <FixedCostPage />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/request',
-        element: (
-          <PrivateRoute allowedRoles={['Staff']}>
-            <RequestPage />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/ticket',
-        element: (
-          <PrivateRoute allowedRoles={['Staff']}>
-            <TicketPage />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/reviews',
-        element: (
-          <PrivateRoute allowedRoles={['Staff']}>
-            <ReviewsPage />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/account',
-        element: (
-          <PrivateRoute allowedRoles={['Admin']}>
-            <AccountPage />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/role',
-        element: (
-          <PrivateRoute allowedRoles={['Admin']}>
-            <RolePage />
-          </PrivateRoute>
-        )
-      },
-      {
-        path: '/user-profile',
-        element: <UserProfilePage />
-      }
-    ]
+    children: [...routeGenerator(staffRoutes), ...routeGenerator(adminRoutes)]
   },
   {
     path: '/login',
-    element: <LoginPage />
+    element: (
+      <PrivateRoute allowedRoles={[]}>
+        <LoginPage />
+      </PrivateRoute>
+    )
   },
   {
     path: '/unauthorized',
@@ -126,6 +61,6 @@ export const routesConfig = [
 ]
 
 export default function useRouteElements() {
-  const routeElements = useRoutes(routesConfig) // thêm các router vào đây
+  const routeElements = useRoutes(routesConfig)
   return routeElements
 }
