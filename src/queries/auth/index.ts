@@ -19,3 +19,17 @@ export const useLoginMutation = (options?: UseMutationOptions<any, unknown, TLog
     }
   })
 }
+export const useLoginDriverMutation = (options?: UseMutationOptions<any, unknown, TLoginAuth, unknown>) => {
+  const { setIsAuthenticated } = useAuth()
+  return useMutation({
+    ...options,
+    mutationFn: (body: Omit<TLoginAuth, 'login'>) => authApiRequest.LoginDriver({ body }),
+    onSuccess(data) {
+      if (data.status === HttpStatusCode.Ok) {
+        setIsAuthenticated(true)
+        useLocalStorage.setLocalStorageData('token', data.data.token)
+        useLocalStorage.setLocalStorageData('role', data.data.role)
+      }
+    }
+  })
+}

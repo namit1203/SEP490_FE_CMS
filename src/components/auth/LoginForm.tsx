@@ -1,10 +1,7 @@
 import { CarOutlined, LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Form, Input, Switch } from 'antd'
-import { useState } from 'react'
 
-const LoginForm = ({ onFinish, styles, loading }: any) => {
-  const [isDriver, setIsDriver] = useState(false)
-
+const LoginForm = ({ onFinish, styles, loading, isDriver, setIsDriver }: any) => {
   const handleToggle = (checked: boolean) => {
     setIsDriver(checked)
   }
