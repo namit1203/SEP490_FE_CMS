@@ -22,6 +22,7 @@ import React from 'react'
 
 import { Link } from 'react-router-dom'
 import logo from '../../assets/logo.png'
+import { useLocalStorage } from '../../utils/localStorage/localStorageService'
 
 interface SidebarProps {
   collapsed: boolean
@@ -29,6 +30,7 @@ interface SidebarProps {
 
 const { Sider } = Layout
 
+const role = useLocalStorage.getLocalStorageData('role')
 // Define menu items
 const items: MenuProps['items'] = [
   {
@@ -82,12 +84,12 @@ const items: MenuProps['items'] = [
         label: <Link to='/reviews'>Reviews</Link> // Link added
       },
       {
-        key: 'Account',
+        key: 'account',
         icon: <UserSwitchOutlined />,
         label: <Link to='/account'>Account</Link> // Link added
       },
       {
-        key: 'Role',
+        key: 'role',
         icon: <UnlockFilled />,
         label: <Link to='/role'>Role</Link> // Link added
       }
@@ -172,10 +174,30 @@ const items: MenuProps['items'] = [
   }
 ]
 
+const allowAdminRoute = ['account', 'role']
+
+const filteredItems = items
+  .map((group: any) => ({
+    ...group,
+    children: group.children?.filter((item: any) => {
+      if (role === 'Admin') {
+        // Admin chỉ thấy account,role
+        return allowAdminRoute.includes(item.key)
+      } else if (role === 'Staff') {
+        // Staff thấy tất cả trừ account,role
+        return !allowAdminRoute.includes(item.key)
+      }
+      // Nếu không phải admin hay staff, không hiển thị gì
+      return false
+    })
+  }))
+  .filter((group) => group.children?.length > 0) // Loại nhóm không có mục con
+
 const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   return (
     <Sider trigger={null} collapsible collapsed={collapsed} width={250}>
-      <div
+      <Link
+        to='/'
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -186,10 +208,10 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         }}
       >
         <img src={logo} alt='logo' />
-      </div>
+      </Link>
       <Menu
         mode='inline'
-        items={items}
+        items={filteredItems}
         defaultSelectedKeys={['dashboard']}
         style={{
           height: '100%',

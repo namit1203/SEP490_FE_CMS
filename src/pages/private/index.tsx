@@ -39,7 +39,7 @@ const PrivateLayout: React.FC = () => {
   const breadcrumbItems = getBreadcrumbItems()
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ display: 'flex'}}>
       <Sidebar collapsed={collapsed}></Sidebar>
       <Layout>
         <HeaderLayout collapsed={collapsed} setCollapsed={setCollapsed} />
