@@ -181,10 +181,10 @@ const filteredItems = items
     ...group,
     children: group.children?.filter((item: any) => {
       if (role === 'Admin') {
-        // Admin chỉ thấy trips, vehicles, promotion
+        // Admin chỉ thấy account,role
         return allowAdminRoute.includes(item.key)
       } else if (role === 'Staff') {
-        // Staff thấy tất cả trừ trips, vehicles, promotion
+        // Staff thấy tất cả trừ account,role
         return !allowAdminRoute.includes(item.key)
       }
       // Nếu không phải admin hay staff, không hiển thị gì
@@ -196,7 +196,8 @@ const filteredItems = items
 const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   return (
     <Sider trigger={null} collapsible collapsed={collapsed} width={250}>
-      <div
+      <Link
+        to='/'
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -207,7 +208,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         }}
       >
         <img src={logo} alt='logo' />
-      </div>
+      </Link>
       <Menu
         mode='inline'
         items={filteredItems}

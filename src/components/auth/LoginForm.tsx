@@ -35,7 +35,7 @@ const LoginForm = ({ onFinish, styles, loading, isDriver, setIsDriver }: any) =>
           }
         ]}
       >
-        <Input prefix={<UserOutlined />} placeholder={isDriver ? 'Tài xế tài khoản' : 'Người dùng tài khoản'} />
+        <Input prefix={<UserOutlined />} placeholder={isDriver ? 'Tài khoản tài xế' : 'Tài khoản người dùng'} />
       </Form.Item>
 
       <Form.Item
