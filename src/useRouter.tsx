@@ -1,5 +1,5 @@
 import { useRoutes } from 'react-router-dom'
-import PrivateRoute from './components/PrivateRoute'
+import PrivateRoute from './middleware'
 import PrivateLayout from './pages/private'
 import AccountPage from './pages/private/Account'
 import CostTypePage from './pages/private/CostType'

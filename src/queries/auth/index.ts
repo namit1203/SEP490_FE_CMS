@@ -13,7 +13,8 @@ export const useLoginMutation = (options?: UseMutationOptions<any, unknown, TLog
     onSuccess(data) {
       if (data.status === HttpStatusCode.Ok) {
         setIsAuthenticated(true)
-        useLocalStorage.setLocalStorageData('token', data.data)
+        useLocalStorage.setLocalStorageData('token', data.data.token)
+        useLocalStorage.setLocalStorageData('role', data.data.role)
       }
     }
   })

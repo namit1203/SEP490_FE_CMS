@@ -63,7 +63,7 @@ const FixedCostPage: React.FC = () => {
   // Add `key` to each record if not present
   const dataSource = data?.map((item: any) => ({
     ...item,
-    key: item.id || item.someUniqueField
+    key: item.id || `${item.description}-${item.licensePlate}-${item.dateIncurred}`
   }))
 
   return <Table<DataType> columns={columns} dataSource={dataSource} />
