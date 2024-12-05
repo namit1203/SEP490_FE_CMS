@@ -8,9 +8,13 @@ import {
   GiftOutlined,
   SettingOutlined,
   ShoppingFilled,
+  StarFilled,
+  SwitcherFilled,
   ToolOutlined,
   TruckFilled,
-  UserOutlined
+  UnlockFilled,
+  UserOutlined,
+  UserSwitchOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Badge, Layout, Menu } from 'antd'
@@ -66,6 +70,26 @@ const items: MenuProps['items'] = [
         key: 'request',
         icon: <ShoppingFilled />,
         label: <Link to='/request'>Request</Link> // Link added
+      },
+      {
+        key: 'ticket',
+        icon: <SwitcherFilled />,
+        label: <Link to='/ticket'>Ticket</Link> // Link added
+      },
+      {
+        key: 'reviews',
+        icon: <StarFilled />,
+        label: <Link to='/reviews'>Reviews</Link> // Link added
+      },
+      {
+        key: 'Account',
+        icon: <UserSwitchOutlined />,
+        label: <Link to='/account'>Account</Link> // Link added
+      },
+      {
+        key: 'Role',
+        icon: <UnlockFilled />,
+        label: <Link to='/role'>Role</Link> // Link added
       }
     ]
   },
