@@ -1,6 +1,7 @@
 export const APP_API_ENDPOINT = Object.freeze({
   AUTH: {
-    LOGIN: '/api/Auth/login'
+    LOGIN: '/api/Auth/login',
+    LOGIN_DRIVER: '/loginDriver'
   },
   TRIPS: {
     GET_TRIPS: '/api/Trip',
