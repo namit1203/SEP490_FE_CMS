@@ -1,6 +1,7 @@
 export const APP_API_ENDPOINT = Object.freeze({
   AUTH: {
-    LOGIN: '/api/Auth/login'
+    LOGIN: '/api/Auth/login',
+    LOGIN_DRIVER: '/loginDriver'
   },
   TRIPS: {
     GET_TRIPS: '/api/Trip',
@@ -39,6 +40,22 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_REQUEST: '/api/Request',
     REQUEST_DETAILS: ({ id }: { id: string | number | null }) => `/api/Request/${id}`,
     ACCEPT_CANCLE_REQUEST: ({ id }: { id: string | number | null }) => `/api/Request/acceptCancleTicket/${id}`
+  },
+  TICKET: {
+    GET_TICKET: '/api/Ticket',
+    TICKET_DETAILS: ({ id }: { id: string | number | null }) => `/api/Ticket/ticketById/${id}`,
+    TICKET_NOT_PAID: ({ id }: { id: string | number | null }) => `/api/Ticket/tickeNotPaid/${id}`,
+    DELETE_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/deleteTicketTimeOut/${id}`,
+    UPDATE_STATUS_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/updateStatusticketNotPaid/${id}`
+  },
+  REVIEWS: {
+    GET_REVIEW: '/api/Review',
+    DELETE_REVIEWS: ({ id }: { id: string | number | null }) => `/api/Review/DeleteReview/${id}`
+  },
+  ACCOUNT: {
+    GET_ACCOUNT: '/api/Account/listAccount',
+    GET_ROLE: '/api/Account/listRole',
+    GET_ACCOUNT_DETAILS: ({ id }: { id: string | number | null }) => `/api/Account/detailsAccount/${id}`
   },
   USER_PROFILE: {
     GET_DATA: '/api/Auth/userProfile'

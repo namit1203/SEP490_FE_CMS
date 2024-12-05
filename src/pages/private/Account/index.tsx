@@ -1,26 +1,24 @@
 import { SearchOutlined } from '@ant-design/icons'
-import type { InputRef, TableColumnType, TableProps } from 'antd'
-import { Button, Input, Popconfirm, Space, Table } from 'antd'
+import { Avatar, Button, Input, InputRef, Popconfirm, Space, Table, TableColumnType, TableProps } from 'antd'
 import { FilterDropdownProps } from 'antd/es/table/interface'
 import React, { useRef, useState } from 'react'
 import Highlighter from 'react-highlight-words'
-import { ActionType, ActionTypeDescriptions } from '../../../enums/enum'
-import { useQueryRequest } from '../../../queries/request'
+import { useQueryAccount } from '../../../queries/account'
 
 interface DataType {
   key: string
-  id: string | number
-  description: string
-  note: string
-  userName: number
-  typeId: string | number
+  avatar: string
+  email: string
+  fullName: string
+  numberPhone: string
+  username: string
+  status: boolean
 }
 
 type DataIndex = keyof DataType
 
-const RequestPage: React.FC = () => {
-  const { data } = useQueryRequest()
-
+const AccountPage: React.FC = () => {
+  const { data } = useQueryAccount()
   const [searchText, setSearchText] = useState('')
   const [searchedColumn, setSearchedColumn] = useState('')
   const searchInput = useRef<InputRef>(null)
@@ -111,65 +109,64 @@ const RequestPage: React.FC = () => {
 
   const columns: TableProps<DataType>['columns'] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: 'Avatar',
+      dataIndex: 'avatar',
+      key: 'avatar',
+      render: () => (
+        <Avatar src={'https://statics.oeg.vn/storage/DEFAULT%20AVATAR%20PROFILE/akirov6.webp'} alt='Avatar' />
+      ),
       width: '10%'
     },
     {
-      title: 'Tên',
-      dataIndex: 'userName',
-      key: 'userName',
-      width: '20%',
-      ...getColumnSearchProps('userName')
-    },
-    {
-      title: 'Mô tả',
-      dataIndex: 'description',
-      key: 'description',
-      ...getColumnSearchProps('description'),
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
       render: (text) => <a>{text}</a>,
-      width: '25%'
-    },
-    {
-      title: 'Trạng thái',
-      dataIndex: 'note',
-      key: 'note',
       width: '20%'
     },
     {
-      title: 'Type',
-      dataIndex: 'typeId',
-      key: 'typeId',
+      title: 'Tên',
+      dataIndex: 'fullName',
+      key: 'fullName',
       width: '20%',
-      render: (type: ActionType) => <span>{ActionTypeDescriptions[type]}</span>,
-      filters: Object.entries(ActionTypeDescriptions).map(([key, value]) => ({
-        text: value,
-        value: Number(key)
-      })),
-      onFilter: (value, record) => record.typeId === value
+      ...getColumnSearchProps('fullName')
+    },
+    {
+      title: 'Số điện thoại',
+      dataIndex: 'numberPhone',
+      key: 'numberPhone',
+      width: '20%'
+    },
+    {
+      title: 'Tên đăng nhập',
+      dataIndex: 'username',
+      key: 'username',
+      width: '20%',
+      ...getColumnSearchProps('username')
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status) => <p>{status === true ? 'Khả dụng' : 'Không khả dụng'}</p>,
+      width: '20%'
     },
     {
       title: 'Action',
       key: 'action',
-      render: (_, record) => (
+      render: () => (
         <Space size='middle'>
-          <Button type='primary'>Show</Button>
-          <Popconfirm title='Bạn có chắc chắn muốn xóa yêu cầu này không?' okText='Yes' cancelText='No'>
+          <Button type='primary'>Edit</Button>
+          <Popconfirm title='Are you sure to delete this item?' okText='Yes' cancelText='No'>
             <Button type='primary' danger>
               Delete
             </Button>
           </Popconfirm>
-          {record.typeId === 3 && (
-            <Popconfirm title='Bạn có chắc chắn muốn hủy yêu cầu này không?' okText='Xác nhận' cancelText='Hủy'>
-              <Button type='default'>Cancel</Button>
-            </Popconfirm>
-          )}
         </Space>
       )
     }
   ]
-  // Add `key` to each record if not present
+
   const dataSource = data?.map((item: any) => ({
     ...item,
     key: item.id || item.someUniqueField
@@ -177,4 +174,5 @@ const RequestPage: React.FC = () => {
 
   return <Table<DataType> columns={columns} dataSource={dataSource} />
 }
-export default RequestPage
+
+export default AccountPage
