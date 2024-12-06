@@ -1,13 +1,13 @@
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
-import tripsApiRequest from '@/services/trip'
+import VehicleUsingApiRequest from '@/services/vehicle-using'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
-export const useQueryTrips = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+export const useQueryVehiclesUsing = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
   return useQuery<any>({
     ...options,
-    queryKey: ['trips'],
+    queryKey: ['vehicles-using'],
     queryFn: async () => {
-      const response = await tripsApiRequest.GetTrips()
+      const response = await VehicleUsingApiRequest.GetVehiclesUsing()
       if (response.status === HttpStatusCode.Ok) {
         return response.data
       }

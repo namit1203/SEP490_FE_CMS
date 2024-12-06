@@ -1,5 +1,5 @@
+import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
-import { useLocalStorage } from '../utils/localStorage/localStorageService'
 import { useNavigate } from 'react-router-dom'
 
 type AuthContextType = {

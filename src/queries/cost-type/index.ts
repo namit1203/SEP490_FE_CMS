@@ -1,6 +1,6 @@
+import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
+import costTypeApiRequest from '@/services/cost-type'
 import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from '@tanstack/react-query'
-import { HttpStatusCode } from '../../constants/httpStatusCode.enum'
-import costTypeApiRequest from '../../services/cost-type'
 
 export const useQueryCostType = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
   return useQuery<any>({

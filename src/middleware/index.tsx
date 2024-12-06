@@ -1,5 +1,5 @@
+import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import { Navigate } from 'react-router-dom'
-import { useLocalStorage } from '../utils/localStorage/localStorageService'
 
 interface PrivateRouteProps {
   allowedRoles: string[]

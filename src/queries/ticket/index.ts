@@ -1,6 +1,6 @@
+import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
+import ticketApiRequest from '@/services/ticket'
 import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from '@tanstack/react-query'
-import { HttpStatusCode } from '../../constants/httpStatusCode.enum'
-import ticketApiRequest from '../../services/ticket'
 
 export const useQueryTicket = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
   return useQuery<any>({
@@ -24,8 +24,9 @@ export const useQueryTicketDetails = (
     queryKey: ['Ticket_details', id],
     queryFn: async () => {
       const response = await ticketApiRequest.GetTicketDetails({ id })
-      if (response.code === HttpStatusCode.Ok) {
-        return response.metadata
+      if (response.status === HttpStatusCode.Ok) {
+        console.log(response.data)
+        return response.data
       }
     }
   })
@@ -39,8 +40,8 @@ export const useQueryTicketNotPaid = (
     queryKey: ['Ticket_not_paid', id],
     queryFn: async () => {
       const response = await ticketApiRequest.GetTicketNotPaid({ id })
-      if (response.code === HttpStatusCode.Ok) {
-        return response.metadata
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
       }
     }
   })

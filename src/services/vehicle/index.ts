@@ -1,6 +1,6 @@
-import { apiBaseServiceInstance } from '../../api'
-import { APP_API_ENDPOINT } from '../../config/api'
-import { METHOD_TYPE } from '../../config/method'
+import { apiBaseServiceInstance } from '@/api'
+import { APP_API_ENDPOINT } from '@/config/api'
+import { METHOD_TYPE } from '@/config/method'
 
 class VehicleApiRequest {
   public GetVehicles(): Promise<any> {

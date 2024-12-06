@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Breadcrumb, Layout, theme } from 'antd'
-import Sidebar from '../../layout/Sidebar'
 import { Outlet, useLocation } from 'react-router-dom'
-import HeaderLayout from '../../layout/Header'
-import { routesConfig } from '../../useRouter'
+import { routesConfig } from '@/useRouter'
+import HeaderLayout from '@/layout/Header'
+import Sidebar from '@/layout/Sidebar'
 
 const { Content, Footer } = Layout
 
@@ -29,7 +29,10 @@ const PrivateLayout: React.FC = () => {
     const pathSegments = location.pathname.split('/').filter((segment) => segment)
 
     const dynamicBreadcrumbs = pathSegments.map((segment) => ({
-      title: segment.charAt(0).toUpperCase() + segment.slice(1)
+      title: segment
+        .split('-') // Tách bằng dấu gạch ngang
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Viết hoa chữ cái đầu
+        .join(' ') // Gộp lại thành chuỗi với khoảng trắng
     }))
 
     return [...baseBreadcrumb, ...dynamicBreadcrumbs]
@@ -39,7 +42,7 @@ const PrivateLayout: React.FC = () => {
   const breadcrumbItems = getBreadcrumbItems()
 
   return (
-    <Layout style={{ display: 'flex'}}>
+    <Layout style={{ display: 'flex' }}>
       <Sidebar collapsed={collapsed}></Sidebar>
       <Layout>
         <HeaderLayout collapsed={collapsed} setCollapsed={setCollapsed} />

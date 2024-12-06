@@ -1,5 +1,5 @@
+import { Form, Modal } from 'antd'
 import React from 'react'
-import { Modal, Form } from 'antd'
 
 export interface ModalFormProps<T> {
   isVisible: boolean
