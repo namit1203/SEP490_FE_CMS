@@ -1,6 +1,6 @@
+import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
+import vehicleApiRequest from '@/services/vehicle'
 import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from '@tanstack/react-query'
-import { HttpStatusCode } from '../../constants/httpStatusCode.enum'
-import vehicleApiRequest from '../../services/vehicle'
 
 export const useQueryVehicles = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
   return useQuery<any>({
@@ -24,8 +24,8 @@ export const useQueryVehiclesDetails = (
     queryKey: ['vehicles_details', id],
     queryFn: async () => {
       const response = await vehicleApiRequest.GetVehiclesDetails({ id })
-      if (response.code === HttpStatusCode.Ok) {
-        return response.metadata
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
       }
     }
   })
