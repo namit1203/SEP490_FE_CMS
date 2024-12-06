@@ -1,5 +1,5 @@
+import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import axios, { AxiosRequestConfig, Method } from 'axios'
-import { useLocalStorage } from '../utils/localStorage/localStorageService'
 
 interface ApiClientConfig {
   method?: Method

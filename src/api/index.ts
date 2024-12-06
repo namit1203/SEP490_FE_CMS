@@ -1,4 +1,4 @@
-import { API_CONFIGS } from '../config/env'
+import { API_CONFIGS } from '@/config/env'
 import { ApiClient } from './axiosClient'
 
 const createApiClientInstance = (host: string, prefix: string): ApiClient => {
