@@ -5,6 +5,8 @@ import AccountPage from './pages/private/Account'
 import CostTypePage from './pages/private/CostType'
 import DriverPage from './pages/private/Driver'
 import FixedCostPage from './pages/private/FixedCost'
+import HistoryRentDriverPage from './pages/private/History-Driver'
+import HistoryRentVehiclePage from './pages/private/History-Vehicle'
 import PromotionPage from './pages/private/Promotion'
 import RequestPage from './pages/private/Request'
 import ReviewsPage from './pages/private/Reviews'
@@ -23,6 +25,16 @@ const staffRoutes = [
   { path: '/vehicles', component: <VehiclesPage />, allowedRoles: ['Staff', 'VehicleOwner', 'Driver'] },
   { path: '/promotion', component: <PromotionPage />, allowedRoles: ['Staff'] },
   { path: '/driver', component: <DriverPage />, allowedRoles: ['Staff', 'Admin'] },
+  {
+    path: '/history-rent-vehicle',
+    component: <HistoryRentVehiclePage />,
+    allowedRoles: ['Staff', 'VehicleOwner', 'Driver']
+  },
+  {
+    path: '/history-rent-driver',
+    component: <HistoryRentDriverPage />,
+    allowedRoles: ['Staff', 'VehicleOwner', 'Driver']
+  },
   { path: '/cost-type', component: <CostTypePage />, allowedRoles: ['Staff'] },
   { path: '/fixed-cost', component: <FixedCostPage />, allowedRoles: ['Staff'] },
   { path: '/request', component: <RequestPage />, allowedRoles: ['Staff', 'Admin', 'Driver'] },

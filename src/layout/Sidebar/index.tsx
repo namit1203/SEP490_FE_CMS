@@ -6,6 +6,7 @@ import {
   EuroCircleFilled,
   FileTextOutlined,
   GiftOutlined,
+  HistoryOutlined,
   SettingOutlined,
   ShopFilled,
   ShoppingFilled,
@@ -67,6 +68,16 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             key: 'driver',
             icon: <UserOutlined />,
             label: <Link to='/driver'>Drivers</Link> // Link added
+          },
+          {
+            key: 'history-rent-driver',
+            icon: <CarOutlined />,
+            label: <Link to='/history-rent-driver'>History Rent Driver</Link> // Link added
+          },
+          {
+            key: 'history-rent-vehicle',
+            icon: <HistoryOutlined />,
+            label: <Link to='/history-rent-vehicle'>History Rent Vehicle</Link> // Link added
           },
           {
             key: 'cost_type',
