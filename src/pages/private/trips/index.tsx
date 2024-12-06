@@ -15,8 +15,6 @@ const TripPage: React.FC = () => {
 
   const { data, isLoading } = useQueryTrips()
 
-  console.log(isLoading)
-
   // Transform data source to ensure each record has a `key`
   const dataSource = data?.map((item: any) => ({
     ...item,
