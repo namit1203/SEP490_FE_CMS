@@ -13,6 +13,9 @@ export const APP_API_ENDPOINT = Object.freeze({
     VEHICLES_DETAILS: ({ id }: { id: string | number | null }) => `/api/Vehicle/getInforVehicle/${id}`,
     ADD_VEHICLES: '/api/Vehicle/addVehicle'
   },
+  VEHICLES_USING: {
+    GET: '/api/Vehicle/getVehicleByDriverId'
+  },
   PROMOTION: {
     GET_PROMOTION: '/api/Promotion',
     DELETE_PROMOTION: ({ id }: { id: string | number | null }) => `/api/Promotion/${id}`,
@@ -56,6 +59,9 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_ACCOUNT: '/api/Account/listAccount',
     GET_ROLE: '/api/Account/listRole',
     GET_ACCOUNT_DETAILS: ({ id }: { id: string | number | null }) => `/api/Account/detailsAccount/${id}`
+  },
+  HISTORY_RENT_VEHICLE: {
+    GET_HISTORY_RENT_VEHICLE: '/api/HistoryRentVehicle'
   },
   USER_PROFILE: {
     GET_DATA: '/api/Auth/userProfile'
