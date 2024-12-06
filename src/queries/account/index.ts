@@ -1,6 +1,6 @@
+import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
+import accountApiRequest from '@/services/account'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
-import { HttpStatusCode } from '../../constants/httpStatusCode.enum'
-import accountApiRequest from '../../services/account'
 
 export const useQueryAccount = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
   return useQuery<any>({
@@ -36,8 +36,8 @@ export const useQueryAccountDetails = (
     queryKey: ['Account_details', id],
     queryFn: async () => {
       const response = await accountApiRequest.GetAccountDetails({ id })
-      if (response.code === HttpStatusCode.Ok) {
-        return response.metadata
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
       }
     }
   })

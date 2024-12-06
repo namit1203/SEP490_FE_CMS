@@ -1,17 +1,21 @@
-import React, { useState } from 'react'
-import { Table, Button, Space, Popconfirm, Input, InputNumber, Switch } from 'antd'
-import { TableProps } from 'antd'
+import ModalForm, { ModalFormProps } from '@/components/Modal/ModalForm'
+import { formatPrize } from '@/helpers'
+import useColumnSearch from '@/hooks/useColumnSearch'
+import { useQueryTrips } from '@/queries/trip'
+import { DataType } from '@/types/DataType'
+import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
+import renderWithLoading from '@/utils/renderWithLoading'
+import { Button, Input, InputNumber, Popconfirm, Space, Switch, Table, TableProps } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { DataType } from '../../../types/DataType'
-import { handlingTsUndefined } from '../../../utils/handlingTsUndefined'
-import { useQueryTrips } from '../../../queries/trip'
-import ModalForm, { ModalFormProps } from '../../../components/Modal/ModalForm'
+import React, { useState } from 'react'
 
 const TripPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState<DataType | null>(null)
 
-  const { data } = useQueryTrips()
+  const { data, isLoading } = useQueryTrips()
+
+  console.log(isLoading)
 
   // Transform data source to ensure each record has a `key`
   const dataSource = data?.map((item: any) => ({
@@ -92,6 +96,8 @@ const TripPage: React.FC = () => {
       title: 'Tên chuyến đi',
       dataIndex: 'name',
       key: 'name',
+      align: 'center',
+      ...useColumnSearch().getColumnSearchProps('name'),
       render: (text) => <a>{text}</a>,
       width: '25%'
     },
@@ -99,12 +105,15 @@ const TripPage: React.FC = () => {
       title: 'Thời gian khởi hành',
       dataIndex: 'startTime',
       key: 'startTime',
+      align: 'center',
       width: '25%'
     },
     {
       title: 'Giá vé',
       dataIndex: 'price',
       key: 'price',
+      align: 'center',
+      render: (text) => <span>{formatPrize(text)}</span>,
       sorter: (a, b) => handlingTsUndefined(a.price) - handlingTsUndefined(b.price),
       width: '20%'
     },
@@ -112,12 +121,14 @@ const TripPage: React.FC = () => {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
+      align: 'center',
       render: (status) => <p>{status ? 'Khả dụng' : 'Không khả dụng'}</p>,
       width: '20%'
     },
     {
       title: 'Action',
       key: 'action',
+      align: 'center',
       render: (_, record) => (
         <Space size='middle'>
           <Button onClick={() => handleEdit(record)} type='primary'>
@@ -140,14 +151,21 @@ const TripPage: React.FC = () => {
 
   return (
     <>
-      <Table columns={columns} dataSource={dataSource} />
-      <ModalForm
-        isVisible={isModalOpen}
-        onSubmit={handleFormSubmit}
-        initialValues={selectedItem}
-        fields={fields}
-        setIsModalOpen={setIsModalOpen}
-      />
+      {renderWithLoading({
+        isLoading,
+        content: (
+          <>
+            <Table columns={columns} dataSource={dataSource} />
+            <ModalForm
+              isVisible={isModalOpen}
+              onSubmit={handleFormSubmit}
+              initialValues={selectedItem}
+              fields={fields}
+              setIsModalOpen={setIsModalOpen}
+            />
+          </>
+        )
+      })}
     </>
   )
 }
