@@ -10,3 +10,19 @@ export interface DataType {
   pointStart?: string
   pointEnd?: string
 }
+
+export interface DataTypeVehicle {
+  id: number | any
+  driverName: string
+  numberSeat: number
+  vehicleTypeId: number
+  status: boolean
+  driverId: number
+  vehicleOwner: number
+  licensePlate: string
+  description: string
+  createdAt: string // ISO Date string
+  createdBy: number | null // Nullable field
+  updateAt: string // ISO Date string
+  updateBy: number | null // Nullable field
+}
