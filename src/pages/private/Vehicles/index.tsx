@@ -1,57 +1,147 @@
 import ModalForm, { ModalFormProps } from '@/components/Modal/ModalForm'
+import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import useColumnSearch from '@/hooks/useColumnSearch'
-import { useQueryVehicles } from '@/queries/vehicle'
-import { DataType } from '@/types/DataType'
+import { useQueryDriver } from '@/queries/driver'
+import {
+  useDeleteVehiclesMutation,
+  useQueryTypeOfVehicles,
+  useQueryTypeVehiclesOwner,
+  useQueryVehicles,
+  useQueryVehiclesDetails,
+  useUpdateVehiclesMutation
+} from '@/queries/vehicle'
+import { DataTypeVehicle } from '@/types/DataType'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
 import renderWithLoading from '@/utils/renderWithLoading'
+import { PlusOutlined } from '@ant-design/icons'
 import type { TableProps } from 'antd'
-import { Button, Form, Input, InputNumber, Popconfirm, Space, Switch, Table } from 'antd'
+import { Button, Form, Input, InputNumber, message, Popconfirm, Select, Space, Switch, Table } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const VehiclesPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedItem, setSelectedItem] = useState<DataType | null>(null)
+
+  const { Option } = Select
+
+  const [selectedItem, setSelectedItem] = useState<DataTypeVehicle | null>(null)
+
+  const [lastFetchedId, setLastFetchedId] = useState<number | null>(null)
 
   const [form] = Form.useForm()
 
-  const { data, isLoading } = useQueryVehicles()
+  const { data, refetch: refetchVehicles, isLoading } = useQueryVehicles()
+
+  const updateMutation = useUpdateVehiclesMutation()
+
+  const deleteMutaion = useDeleteVehiclesMutation()
+
+  const { data: formData, refetch } = useQueryVehiclesDetails(
+    { id: selectedItem?.id },
+    {
+      enabled: false
+    }
+  )
+
+  const { data: dataTypeOfVehicles, refetch: refetchTypeOfVehicles } = useQueryTypeOfVehicles()
+
+  const { data: dataTypeOfVehiclesOwner, refetch: refetchTypeOfVehiclesOwner } = useQueryTypeVehiclesOwner()
+
+  const { data: dataTypeDriver, refetch: refetchDriver } = useQueryDriver()
 
   const dataSource = data?.map((item: any) => ({
     ...item,
     key: item.id || item.someUniqueField
   }))
 
-  const handleEdit = (item: DataType) => {
+  const handleEdit = (item: DataTypeVehicle) => {
     setSelectedItem(item)
     setIsModalOpen(true)
-    form.setFieldsValue(item)
   }
 
-  const handleFormSubmit = (values: any) => {
-    console.log('Updated values:', values)
-    setIsModalOpen(false)
-    setSelectedItem(null)
+  useEffect(() => {
+    if (selectedItem?.id && selectedItem.id !== lastFetchedId) {
+      refetch()
+      refetchTypeOfVehicles()
+      refetchTypeOfVehiclesOwner()
+      refetchDriver()
+      setLastFetchedId(selectedItem.id)
+    }
+  }, [refetch, refetchTypeOfVehicles, refetchTypeOfVehiclesOwner, selectedItem, lastFetchedId, refetchDriver])
+
+  useEffect(() => {
+    if (formData) {
+      form.setFieldsValue(formData)
+      setSelectedItem((prev) => ({
+        ...prev,
+        ...formData
+      }))
+    }
+  }, [formData, form])
+
+  const handleFormSubmit = async (values: any) => {
+    try {
+      const response = await updateMutation.mutateAsync({ id: selectedItem?.id, body: values })
+      if (response.status === HttpStatusCode.Ok) {
+        message.success('Update successfully')
+        refetchVehicles()
+      } else {
+        message.error('Update failed')
+      }
+    } catch (error) {
+      console.error('Error updating values:', error)
+    } finally {
+      setIsModalOpen(false)
+      setSelectedItem(null)
+    }
   }
 
-  const fields: ModalFormProps<DataType>['fields'] = [
+  const handleFormDelete = async (id: number) => {
+    try {
+      const response = await deleteMutaion.mutateAsync({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        message.success('Delete successfully')
+        refetchVehicles()
+      } else {
+        message.error('Delete failed')
+      }
+    } catch (error) {
+      console.error('Error deleting:', error)
+    }
+  }
+
+  const fields: ModalFormProps<DataTypeVehicle>['fields'] = [
     {
-      name: 'name',
-      label: 'Tên chuyến đi',
+      name: 'description',
+      label: 'Mô tả',
+      component: <TextArea />,
+      rules: [{ required: true, message: 'Vui lòng nhập Mô tả!' }]
+    },
+    {
+      name: 'driverId',
+      label: 'Tài xế',
+      component: (
+        <Select placeholder='Chọn tài xế' style={{ width: '100%' }}>
+          {dataTypeDriver?.map((item: any) => (
+            <Option key={item.id} value={item.id}>
+              {item.userName}
+            </Option>
+          ))}
+        </Select>
+      ),
+      rules: [{ required: true, message: 'Vui lòng chọn tài xế!' }]
+    },
+    {
+      name: 'image',
+      label: 'Link ảnh',
       component: <Input />,
-      rules: [{ required: true, message: 'Vui lòng nhập tên chuyến đi!' }]
+      rules: [{ required: true, message: 'Vui lòng nhập link ảnh!' }]
     },
     {
-      name: 'startTime',
-      label: 'Thời gian khởi hành',
+      name: 'numberSeat',
+      label: 'Số ghế ngồi',
       component: <InputNumber style={{ width: '100%' }} />,
-      rules: [{ required: true, message: 'Vui lòng nhập thời gian khởi hành!' }]
-    },
-    {
-      name: 'price',
-      label: 'Giá vé',
-      component: <InputNumber style={{ width: '100%' }} />,
-      rules: [{ required: true, message: 'Vui lòng nhập giá vé!' }]
+      rules: [{ required: true, message: 'Vui lòng nhập số chỗ ngồi!' }]
     },
     {
       name: 'licensePlate',
@@ -60,22 +150,32 @@ const VehiclesPage: React.FC = () => {
       rules: [{ required: true, message: 'Vui lòng nhập Biển số xe!' }]
     },
     {
-      name: 'pointStart',
-      label: 'Điểm đến',
-      component: <Input />,
-      rules: [{ required: true, message: 'Vui lòng nhập điểm đến!' }]
+      name: 'vehicleTypeId',
+      label: 'Nhà xe',
+      component: (
+        <Select placeholder='Chọn nhà xe' style={{ width: '100%' }}>
+          {dataTypeOfVehicles?.map((item: any) => (
+            <Option key={item.id} value={item.id}>
+              {item.description}
+            </Option>
+          ))}
+        </Select>
+      ),
+      rules: [{ required: true, message: 'Vui lòng chọn nhà xe!' }]
     },
     {
-      name: 'pointEnd',
-      label: 'Điểm đi',
-      component: <Input />,
-      rules: [{ required: true, message: 'Vui lòng nhập điểm đi!' }]
-    },
-    {
-      name: 'description',
-      label: 'Mô tả',
-      component: <TextArea />,
-      rules: [{ required: true, message: 'Vui lòng nhập Mô tả!' }]
+      name: 'vehicleOwner',
+      label: 'Chủ nhà xe',
+      component: (
+        <Select placeholder='Chọn nhà xe' style={{ width: '100%' }}>
+          {dataTypeOfVehiclesOwner?.map((item: any) => (
+            <Option key={item.id} value={item.id}>
+              {item.username}
+            </Option>
+          ))}
+        </Select>
+      ),
+      rules: [{ required: true, message: 'Vui lòng chọn chủ nhà xe!' }]
     },
     {
       name: 'status',
@@ -85,7 +185,7 @@ const VehiclesPage: React.FC = () => {
     }
   ]
 
-  const columns: TableProps<DataType>['columns'] = [
+  const columns: TableProps<DataTypeVehicle>['columns'] = [
     {
       title: 'Tên chuyến đi',
       dataIndex: 'description',
@@ -130,7 +230,14 @@ const VehiclesPage: React.FC = () => {
           <Button onClick={() => handleEdit(record)} type='primary'>
             Edit
           </Button>
-          <Popconfirm title='Are you sure to delete this item?' okText='Yes' cancelText='No'>
+          <Popconfirm
+            title='Are you sure to delete this item?'
+            okText='Yes'
+            cancelText='No'
+            onConfirm={() => {
+              handleFormDelete(record.id)
+            }}
+          >
             <Button type='primary' danger>
               Delete
             </Button>
@@ -146,6 +253,11 @@ const VehiclesPage: React.FC = () => {
         isLoading,
         content: (
           <>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+              <Button type='primary' icon={<PlusOutlined />} ghost>
+                Thêm mới
+              </Button>
+            </div>
             <Table columns={columns} dataSource={dataSource} />
             <ModalForm
               isVisible={isModalOpen}
@@ -153,6 +265,7 @@ const VehiclesPage: React.FC = () => {
               initialValues={selectedItem}
               fields={fields}
               setIsModalOpen={setIsModalOpen}
+              setSelectedItem={setSelectedItem}
             />
           </>
         )

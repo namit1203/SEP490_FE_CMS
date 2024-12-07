@@ -4,6 +4,7 @@ import React from 'react'
 export interface ModalFormProps<T> {
   isVisible: boolean
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setSelectedItem: React.Dispatch<React.SetStateAction<T | null>>
   onSubmit: (values: T) => void
   initialValues: T | null
   fields: {
@@ -16,16 +17,31 @@ export interface ModalFormProps<T> {
   }[]
 }
 
-function ModalForm<T>({ isVisible, onSubmit, initialValues, fields, setIsModalOpen }: ModalFormProps<T>) {
+function ModalForm<T>({
+  isVisible,
+  onSubmit,
+  initialValues,
+  fields,
+  setIsModalOpen,
+  setSelectedItem
+}: ModalFormProps<T>) {
   const [form] = Form.useForm()
 
+  // Synchronize form fields with `initialValues`
+  React.useEffect(() => {
+    if (initialValues) {
+      form.setFieldsValue(initialValues)
+    }
+  }, [initialValues, form])
+
   const handleOk = () => {
-    form.submit()
+    form.submit() // Trigger form submission
   }
 
   const handleCancel = () => {
-    setIsModalOpen(!isVisible)
+    setIsModalOpen(false)
     form.resetFields()
+    setSelectedItem(null)
   }
 
   const handleFinish = (values: T) => {

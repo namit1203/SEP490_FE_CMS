@@ -1,15 +1,17 @@
-import ModalForm, { ModalFormProps } from '@/components/Modal/ModalForm'
+import ModalForm from '@/components/Modal/ModalForm'
 import { formatPrize } from '@/helpers'
 import useColumnSearch from '@/hooks/useColumnSearch'
 import { useQueryTrips } from '@/queries/trip'
 import { DataType } from '@/types/DataType'
+import { fieldModalTable } from '@/utils/fieldModalTable'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
 import renderWithLoading from '@/utils/renderWithLoading'
-import { Button, Input, InputNumber, Popconfirm, Space, Switch, Table, TableProps } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
+import { Button, Form, Popconfirm, Space, Table, TableProps } from 'antd'
+
 import React, { useState } from 'react'
 
 const TripPage: React.FC = () => {
+  const [form] = Form.useForm()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState<DataType | null>(null)
 
@@ -24,6 +26,7 @@ const TripPage: React.FC = () => {
   const handleEdit = (item: DataType) => {
     setSelectedItem(item)
     setIsModalOpen(true)
+    form.setFieldsValue(item)
   }
 
   const handleDelete = (id: string) => {
@@ -38,56 +41,10 @@ const TripPage: React.FC = () => {
     // Implement update logic
   }
 
-  const fields: ModalFormProps<DataType>['fields'] = [
-    {
-      name: 'name',
-      label: 'Tên chuyến đi',
-      component: <Input />,
-      rules: [{ required: true, message: 'Vui lòng nhập tên chuyến đi!' }]
-    },
-    {
-      name: 'startTime',
-      label: 'Thời gian khởi hành',
-      component: <InputNumber style={{ width: '100%' }} />,
-      rules: [{ required: true, message: 'Vui lòng nhập thời gian khởi hành!' }]
-    },
-    {
-      name: 'price',
-      label: 'Giá vé',
-      component: <InputNumber style={{ width: '100%' }} />,
-      rules: [{ required: true, message: 'Vui lòng nhập giá vé!' }]
-    },
-    {
-      name: 'licensePlate',
-      label: 'Biển số xe',
-      component: <Input />,
-      rules: [{ required: true, message: 'Vui lòng nhập Biển số xe!' }]
-    },
-    {
-      name: 'pointStart',
-      label: 'Điểm đến',
-      component: <Input />,
-      rules: [{ required: true, message: 'Vui lòng nhập điểm đến!' }]
-    },
-    {
-      name: 'pointEnd',
-      label: 'Điểm đi',
-      component: <Input />,
-      rules: [{ required: true, message: 'Vui lòng nhập điểm đi!' }]
-    },
-    {
-      name: 'description',
-      label: 'Mô tả',
-      component: <TextArea />,
-      rules: [{ required: true, message: 'Vui lòng nhập Mô tả!' }]
-    },
-    {
-      name: 'status',
-      label: 'Trạng thái',
-      component: <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />,
-      valuePropName: 'checked'
-    }
-  ]
+  const filteredFields = fieldModalTable.filter(
+    (field) =>
+      field.name && ['name', 'licensePlate', 'startTime', 'pointStart', 'pointStart', 'price'].includes(field.name)
+  )
 
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -158,8 +115,9 @@ const TripPage: React.FC = () => {
               isVisible={isModalOpen}
               onSubmit={handleFormSubmit}
               initialValues={selectedItem}
-              fields={fields}
+              fields={filteredFields}
               setIsModalOpen={setIsModalOpen}
+              setSelectedItem={setSelectedItem}
             />
           </>
         )
