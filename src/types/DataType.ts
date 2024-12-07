@@ -14,6 +14,7 @@ export interface DataType {
 export interface DataTypeVehicle {
   id: number | any
   driverName: string
+  image: string
   numberSeat: number
   vehicleTypeId: number
   status: boolean
