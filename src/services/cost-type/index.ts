@@ -15,6 +15,13 @@ class CostTypeApiRequest {
       config: { method: METHOD_TYPE.POST, cors: false }
     })
   }
+
+  public UpdateCostType({ id, body }: { id: string | number | null; body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.COST_TYPE.UPDATE_COST_TYPE({ id }),
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
   public AddCostType({ body }: { body: any }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.COST_TYPE.ADD_COST_TYPE,
