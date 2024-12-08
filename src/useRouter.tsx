@@ -1,4 +1,4 @@
-import { useRoutes } from 'react-router-dom'
+import { RouteObject, useRoutes } from 'react-router-dom'
 import PrivateRoute from './middleware'
 import PrivateLayout from './pages/private'
 import AccountPage from './pages/private/Account'
@@ -19,10 +19,26 @@ import UserProfilePage from './pages/private/UserProfile'
 import VehiclesPage from './pages/private/Vehicles'
 import VehicleUsingPage from './pages/private/VehicleUsing'
 import LoginPage from './pages/public/login'
+import EditVehiclePage from './pages/private/Vehicles/edit'
+import AddVehiclePage from './pages/private/Vehicles/add'
 
 const staffRoutes = [
   { path: '/trips', component: <TripsPages />, allowedRoles: ['Staff'] },
-  { path: '/vehicles', component: <VehiclesPage />, allowedRoles: ['Staff', 'VehicleOwner', 'Driver'] },
+  {
+    path: '/vehicles',
+    component: <VehiclesPage />,
+    allowedRoles: ['Staff', 'VehicleOwner', 'Driver']
+  },
+  {
+    path: '/vehicles/add', // Note: Relative to the parent route
+    component: <AddVehiclePage />,
+    allowedRoles: ['Staff']
+  },
+  {
+    path: '/vehicles/edit', // Note: Relative to the parent route
+    component: <EditVehiclePage />,
+    allowedRoles: ['Staff']
+  },
   { path: '/promotion', component: <PromotionPage />, allowedRoles: ['Staff'] },
   { path: '/driver', component: <DriverPage />, allowedRoles: ['Staff', 'Admin'] },
   {
@@ -55,11 +71,18 @@ const adminRoutes = [
 
 const driverRoutes = [{ path: '/vehicles-using', component: <VehicleUsingPage />, allowedRoles: ['Driver'] }]
 
-const routeGenerator = (routes: { path: string; component: React.ReactNode; allowedRoles: string[] }[]) =>
-  routes.map((route) => ({
+const routeGenerator = (
+  routes: {
+    path: string
+    component: React.ReactNode
+    allowedRoles: string[]
+  }[]
+): RouteObject[] => {
+  return routes.map((route) => ({
     path: route.path,
     element: <PrivateRoute allowedRoles={route.allowedRoles}>{route.component}</PrivateRoute>
   }))
+}
 
 export const routesConfig = [
   {

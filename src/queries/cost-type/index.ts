@@ -21,3 +21,19 @@ export const useAddCostTypeMutation = (options?: UseMutationOptions<any, unknown
     mutationFn: (body: Omit<any, 'addCostType'>) => costTypeApiRequest.AddCostType({ body })
   })
 }
+
+export const useUpdateCostTypeMutation = (
+  options?: UseMutationOptions<any, unknown, { id: string | number; body: any }, unknown>
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id, body }: { id: string | number; body: any }) => costTypeApiRequest.UpdateCostType({ id, body })
+  })
+}
+
+export const useDeleteCostTypeMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id }: { id: string | number | null }) => costTypeApiRequest.DeleteCostType({ id })
+  })
+}

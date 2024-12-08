@@ -9,9 +9,11 @@ export interface DataType {
   licensePlate?: string
   pointStart?: string
   pointEnd?: string
+  driverId?: number
 }
 
 export interface DataTypeVehicle {
+  type: string
   id: number | any
   driverName: string
   image: string
@@ -26,4 +28,13 @@ export interface DataTypeVehicle {
   createdBy: number | null // Nullable field
   updateAt: string // ISO Date string
   updateBy: number | null // Nullable field
+}
+
+export interface DataTypeCost {
+  id: number | any
+  key: string
+  description: string
+  createdAt: number
+  updateAt: number
+  status: boolean
 }

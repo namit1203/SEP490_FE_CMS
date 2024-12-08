@@ -112,6 +112,7 @@ const TripPage: React.FC = () => {
           <>
             <Table columns={columns} dataSource={dataSource} />
             <ModalForm
+              form={form}
               isVisible={isModalOpen}
               onSubmit={handleFormSubmit}
               initialValues={selectedItem}

@@ -70,6 +70,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             label: <Link to='/driver'>Drivers</Link> // Link added
           },
           {
+            key: 'rent-driver',
+            icon: <CarOutlined />,
+            label: <Link to='/rent-driver'>Rent Driver</Link> // Link added
+          },
+          {
             key: 'history-rent-driver',
             icon: <CarOutlined />,
             label: <Link to='/history-rent-driver'>History Rent Driver</Link> // Link added

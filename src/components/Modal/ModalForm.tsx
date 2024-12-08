@@ -6,6 +6,7 @@ export interface ModalFormProps<T> {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   setSelectedItem: React.Dispatch<React.SetStateAction<T | null>>
   onSubmit: (values: T) => void
+  form: any
   initialValues: T | null
   fields: {
     name?: keyof T
@@ -23,9 +24,10 @@ function ModalForm<T>({
   initialValues,
   fields,
   setIsModalOpen,
-  setSelectedItem
+  setSelectedItem,
+  form
 }: ModalFormProps<T>) {
-  const [form] = Form.useForm()
+  // const [form] = Form.useForm()
 
   // Synchronize form fields with `initialValues`
   React.useEffect(() => {
