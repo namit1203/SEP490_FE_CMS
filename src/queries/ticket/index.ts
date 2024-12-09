@@ -25,7 +25,21 @@ export const useQueryTicketDetails = (
     queryFn: async () => {
       const response = await ticketApiRequest.GetTicketDetails({ id })
       if (response.status === HttpStatusCode.Ok) {
-        console.log(response.data)
+        return response.data
+      }
+    }
+  })
+}
+export const useQueryTravelCarByRequest = (
+  { id }: { id: string | number | null | any },
+  options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['TravelCar_details', id],
+    queryFn: async () => {
+      const response = await ticketApiRequest.GetTravelCarByRequest({ id })
+      if (response.status === HttpStatusCode.Ok) {
         return response.data
       }
     }
