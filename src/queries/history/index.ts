@@ -26,3 +26,15 @@ export const useQueryHistoryRentDriver = (options?: Omit<UseQueryOptions<any>, '
     }
   })
 }
+export const useQueryDriverRent = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['driver_rent'],
+    queryFn: async () => {
+      const response = await historyApiRequest.GetListDriverRent()
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
+      }
+    }
+  })
+}
