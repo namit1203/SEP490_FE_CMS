@@ -15,6 +15,13 @@ class LossCostVehicleApiRequest {
       config: { method: METHOD_TYPE.POST, cors: false }
     })
   }
+
+  public UpdateLossCost({ id, body }: { id: string | number | null; body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.LOSS_COST_VEHICLE.UPDATE_COST({ id }),
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
   public AddLossCost({ body }: { body: any }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.LOSS_COST_VEHICLE.ADD_COST,
