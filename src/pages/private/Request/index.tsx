@@ -5,6 +5,7 @@ import renderWithLoading from '@/utils/renderWithLoading'
 import type { TableProps } from 'antd'
 import { Button, Popconfirm, Space, Table } from 'antd'
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 interface DataType {
   key: string
@@ -68,7 +69,9 @@ const RequestPage: React.FC = () => {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <Button type='primary'>Show</Button>
+          <Link to={`details?id=${record.id}`}>
+            <Button type='primary'>Show</Button>
+          </Link>
           <Popconfirm title='Bạn có chắc chắn muốn xóa yêu cầu này không?' okText='Yes' cancelText='No'>
             <Button type='primary' danger>
               Delete
