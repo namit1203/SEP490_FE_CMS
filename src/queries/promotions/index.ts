@@ -37,3 +37,17 @@ export const useAddPromotionMutation = (options?: UseMutationOptions<any, unknow
     mutationFn: (body: Omit<any, 'addPromotion'>) => promotionApiRequest.AddPromotion({ body })
   })
 }
+
+export const useAddPromotionToAllUserMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: (body: Omit<any, 'addPromotionToAllUser'>) => promotionApiRequest.AddPromotionToAllUsers({ body })
+  })
+}
+
+export const useDeletePromotionMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id }: { id: string | number | null }) => promotionApiRequest.DeletePromotion({ id })
+  })
+}
