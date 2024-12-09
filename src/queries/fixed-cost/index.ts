@@ -9,9 +9,19 @@ export const useQueryLossCost = (options?: Omit<UseQueryOptions<any>, 'queryKey'
     queryFn: async () => {
       const response = await lossCostVehicleApiRequest.GetLossCost()
       if (response.status === HttpStatusCode.Ok) {
-        return response.data
+        return response.data?.listLossCostVehicle
       }
     }
+  })
+}
+
+export const useUpdatelossCostMutation = (
+  options?: UseMutationOptions<any, unknown, { id: string | number; body: any }, unknown>
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id, body }: { id: string | number; body: any }) =>
+      lossCostVehicleApiRequest.UpdateLossCost({ id, body })
   })
 }
 
@@ -19,5 +29,12 @@ export const useAddLossCostMutation = (options?: UseMutationOptions<any, unknown
   return useMutation({
     ...options,
     mutationFn: (body: Omit<any, 'addLossCost'>) => lossCostVehicleApiRequest.AddLossCost({ body })
+  })
+}
+
+export const useDeleteLossCostMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id }: { id: string | number | null }) => lossCostVehicleApiRequest.DeleteLossCost({ id })
   })
 }

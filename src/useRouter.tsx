@@ -3,12 +3,19 @@ import PrivateRoute from './middleware'
 import PrivateLayout from './pages/private'
 import AccountPage from './pages/private/Account'
 import CostTypePage from './pages/private/CostType'
+import AddCostTypePage from './pages/private/CostType/add'
+import EditCostTypePage from './pages/private/CostType/edit'
 import DriverPage from './pages/private/Driver'
 import FixedCostPage from './pages/private/FixedCost'
+import AddFixedCostPage from './pages/private/FixedCost/add'
+import EditFixedCostPage from './pages/private/FixedCost/edit'
 import HistoryRentDriverPage from './pages/private/History-Driver'
 import HistoryRentVehiclePage from './pages/private/History-Vehicle'
 import PromotionPage from './pages/private/Promotion'
+import AddPromotionPage from './pages/private/Promotion/add'
+import EditPromotionPage from './pages/private/Promotion/edit'
 import RequestPage from './pages/private/Request'
+import DetailsRequestPage from './pages/private/Request/details'
 import ReviewsPage from './pages/private/Reviews'
 import RolePage from './pages/private/Role'
 import TicketPage from './pages/private/Ticket'
@@ -17,10 +24,11 @@ import TripsPages from './pages/private/trips'
 import UnauthorizedPage from './pages/private/Unauthorized'
 import UserProfilePage from './pages/private/UserProfile'
 import VehiclesPage from './pages/private/Vehicles'
+import AddVehiclePage from './pages/private/Vehicles/add'
+import EditVehiclePage from './pages/private/Vehicles/edit'
 import VehicleUsingPage from './pages/private/VehicleUsing'
 import LoginPage from './pages/public/login'
-import EditVehiclePage from './pages/private/Vehicles/edit'
-import AddVehiclePage from './pages/private/Vehicles/add'
+import DetailPromotionPage from './pages/private/Promotion/detail'
 
 const staffRoutes = [
   { path: '/trips', component: <TripsPages />, allowedRoles: ['Staff'] },
@@ -30,16 +38,31 @@ const staffRoutes = [
     allowedRoles: ['Staff', 'VehicleOwner', 'Driver']
   },
   {
-    path: '/vehicles/add', // Note: Relative to the parent route
+    path: '/vehicles/add',
     component: <AddVehiclePage />,
     allowedRoles: ['Staff']
   },
   {
-    path: '/vehicles/edit', // Note: Relative to the parent route
+    path: '/vehicles/edit',
     component: <EditVehiclePage />,
     allowedRoles: ['Staff']
   },
   { path: '/promotion', component: <PromotionPage />, allowedRoles: ['Staff'] },
+  {
+    path: '/promotion/add',
+    component: <AddPromotionPage />,
+    allowedRoles: ['Staff']
+  },
+  {
+    path: '/promotion/edit',
+    component: <EditPromotionPage />,
+    allowedRoles: ['Staff']
+  },
+  {
+    path: '/promotion/detail',
+    component: <DetailPromotionPage />,
+    allowedRoles: ['Staff']
+  },
   { path: '/driver', component: <DriverPage />, allowedRoles: ['Staff', 'Admin'] },
   {
     path: '/history-rent-vehicle',
@@ -52,8 +75,29 @@ const staffRoutes = [
     allowedRoles: ['Staff', 'VehicleOwner', 'Driver']
   },
   { path: '/cost-type', component: <CostTypePage />, allowedRoles: ['Staff'] },
+  {
+    path: '/cost-type/edit', // Note: Relative to the parent route
+    component: <EditCostTypePage />,
+    allowedRoles: ['Staff']
+  },
+  {
+    path: '/cost-type/add', // Note: Relative to the parent route
+    component: <AddCostTypePage />,
+    allowedRoles: ['Staff']
+  },
   { path: '/fixed-cost', component: <FixedCostPage />, allowedRoles: ['Staff'] },
+  {
+    path: '/fixed-cost/edit', // Note: Relative to the parent route
+    component: <EditFixedCostPage />,
+    allowedRoles: ['Staff']
+  },
+  {
+    path: '/fixed-cost/add', // Note: Relative to the parent route
+    component: <AddFixedCostPage />,
+    allowedRoles: ['Staff']
+  },
   { path: '/request', component: <RequestPage />, allowedRoles: ['Staff', 'Admin', 'Driver'] },
+  { path: '/request/details', component: <DetailsRequestPage />, allowedRoles: ['Staff', 'Admin', 'Driver'] },
   { path: '/ticket', component: <TicketPage />, allowedRoles: ['Staff', 'Driver'] },
   { path: '/ticket-not-paid', component: <TicketNotPaidPage />, allowedRoles: ['Staff', 'Driver'] },
   { path: '/reviews', component: <ReviewsPage />, allowedRoles: ['Staff'] },
