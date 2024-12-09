@@ -21,9 +21,10 @@ export const APP_API_ENDPOINT = Object.freeze({
   },
   PROMOTION: {
     GET_PROMOTION: '/api/Promotion',
-    DELETE_PROMOTION: ({ id }: { id: string | number | null }) => `/api/Promotion/${id}`,
+    DELETE_PROMOTION: ({ id }: { id: string | number | null }) => `/api/Promotion/deletePromotion/id?id=${id}`,
     PROMOTION_DETAILS: ({ id }: { id: string | number | null }) => `/api/Promotion/getPromotionById/${id}`,
-    ADD_PROMOTION: '/api/Promotion/CreatePromotion'
+    ADD_PROMOTION: '/api/Promotion/CreatePromotion',
+    ADD_PROMOTION_ALL_USER: '/api/Promotion/givePromotionAllUser'
   },
   DRIVER: {
     GET_DRIVER: '/api/Driver',
@@ -32,8 +33,9 @@ export const APP_API_ENDPOINT = Object.freeze({
     ADD_DRIVER: '/api/Driver/Driver'
   },
   LOSS_COST_VEHICLE: {
-    GET_COST: '/api/LossCostVehicle/lossCostCar/vehicleId/startDate/endDate',
+    GET_COST: '/api/LossCostVehicle/totalLossVehicel',
     DELETE_COST: ({ id }: { id: string | number | null }) => `/api/LossCostVehicle/deleteLossCost/id?id=${id}`,
+    UPDATE_COST: ({ id }: { id: string | number | null }) => `/api/LossCostVehicle/updateLossCost/id?id=${id}`,
     ADD_COST: '/api/LossCostVehicle/addLossCostVehicle'
   },
   COST_TYPE: {
@@ -44,7 +46,7 @@ export const APP_API_ENDPOINT = Object.freeze({
   },
   REQUEST: {
     GET_REQUEST: '/api/Request',
-    REQUEST_DETAILS: ({ id }: { id: string | number | null }) => `/api/Request/${id}`,
+    REQUEST_DETAILS: ({ id }: { id: string | number | null }) => `/GetRequestDetailById/${id}`,
     ACCEPT_CANCLE_REQUEST: ({ id }: { id: string | number | null }) => `/api/Request/acceptCancleTicket/${id}`
   },
   TICKET: {
@@ -52,7 +54,8 @@ export const APP_API_ENDPOINT = Object.freeze({
     TICKET_DETAILS: ({ id }: { id: string | number | null }) => `/api/Ticket/ticketById/${id}`,
     TICKET_NOT_PAID: ({ id }: { id: string | number | null }) => `/api/Ticket/tickeNotPaid/${id}`,
     DELETE_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/deleteTicketTimeOut/${id}`,
-    UPDATE_STATUS_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/updateStatusticketNotPaid/${id}`
+    UPDATE_STATUS_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/updateStatusticketNotPaid/${id}`,
+    GET_TRAVEL_CAR_BY_REQUEST: ({ id }: { id: string | number | null }) => `/api/Ticket/GetTravelCarByRequest/${id}`
   },
   REVIEWS: {
     GET_REVIEW: '/api/Review',
@@ -67,7 +70,8 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_HISTORY_RENT_VEHICLE: '/api/HistoryRentVehicle/listHistoryRentVehicle'
   },
   HISTORY_RENT_DRIVER: {
-    GET_HISTORY_RENT_DRIVER: '/api/HistoryRentDriver/listHistoryRentDriver'
+    GET_HISTORY_RENT_DRIVER: '/api/HistoryRentDriver/listHistoryRentDriver',
+    GET_LIST_DRIVER_RENT: '/api/HistoryRentDriver/ListDriverRent'
   },
   USER_PROFILE: {
     GET_DATA: '/api/Auth/userProfile'
