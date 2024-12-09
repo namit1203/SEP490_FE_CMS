@@ -98,10 +98,10 @@ const AddVehiclePage: React.FC = () => {
     try {
       const response = await addMutation.mutateAsync(values)
       if (response.status === HttpStatusCode.Ok) {
-        message.success(response.data.message)
+        message.success('Add successfully')
         navigate('/vehicles')
       } else {
-        message.error(response.message)
+        message.error('Add failed')
       }
     } catch (error) {
       console.error('Error values:', error)

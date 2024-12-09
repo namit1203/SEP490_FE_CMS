@@ -3,7 +3,6 @@ import useColumnSearch from '@/hooks/useColumnSearch'
 import { useDeleteVehiclesMutation, useQueryVehicles } from '@/queries/vehicle'
 import { DataTypeVehicle } from '@/types/DataType'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
-// import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { PlusOutlined } from '@ant-design/icons'
 import type { TableProps } from 'antd'
@@ -25,41 +24,6 @@ const VehiclesPage: React.FC = () => {
     refetchVehicles()
   }, [refetchVehicles])
 
-  // useEffect(() => {
-  //   if (formData) {
-  //     form.setFieldsValue(formData)
-  //     setSelectedItem(null)
-  //   }
-  // }, [formData, form])
-
-  // const handleFormSubmit = async (values: any) => {
-  //   const handleResponse = (response: any, successMessage: string, errorMessage: string) => {
-  //     if (response.status === HttpStatusCode.Ok) {
-  //       message.success(successMessage)
-  //       refetchVehicles()
-  //     } else {
-  //       message.error(errorMessage)
-  //     }
-  //   }
-
-  //   try {
-  //     let response
-  //     if (mode === 'add') {
-  //       console.log(values)
-  //       response = await addMutation.mutateAsync(values)
-  //       handleResponse(response, response.message, 'Add failed')
-  //     } else if (mode === 'edit' && lastFetchedId != null) {
-  //       response = await updateMutation.mutateAsync({ id: lastFetchedId, body: values })
-  //       handleResponse(response, 'Update successfully', 'Update failed')
-  //     }
-  //   } catch (error) {
-  //     console.error('Error values:', error)
-  //   } finally {
-  //     setIsModalOpen(false)
-  //     setSelectedItem(null)
-  //   }
-  // }
-
   const handleFormDelete = async (id: number) => {
     try {
       const response = await deleteMutaion.mutateAsync({ id })
@@ -73,87 +37,6 @@ const VehiclesPage: React.FC = () => {
       console.error('Error deleting:', error)
     }
   }
-
-  // const openAddModal = () => {
-  //   setMode('add')
-  //   form.resetFields()
-  //   setIsModalOpen(true)
-  // }
-
-  // const fields: ModalFormProps<DataTypeVehicle>['fields'] = [
-  //   {
-  //     name: 'description',
-  //     label: 'Mô tả',
-  //     component: <TextArea />,
-  //     rules: [{ required: true, message: 'Vui lòng nhập Mô tả!' }]
-  //   },
-  //   {
-  //     name: 'driverId',
-  //     label: 'Tài xế',
-  //     component: (
-  //       <Select placeholder='Chọn tài xế' style={{ width: '100%' }}>
-  //         {dataTypeDriver?.map((item: any) => (
-  //           <Option key={item.id} value={item.id}>
-  //             {item.userName}
-  //           </Option>
-  //         ))}
-  //       </Select>
-  //     ),
-  //     rules: [{ required: true, message: 'Vui lòng chọn tài xế!' }]
-  //   },
-  //   {
-  //     name: 'image',
-  //     label: 'Link ảnh',
-  //     component: <Input />,
-  //     rules: [{ required: true, message: 'Vui lòng nhập link ảnh!' }]
-  //   },
-  //   {
-  //     name: 'numberSeat',
-  //     label: 'Số ghế ngồi',
-  //     component: <InputNumber style={{ width: '100%' }} />,
-  //     rules: [{ required: true, message: 'Vui lòng nhập số chỗ ngồi!' }]
-  //   },
-  //   {
-  //     name: 'licensePlate',
-  //     label: 'Biển số xe',
-  //     component: <Input />,
-  //     rules: [{ required: true, message: 'Vui lòng nhập Biển số xe!' }]
-  //   },
-  //   {
-  //     name: 'vehicleTypeId',
-  //     label: 'Nhà xe',
-  //     component: (
-  //       <Select placeholder='Chọn nhà xe' style={{ width: '100%' }}>
-  //         {dataTypeOfVehicles?.map((item: any) => (
-  //           <Option key={item.id} value={item.id}>
-  //             {item.description}
-  //           </Option>
-  //         ))}
-  //       </Select>
-  //     ),
-  //     rules: [{ required: true, message: 'Vui lòng chọn nhà xe!' }]
-  //   },
-  //   {
-  //     name: 'vehicleOwner',
-  //     label: 'Chủ nhà xe',
-  //     component: (
-  //       <Select placeholder='Chọn nhà xe' style={{ width: '100%' }}>
-  //         {dataTypeOfVehiclesOwner?.map((item: any) => (
-  //           <Option key={item.id} value={item.id}>
-  //             {item.username}
-  //           </Option>
-  //         ))}
-  //       </Select>
-  //     ),
-  //     rules: [{ required: true, message: 'Vui lòng chọn chủ nhà xe!' }]
-  //   },
-  //   {
-  //     name: 'status',
-  //     label: 'Trạng thái',
-  //     component: <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />,
-  //     valuePropName: 'checked'
-  //   }
-  // ]
 
   const columns: TableProps<DataTypeVehicle>['columns'] = [
     {
@@ -231,15 +114,6 @@ const VehiclesPage: React.FC = () => {
               </Link>
             </div>
             <Table columns={columns} dataSource={dataSource} />
-            {/* <ModalForm
-              form={form}
-              isVisible={isModalOpen}
-              onSubmit={handleFormSubmit}
-              initialValues={selectedItem}
-              fields={fields}
-              setIsModalOpen={setIsModalOpen}
-              setSelectedItem={setSelectedItem}
-            /> */}
           </>
         )
       })}

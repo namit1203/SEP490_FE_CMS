@@ -122,10 +122,10 @@ const EditVehiclePage: React.FC = () => {
         console.log(response)
 
         if (response.status === HttpStatusCode.Ok) {
-          message.success(response.data.message)
+          message.success('Update successfully')
           navigate('/vehicles')
         } else {
-          message.error(response.message)
+          message.error('Update failed')
         }
       }
     } catch (error) {
