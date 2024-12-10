@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { Breadcrumb, Layout, theme } from 'antd'
-import { Outlet, useLocation } from 'react-router-dom'
-import { routesConfig } from '@/useRouter'
 import HeaderLayout from '@/layout/Header'
 import Sidebar from '@/layout/Sidebar'
+import { routesConfig } from '@/useRouter'
+import { Breadcrumb, Layout, theme } from 'antd'
+import React, { useState } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 
 const { Content, Footer } = Layout
 
@@ -21,7 +21,7 @@ const PrivateLayout: React.FC = () => {
 
   const isChildRoute = () => {
     const childrenPaths = getChildrenOfRootPath()
-    return childrenPaths.some((path) => location.pathname.startsWith(path))
+    return childrenPaths.some((path) => location.pathname.startsWith(path as string))
   }
 
   const getBreadcrumbItems = () => {
