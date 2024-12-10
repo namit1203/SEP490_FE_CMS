@@ -1,21 +1,54 @@
-import { ActionType } from '@/enums/enum'
+import { ActionType, RoleType } from '@/enums/enum'
 import { formatTime } from '@/helpers'
 import { useQueryVehicleRent } from '@/queries/history'
+import { useAddHistoryVehicleMutation, useQueryRequest } from '@/queries/request'
 import { DataTypeRequest } from '@/types/DataType'
-import { Button, Col, Form, Input, Row, Select, Table, TableColumnsType } from 'antd'
-import { useMemo } from 'react'
+import { Button, Col, Form, Input, message, Row, Select, Table, TableColumnsType } from 'antd'
+import { HttpStatusCode } from 'axios'
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface TableData {
   key: string
   label: string
   value: string | number | JSX.Element | undefined
 }
-const RentCarForDriver = ({ data }: { data: DataTypeRequest | undefined }) => {
+const RentCarForDriver = ({
+  data,
+  account
+}: {
+  data: DataTypeRequest | undefined
+  account: {
+    role: string
+  }
+}) => {
   const [form] = Form.useForm()
+
+  const navigate = useNavigate()
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const [isLoadingDeny, setIsLoadingDeny] = useState<boolean>(false)
+
+  const [isCheck, setIsCheck] = useState<boolean>(false)
+
+  const addMutation = useAddHistoryVehicleMutation()
+
+  const { data: requestData, refetch } = useQueryRequest()
 
   const { data: rentVehicleData } = useQueryVehicleRent({
     enabled: data?.typeRequestId === ActionType.DRIVER_RENT_VEHICLE
   })
+
+  const filtered = useMemo(() => {
+    return requestData?.find((item: DataTypeRequest) => item.id === data?.requestId)
+  }, [data?.requestId, requestData])
+
+  useEffect(() => {
+    if (filtered && filtered.status !== isCheck) {
+      setIsCheck(filtered.status)
+    }
+  }, [filtered, isCheck])
 
   const tableData: TableData[] = useMemo(
     () => [
@@ -23,7 +56,12 @@ const RentCarForDriver = ({ data }: { data: DataTypeRequest | undefined }) => {
         key: 'vehicleId',
         label: 'Xe thuê',
         value: (
-          <Form.Item name='vehicleId' noStyle initialValue={data?.vehicleId}>
+          <Form.Item
+            name='vehicleId'
+            noStyle
+            initialValue={data?.vehicleId}
+            rules={[{ required: true, message: 'Vui lòng chọn xe thuê' }]}
+          >
             <Select placeholder='Chọn xe thuê' style={{ width: '30%' }}>
               {rentVehicleData &&
                 rentVehicleData.map((item: any) => (
@@ -100,25 +138,69 @@ const RentCarForDriver = ({ data }: { data: DataTypeRequest | undefined }) => {
     []
   )
 
-  const handleFormSubmit = (values: any) => {
-    console.log('Form Submitted', values)
+  const handleAction = async (options: { choose: boolean; vehicleId?: string; price?: number }) => {
+    if (options.choose) {
+      if (isLoading) return
+      setIsLoading(true)
+    } else {
+      if (isLoadingDeny) return
+      setIsLoadingDeny(true)
+    }
+
+    try {
+      const response = await addMutation.mutateAsync({
+        requestId: data?.requestId || null,
+        choose: options.choose,
+        vehicleId: options.vehicleId ? Number(options.vehicleId) : undefined,
+        price: options.price
+      })
+
+      if (response.status === HttpStatusCode.Ok) {
+        refetch()
+        message.success(`${options.choose ? 'Accept' : 'Deny'} successfully`)
+        navigate('/request')
+      } else {
+        message.error(`${options.choose ? 'Accept' : 'Deny'} failed`)
+      }
+    } catch (error) {
+      console.error('Error values:', error)
+      message.error(`${options.choose ? 'Accept' : 'Deny'} failed`)
+    } finally {
+      if (options.choose) {
+        setIsLoading(false)
+      } else {
+        setIsLoadingDeny(false)
+      }
+    }
   }
 
   return (
-    <Form form={form} layout='vertical' onFinish={handleFormSubmit}>
+    <Form
+      form={form}
+      layout='vertical'
+      onFinish={(values) => handleAction({ choose: true, vehicleId: values.vehicleId, price: values.price })}
+    >
       <Table columns={columns} dataSource={tableData} pagination={false} bordered />
-      <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
-        <Col>
-          <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }}>
-            Accept
-          </Button>
-        </Col>
-        <Col>
-          <Button type='primary' htmlType='button' danger>
-            Deny
-          </Button>
-        </Col>
-      </Row>
+      {!isCheck && [RoleType.ADMIN, RoleType.STAFF].includes(account.role as RoleType) && (
+        <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
+          <Col>
+            <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }} loading={isLoading}>
+              Accept
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type='primary'
+              htmlType='button'
+              danger
+              onClick={() => handleAction({ choose: false })}
+              loading={isLoadingDeny}
+            >
+              Deny
+            </Button>
+          </Col>
+        </Row>
+      )}
     </Form>
   )
 }

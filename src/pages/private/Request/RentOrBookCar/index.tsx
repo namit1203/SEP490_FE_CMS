@@ -1,7 +1,10 @@
+import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { formatTime } from '@/helpers'
+import { useQueryRequest, useUpdateConvenientTripMutation } from '@/queries/request'
 import { DataTypeRequest } from '@/types/DataType'
-import { Button, Col, Form, Input, Row, Table, TableColumnsType } from 'antd'
-import { useMemo } from 'react'
+import { Button, Col, Form, Input, message, Row, Table, TableColumnsType } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface TableData {
   key: string
@@ -10,6 +13,28 @@ interface TableData {
 }
 const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
   const [form] = Form.useForm()
+
+  const { data: requestData, refetch } = useQueryRequest()
+
+  const [isCheck, setIsCheck] = useState<boolean>(false)
+
+  const navigate = useNavigate()
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const [isLoadingDeny, setIsLoadingDeny] = useState<boolean>(false)
+
+  const AddVehicleByStaff = useUpdateConvenientTripMutation()
+
+  const filtered = useMemo(() => {
+    return requestData?.find((item: DataTypeRequest) => item.id === data?.requestId)
+  }, [data?.requestId, requestData])
+
+  useEffect(() => {
+    if (filtered && filtered.status !== isCheck) {
+      setIsCheck(filtered.status)
+    }
+  }, [filtered, isCheck])
 
   const tableData: TableData[] = useMemo(
     () => [
@@ -93,25 +118,63 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
     []
   )
 
-  const handleFormSubmit = (values: any) => {
-    console.log('Form Submitted', values)
+  const handleFormAction = async (choose: boolean, successMessage: string, errorMessage: string) => {
+    if (isLoading || isLoadingDeny) return
+
+    if (choose) {
+      setIsLoading(true)
+    } else {
+      setIsLoadingDeny(true)
+    }
+
+    try {
+      const response = await AddVehicleByStaff.mutateAsync({
+        id: data?.requestId ?? null,
+        choose
+      })
+
+      if (response.status === HttpStatusCode.Ok) {
+        refetch()
+        message.success(successMessage)
+        navigate('/request')
+      } else {
+        message.error(errorMessage)
+      }
+    } catch (error) {
+      console.error('Error values:', error)
+      message.error(errorMessage)
+    } finally {
+      if (choose) {
+        setIsLoading(false)
+      } else {
+        setIsLoadingDeny(false)
+      }
+    }
   }
 
   return (
-    <Form form={form} layout='vertical' onFinish={handleFormSubmit}>
+    <Form form={form} layout='vertical' onFinish={() => handleFormAction(true, 'Accept successfully', 'Accept failed')}>
       <Table columns={columns} dataSource={tableData} pagination={false} bordered />
-      <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
-        <Col>
-          <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }}>
-            Accept
-          </Button>
-        </Col>
-        <Col>
-          <Button type='primary' htmlType='button' danger>
-            Deny
-          </Button>
-        </Col>
-      </Row>
+      {!isCheck && (
+        <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
+          <Col>
+            <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }} loading={isLoading}>
+              Accept
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type='primary'
+              htmlType='button'
+              danger
+              onClick={() => handleFormAction(false, 'Deny successfully', 'Deny failed')}
+              loading={isLoadingDeny}
+            >
+              Deny
+            </Button>
+          </Col>
+        </Row>
+      )}
     </Form>
   )
 }

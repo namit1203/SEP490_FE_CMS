@@ -105,7 +105,7 @@ const staffRoutes = [
   {
     path: '/request/details',
     component: <DetailsRequestPage />,
-    allowedRoles: [RoleType.STAFF, RoleType.ADMIN, RoleType.DRIVER]
+    allowedRoles: [RoleType.STAFF, RoleType.DRIVER]
   },
   {
     path: '/request/add',

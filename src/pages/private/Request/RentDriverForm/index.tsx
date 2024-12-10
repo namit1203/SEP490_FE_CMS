@@ -1,9 +1,12 @@
+import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { ActionType } from '@/enums/enum'
 import { formatTime } from '@/helpers'
 import { useQueryDriverRent } from '@/queries/history'
+import { useAddHistoryDriverMutation, useQueryRequest } from '@/queries/request'
 import { DataTypeRequest } from '@/types/DataType'
-import { Button, Col, Form, Input, Row, Select, Table, TableColumnsType, Tooltip } from 'antd'
-import { useMemo } from 'react'
+import { Button, Col, Form, Input, message, Row, Select, Table, TableColumnsType, Tooltip } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface TableData {
   key: string
@@ -13,9 +16,21 @@ interface TableData {
 const RentDriverForm = ({ data }: { data: DataTypeRequest | undefined }) => {
   const [form] = Form.useForm()
 
+  const navigate = useNavigate()
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const [isLoadingDeny, setIsLoadingDeny] = useState<boolean>(false)
+
+  const [isCheck, setIsCheck] = useState<boolean>(false)
+
+  const addMutation = useAddHistoryDriverMutation()
+
   const { data: driverData } = useQueryDriverRent({
     enabled: data?.typeRequestId === ActionType.RENT_DRIVER
   })
+
+  const { data: requestData, refetch } = useQueryRequest()
 
   const tableData: TableData[] = useMemo(
     () => [
@@ -85,6 +100,16 @@ const RentDriverForm = ({ data }: { data: DataTypeRequest | undefined }) => {
     [data, driverData]
   )
 
+  const filtered = useMemo(() => {
+    return requestData?.find((item: DataTypeRequest) => item.id === data?.requestId)
+  }, [data?.requestId, requestData])
+
+  useEffect(() => {
+    if (filtered && filtered.status !== isCheck) {
+      setIsCheck(filtered.status)
+    }
+  }, [filtered, isCheck])
+
   const columns: TableColumnsType<TableData> = useMemo(
     () => [
       {
@@ -104,25 +129,69 @@ const RentDriverForm = ({ data }: { data: DataTypeRequest | undefined }) => {
     []
   )
 
-  const handleFormSubmit = (values: any) => {
-    console.log('Form Submitted', values)
+  const handleAction = async (options: { choose: boolean; driverId?: string; price?: number }) => {
+    if (options.choose) {
+      if (isLoading) return
+      setIsLoading(true)
+    } else {
+      if (isLoadingDeny) return
+      setIsLoadingDeny(true)
+    }
+
+    try {
+      const response = await addMutation.mutateAsync({
+        requestId: data?.requestId || null,
+        choose: options.choose,
+        driverId: options.driverId ? Number(options.driverId) : undefined,
+        price: options.price
+      })
+
+      if (response.status === HttpStatusCode.Ok) {
+        refetch()
+        message.success(`${options.choose ? 'Accept' : 'Deny'} successfully`)
+        navigate('/request')
+      } else {
+        message.error(`${options.choose ? 'Accept' : 'Deny'} failed`)
+      }
+    } catch (error) {
+      console.error('Error values:', error)
+      message.error(`${options.choose ? 'Accept' : 'Deny'} failed`)
+    } finally {
+      if (options.choose) {
+        setIsLoading(false)
+      } else {
+        setIsLoadingDeny(false)
+      }
+    }
   }
 
   return (
-    <Form form={form} layout='vertical' onFinish={handleFormSubmit}>
+    <Form
+      form={form}
+      layout='vertical'
+      onFinish={(values) => handleAction({ choose: true, driverId: values.driverId, price: values.price })}
+    >
       <Table columns={columns} dataSource={tableData} pagination={false} bordered />
-      <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
-        <Col>
-          <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }}>
-            Accept
-          </Button>
-        </Col>
-        <Col>
-          <Button type='primary' htmlType='button' danger>
-            Deny
-          </Button>
-        </Col>
-      </Row>
+      {!isCheck && (
+        <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
+          <Col>
+            <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }} loading={isLoading}>
+              Accept
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type='primary'
+              htmlType='button'
+              danger
+              onClick={() => handleAction({ choose: false })}
+              loading={isLoadingDeny}
+            >
+              Deny
+            </Button>
+          </Col>
+        </Row>
+      )}
     </Form>
   )
 }

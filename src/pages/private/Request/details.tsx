@@ -1,38 +1,37 @@
 import { ActionType } from '@/enums/enum'
 import { useQueryRequestDetails } from '@/queries/request'
+import { useQueryUserProfile } from '@/queries/user-profile'
 import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 import AddVehicleForm from './AddVehicleForm'
-import RentVehicleForm from './RentVehicleForm'
+import RentCarForDriver from './RentCarForDriver'
 import RentDriverForm from './RentDriverForm'
 import RentOrBookCar from './RentOrBookCar'
-import RentCarForDriver from './RentCarForDriver'
+import RentVehicleForm from './RentVehicleForm'
 
 const DetailsRequestPage: React.FC = () => {
   const [searchParams] = useSearchParams()
 
   const requestID = searchParams.get('id')
 
-  const { data } = useQueryRequestDetails({ id: requestID })
+  const { data, isLoading, error } = useQueryRequestDetails({ id: requestID })
 
-  const renderComponent = () => {
-    switch (data?.typeRequestId) {
-      case ActionType.ADD_VEHICLE:
-        return <AddVehicleForm data={data} />
-      case ActionType.RENT_VEHICLE:
-        return <RentVehicleForm data={data} />
-      case ActionType.RENT_DRIVER:
-        return <RentDriverForm data={data} />
-      case ActionType.RENT_TRIP || ActionType.CHARTER_TRIP:
-        return <RentOrBookCar data={data} />
-      case ActionType.DRIVER_RENT_VEHICLE:
-        return <RentCarForDriver data={data} />
-      default:
-        return <p>Không tìm thấy loại yêu cầu phù hợp.</p>
-    }
+  const { data: account } = useQueryUserProfile()
+
+  if (isLoading) return <p>Đang tải...</p>
+  if (error) return <p>Có lỗi xảy ra: {error.message}</p>
+  if (!data) return <p>Không tìm thấy dữ liệu yêu cầu.</p>
+
+  const componentsMap: Partial<Record<ActionType, React.ReactNode>> = {
+    [ActionType.ADD_VEHICLE]: <AddVehicleForm data={data} />,
+    [ActionType.RENT_VEHICLE]: <RentVehicleForm data={data} />,
+    [ActionType.RENT_DRIVER]: <RentDriverForm data={data} />,
+    [ActionType.RENT_TRIP]: <RentOrBookCar data={data} />,
+    [ActionType.CHARTER_TRIP]: <RentOrBookCar data={data} />,
+    [ActionType.DRIVER_RENT_VEHICLE]: <RentCarForDriver data={data} account={account} />
   }
 
-  return <>{renderComponent()}</>
+  return componentsMap[data.typeRequestId as ActionType] || <p>Không tìm thấy loại yêu cầu phù hợp.</p>
 }
 
 export default DetailsRequestPage

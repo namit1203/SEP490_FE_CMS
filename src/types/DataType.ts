@@ -72,12 +72,13 @@ export interface DataTypeFixedCost {
 }
 
 export interface DataTypeRequest {
+  id?: number
   requestId: number
   ticketId: number | null // Nullable field
   vehicleId: number | any
   driverId: number
   note: string | null // Nullable field
-  typeRequestId: number
+  typeRequestId: string | number | null
   typeName: string
   startLocation: string
   endLocation: string
@@ -88,4 +89,12 @@ export interface DataTypeRequest {
   username: string
   phoneNumber: string
   promotionCode: string
+}
+
+export interface RequestOption {
+  requestId?: number | string | null
+  choose?: boolean
+  vehicleId?: number
+  price?: number
+  driverId?: number
 }
