@@ -1,7 +1,9 @@
-import { ActionType, ActionTypeDescriptions } from '@/enums/enum'
+import { ActionType, ActionTypeDescriptions, RoleType } from '@/enums/enum'
 import useColumnSearch from '@/hooks/useColumnSearch'
 import { useQueryRequest } from '@/queries/request'
+import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import renderWithLoading from '@/utils/renderWithLoading'
+import { PlusOutlined } from '@ant-design/icons'
 import type { TableProps } from 'antd'
 import { Button, Popconfirm, Space, Table } from 'antd'
 import React from 'react'
@@ -18,6 +20,7 @@ interface DataType {
 
 const RequestPage: React.FC = () => {
   const { data, isLoading } = useQueryRequest()
+  const role = useLocalStorage.getLocalStorageData('role')
 
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -100,6 +103,15 @@ const RequestPage: React.FC = () => {
         isLoading,
         content: (
           <>
+            {role && role === RoleType.DRIVER && (
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+                <Link to='add'>
+                  <Button type='primary' icon={<PlusOutlined />} ghost>
+                    Thuê xe
+                  </Button>
+                </Link>
+              </div>
+            )}
             <Table columns={columns} dataSource={dataSource} />
           </>
         )
