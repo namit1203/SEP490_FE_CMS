@@ -1,4 +1,5 @@
 import {
+  AccountBookOutlined,
   AppstoreOutlined,
   BarChartOutlined,
   CarOutlined,
@@ -75,6 +76,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             label: <Link to='/rent-driver'>Rent Driver</Link> // Link added
           },
           {
+            key: 'rent-vehicle',
+            icon: <CarOutlined />,
+            label: <Link to='/rent-vehicle'>Rent Vehicle</Link> // Link added
+          },
+          {
             key: 'history-rent-driver',
             icon: <CarOutlined />,
             label: <Link to='/history-rent-driver'>History Rent Driver</Link> // Link added
@@ -118,6 +124,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             key: 'account',
             icon: <UserSwitchOutlined />,
             label: <Link to='/account'>Account</Link> // Link added
+          },
+          {
+            key: 'revenue',
+            icon: <AccountBookOutlined />,
+            label: <Link to='/revenue'>Revenue</Link> // Link added
           },
           {
             key: 'role',

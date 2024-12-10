@@ -85,4 +85,7 @@ export interface DataTypeRequest {
   endTime: string // ISO Date string
   seats: number | null // Nullable field
   price: number
+  username: string
+  phoneNumber: string
+  promotionCode: string
 }

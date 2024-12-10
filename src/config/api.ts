@@ -58,6 +58,9 @@ export const APP_API_ENDPOINT = Object.freeze({
     UPDATE_STATUS_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/updateStatusticketNotPaid/${id}`,
     GET_TRAVEL_CAR_BY_REQUEST: ({ id }: { id: string | number | null }) => `/api/Ticket/GetTravelCarByRequest/${id}`
   },
+  REVENUE: {
+    GET_REVENUE: '/api/Revenue/getRevenue'
+  },
   REVIEWS: {
     GET_REVIEW: '/api/Review',
     DELETE_REVIEWS: ({ id }: { id: string | number | null }) => `/api/Review/DeleteReview/${id}`
@@ -68,7 +71,8 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_ACCOUNT_DETAILS: ({ id }: { id: string | number | null }) => `/api/Account/detailsAccount/${id}`
   },
   HISTORY_RENT_VEHICLE: {
-    GET_HISTORY_RENT_VEHICLE: '/api/HistoryRentVehicle/listHistoryRentVehicle'
+    GET_HISTORY_RENT_VEHICLE: '/api/HistoryRentVehicle/listHistoryRentVehicle',
+    GET_LIST_VEHICLE_RENT: '/api/HistoryRentVehicle/ListVehicleUseRent'
   },
   HISTORY_RENT_DRIVER: {
     GET_HISTORY_RENT_DRIVER: '/api/HistoryRentDriver/listHistoryRentDriver',

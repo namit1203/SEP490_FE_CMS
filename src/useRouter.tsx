@@ -13,13 +13,19 @@ import HistoryRentDriverPage from './pages/private/History-Driver'
 import HistoryRentVehiclePage from './pages/private/History-Vehicle'
 import PromotionPage from './pages/private/Promotion'
 import AddPromotionPage from './pages/private/Promotion/add'
+import DetailPromotionPage from './pages/private/Promotion/detail'
 import EditPromotionPage from './pages/private/Promotion/edit'
+import RentVehiclePage from './pages/private/RentVehicle'
+import AddRentVehiclePage from './pages/private/RentVehicle/add'
 import RequestPage from './pages/private/Request'
 import DetailsRequestPage from './pages/private/Request/details'
+import RevenuePage from './pages/private/Revenue'
 import ReviewsPage from './pages/private/Reviews'
 import RolePage from './pages/private/Role'
 import TicketPage from './pages/private/Ticket'
 import TicketNotPaidPage from './pages/private/Ticket-Not-Paid'
+import DetailTicketPage from './pages/private/Ticket/detail'
+import EditTicketPage from './pages/private/Ticket/edit'
 import TripsPages from './pages/private/trips'
 import UnauthorizedPage from './pages/private/Unauthorized'
 import UserProfilePage from './pages/private/UserProfile'
@@ -28,9 +34,6 @@ import AddVehiclePage from './pages/private/Vehicles/add'
 import EditVehiclePage from './pages/private/Vehicles/edit'
 import VehicleUsingPage from './pages/private/VehicleUsing'
 import LoginPage from './pages/public/login'
-import DetailPromotionPage from './pages/private/Promotion/detail'
-import DetailTicketPage from './pages/private/Ticket/detail'
-import EditTicketPage from './pages/private/Ticket/edit'
 
 const staffRoutes = [
   { path: '/trips', component: <TripsPages />, allowedRoles: ['Staff'] },
@@ -100,11 +103,14 @@ const staffRoutes = [
   },
   { path: '/request', component: <RequestPage />, allowedRoles: ['Staff', 'Admin', 'Driver'] },
   { path: '/request/details', component: <DetailsRequestPage />, allowedRoles: ['Staff', 'Admin', 'Driver'] },
+  { path: '/revenue', component: <RevenuePage />, allowedRoles: ['Staff', 'VehicleOwner'] },
   { path: '/ticket', component: <TicketPage />, allowedRoles: ['Staff'] },
   { path: '/ticket/detail', component: <DetailTicketPage />, allowedRoles: ['Staff'] },
   { path: '/ticket/edit', component: <EditTicketPage />, allowedRoles: ['Staff'] },
   { path: '/ticket-not-paid', component: <TicketNotPaidPage />, allowedRoles: ['Staff', 'Driver'] },
   { path: '/reviews', component: <ReviewsPage />, allowedRoles: ['Staff'] },
+  { path: '/rent-vehicle', component: <RentVehiclePage />, allowedRoles: ['Staff'] },
+  { path: '/rent-vehicle/add', component: <AddRentVehiclePage />, allowedRoles: ['Staff'] },
   {
     path: '/user-profile',
     component: <UserProfilePage />,

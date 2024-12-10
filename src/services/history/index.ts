@@ -21,6 +21,12 @@ class HistoryApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+  public GetListVehicleRent(): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.HISTORY_RENT_VEHICLE.GET_LIST_VEHICLE_RENT,
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
 }
 
 const historyApiRequest = new HistoryApiRequest()

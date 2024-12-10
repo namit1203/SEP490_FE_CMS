@@ -69,14 +69,16 @@ const RequestPage: React.FC = () => {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <Link to={`details?id=${record.id}`}>
-            <Button type='primary'>Show</Button>
-          </Link>
           <Popconfirm title='Bạn có chắc chắn muốn xóa yêu cầu này không?' okText='Yes' cancelText='No'>
             <Button type='primary' danger>
               Delete
             </Button>
           </Popconfirm>
+          {record.typeId !== 3 && (
+            <Link to={`details?id=${record.id}`}>
+              <Button type='primary'>Show</Button>
+            </Link>
+          )}
           {record.typeId === 3 && (
             <Popconfirm title='Bạn có chắc chắn muốn hủy yêu cầu này không?' okText='Xác nhận' cancelText='Hủy'>
               <Button type='default'>Cancel</Button>
