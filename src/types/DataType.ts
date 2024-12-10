@@ -2,11 +2,11 @@ export interface DataType {
   key: string
   name?: string
   numberSeat?: number
-  startTime?: number
+  startTime?: number | string
   price?: number
-  status?: boolean
+  status?: boolean | string // For "Đã thanh toán" type values
   description?: string
-  licensePlate?: string
+  licensePlate?: string // Corrected from "licsenceVehicle"
   pointStart?: string
   pointEnd?: string
   driverId?: number
@@ -16,6 +16,18 @@ export interface DataType {
   exchangePoint?: number
   imagePromotion?: string
   startDate?: string
+  vehicleId?: number
+  licsenceVehicle?: string // Kept for compatibility, though it duplicates licensePlate
+  note?: string
+  image?: string
+  pricePromotion?: number
+  typeOfPayment?: string
+  fullName?: string
+  userId?: number // Added
+  tripId?: number // Added
+  seatCode?: string | null // Added
+  timeFrom?: string // Added
+  timeTo?: string // Added
 }
 
 export interface DataTypeVehicle {
@@ -34,6 +46,8 @@ export interface DataTypeVehicle {
   createdBy: number | null // Nullable field
   updateAt: string // ISO Date string
   updateBy: number | null // Nullable field
+  licsenceVehicle?: string
+  note?: string
 }
 
 export interface DataTypeCost {

@@ -29,6 +29,8 @@ import EditVehiclePage from './pages/private/Vehicles/edit'
 import VehicleUsingPage from './pages/private/VehicleUsing'
 import LoginPage from './pages/public/login'
 import DetailPromotionPage from './pages/private/Promotion/detail'
+import DetailTicketPage from './pages/private/Ticket/detail'
+import EditTicketPage from './pages/private/Ticket/edit'
 
 const staffRoutes = [
   { path: '/trips', component: <TripsPages />, allowedRoles: ['Staff'] },
@@ -98,7 +100,9 @@ const staffRoutes = [
   },
   { path: '/request', component: <RequestPage />, allowedRoles: ['Staff', 'Admin', 'Driver'] },
   { path: '/request/details', component: <DetailsRequestPage />, allowedRoles: ['Staff', 'Admin', 'Driver'] },
-  { path: '/ticket', component: <TicketPage />, allowedRoles: ['Staff', 'Driver'] },
+  { path: '/ticket', component: <TicketPage />, allowedRoles: ['Staff'] },
+  { path: '/ticket/detail', component: <DetailTicketPage />, allowedRoles: ['Staff'] },
+  { path: '/ticket/edit', component: <EditTicketPage />, allowedRoles: ['Staff'] },
   { path: '/ticket-not-paid', component: <TicketNotPaidPage />, allowedRoles: ['Staff', 'Driver'] },
   { path: '/reviews', component: <ReviewsPage />, allowedRoles: ['Staff'] },
   {

@@ -39,6 +39,12 @@ class TicketApiRequest {
       config: { method: METHOD_TYPE.POST, cors: false }
     })
   }
+  public UpdateTicket({ id, body }: { id: string | number | null; body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TICKET.UPDATE_TICKET({ id }),
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
 }
 
 const ticketApiRequest = new TicketApiRequest()

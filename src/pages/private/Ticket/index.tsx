@@ -1,9 +1,11 @@
 import { formatTime } from '@/helpers'
 import useColumnSearch from '@/hooks/useColumnSearch'
-import { useQueryTicket } from '@/queries/ticket'
+import { useQueryTicket, useRemoveTicketMutation } from '@/queries/ticket'
 import renderWithLoading from '@/utils/renderWithLoading'
-import { Button, Popconfirm, Space, Table, TableProps } from 'antd'
-import React from 'react'
+import { Button, message, Popconfirm, Space, Table, TableProps } from 'antd'
+import { HttpStatusCode } from 'axios'
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 interface DataType {
   key: string
@@ -18,24 +20,39 @@ interface DataType {
 }
 
 const TicketPage: React.FC = () => {
-  const { data, isLoading } = useQueryTicket()
+  const { data, refetch, isLoading } = useQueryTicket()
+
+  const deleteMutation = useRemoveTicketMutation()
+
+  const emptyValue = (value: any) => {
+    return <span>{value === null || value === undefined ? '(Không)' : value}</span>
+  }
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
+
+  const handleFormDelete = async (id: number) => {
+    try {
+      const response = await deleteMutation.mutateAsync({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        message.success('Delete successfully')
+        refetch()
+      } else {
+        message.error('Delete failed')
+      }
+    } catch (error) {
+      console.error('Error deleting:', error)
+    }
+  }
 
   const columns: TableProps<DataType>['columns'] = [
-    {
-      title: 'Code',
-      dataIndex: 'codePromotion',
-      key: 'codePromotion',
-      ...useColumnSearch().getColumnSearchProps('codePromotion'),
-      render: (text) => <span>{text ?? 'null'}</span>,
-      align: 'center',
-      width: '10%'
-    },
     {
       title: 'Mô tả',
       dataIndex: 'description',
       key: 'description',
       ...useColumnSearch().getColumnSearchProps('description'),
-      render: (text) => <a>{text}</a>,
+      render: (text) => emptyValue(text),
       align: 'center',
       width: '15%'
     },
@@ -44,28 +61,31 @@ const TicketPage: React.FC = () => {
       dataIndex: 'note',
       key: 'note',
       align: 'center',
-      width: '15%'
+      width: '15%',
+      render: (text) => emptyValue(text)
     },
     {
       title: 'Điểm đi',
       dataIndex: 'pointStart',
       key: 'pointStart',
       align: 'center',
-      width: '10%'
+      width: '10%',
+      render: (text) => emptyValue(text)
     },
     {
       title: 'Điểm đến',
       dataIndex: 'pointEnd',
       key: 'pointEnd',
       align: 'center',
-      width: '10%'
+      width: '10%',
+      render: (text) => emptyValue(text)
     },
     {
       title: 'Thời gian bắt dầu',
       dataIndex: 'timeFrom',
       key: 'timeFrom',
       align: 'center',
-      render: (text) => <span>{formatTime(text)}</span>,
+      render: (text) => emptyValue(formatTime(text)),
       width: '10%'
     },
     {
@@ -73,7 +93,7 @@ const TicketPage: React.FC = () => {
       dataIndex: 'timeTo',
       key: 'timeTo',
       align: 'center',
-      render: (text) => <span>{formatTime(text)}</span>,
+      render: (text) => emptyValue(formatTime(text)),
       width: '10%'
     },
     {
@@ -84,14 +104,36 @@ const TicketPage: React.FC = () => {
       width: '10%'
     },
     {
+      title: 'Code',
+      dataIndex: 'codePromotion',
+      key: 'codePromotion',
+      ...useColumnSearch().getColumnSearchProps('codePromotion'),
+      render: (text) => emptyValue(text),
+      align: 'center',
+      width: '10%'
+    },
+    {
       title: 'Action',
       key: 'action',
       align: 'center',
-      render: () => (
+      render: (ticket) => (
         <Space size='middle'>
-          <Button type='primary'>Edit</Button>
-          <Popconfirm title='Are you sure to delete this item?' okText='Yes' cancelText='No'>
-            <Button type='primary' danger>
+          <Link to={`/ticket/detail?id=${ticket.id}`}>
+            <Button color='default' variant='solid'>
+              Detail
+            </Button>
+          </Link>
+          <Link to={`/ticket/edit?id=${ticket.id}`}>
+            <Button type='primary'>Edit</Button>
+          </Link>
+
+          <Popconfirm
+            onConfirm={() => handleFormDelete(ticket.id)}
+            title='Are you sure to delete this item?'
+            okText='Yes'
+            cancelText='No'
+          >
+            <Button disabled={ticket.typeOfPayment !== 2} type='primary' danger>
               Delete
             </Button>
           </Popconfirm>
