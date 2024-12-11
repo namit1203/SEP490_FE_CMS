@@ -9,6 +9,19 @@ class TripsApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+  public GetTypeOfTrips(): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TRIPS.GET_TYPE_OF_TRIPS,
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
+
+  public AddTrip({ body }: { body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TRIPS.ADD_TRIP,
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
 }
 
 const tripsApiRequest = new TripsApiRequest()
