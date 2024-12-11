@@ -1,15 +1,19 @@
-import { ModalFormProps } from '@/components/Modal/ModalForm'
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useQueryDriver } from '@/queries/driver'
 import { useAddVehiclesMutation, useQueryTypeOfVehicles, useQueryTypeVehiclesOwner } from '@/queries/vehicle'
 import { DataTypeVehicle } from '@/types/DataType'
-import { Button, Form, Input, InputNumber, message, Select, Switch } from 'antd'
+import { Button, Col, Form, Input, InputNumber, message, Row, Select, Switch, Table, TableColumnsType } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { useNavigate } from 'react-router-dom'
 
+interface TableData {
+  key: string
+  label: string
+  value: JSX.Element | string | undefined
+}
+
 const AddVehiclePage: React.FC = () => {
   const [form] = Form.useForm()
-  const { Option } = Select
 
   const { data: dataTypeDriver } = useQueryDriver()
   const { data: dataTypeOfVehicles } = useQueryTypeOfVehicles()
@@ -19,78 +23,112 @@ const AddVehiclePage: React.FC = () => {
 
   const navigate = useNavigate()
 
-  const fields: ModalFormProps<DataTypeVehicle>['fields'] = [
+  const tableData: TableData[] = [
     {
-      name: 'description',
+      key: 'description',
       label: 'Mô tả',
-      component: <TextArea />,
-      rules: [{ required: true, message: 'Vui lòng nhập Mô tả!' }]
+      value: (
+        <Form.Item name='description' rules={[{ required: true, message: 'Vui lòng nhập Mô tả!' }]}>
+          <TextArea placeholder='Nhập Mô tả' style={{ width: '30%' }} rows={2} />
+        </Form.Item>
+      )
     },
     {
-      name: 'driverId',
+      key: 'driverId',
       label: 'Tài xế',
-      component: (
-        <Select placeholder='Chọn tài xế' style={{ width: '100%' }}>
-          {dataTypeDriver?.map((item: any) => (
-            <Option key={item.id} value={item.id}>
-              {item.userName}
-            </Option>
-          ))}
-        </Select>
-      ),
-      rules: [{ required: true, message: 'Vui lòng chọn tài xế!' }]
+      value: (
+        <Form.Item name='driverId' rules={[{ required: true, message: 'Vui lòng chọn tài xế!' }]}>
+          <Select placeholder='Chọn tài xế' style={{ width: '30%' }}>
+            {dataTypeDriver?.map((item: any) => (
+              <Select.Option key={item.id} value={item.id}>
+                {item.userName}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      )
     },
     {
-      name: 'image',
+      key: 'image',
       label: 'Link ảnh',
-      component: <Input />,
-      rules: [{ required: true, message: 'Vui lòng nhập link ảnh!' }]
+      value: (
+        <Form.Item name='image' rules={[{ required: true, message: 'Vui lòng nhập link ảnh!' }]}>
+          <Input placeholder='Nhập link ảnh' style={{ width: '30%' }} type='url' />
+        </Form.Item>
+      )
     },
     {
-      name: 'numberSeat',
+      key: 'numberSeat',
       label: 'Số ghế ngồi',
-      component: <InputNumber style={{ width: '100%' }} />,
-      rules: [{ required: true, message: 'Vui lòng nhập số chỗ ngồi!' }]
+      value: (
+        <Form.Item name='numberSeat' rules={[{ required: true, message: 'Vui lòng nhập số chỗ ngồi!' }]}>
+          <InputNumber style={{ width: '30%' }} placeholder='Nhập số chỗ ngồi' />
+        </Form.Item>
+      )
     },
     {
-      name: 'licensePlate',
+      key: 'licensePlate',
       label: 'Biển số xe',
-      component: <Input />,
-      rules: [{ required: true, message: 'Vui lòng nhập Biển số xe!' }]
+      value: (
+        <Form.Item name='licensePlate' rules={[{ required: true, message: 'Vui lòng nhập Biển số xe!' }]}>
+          <Input placeholder='Biển số xe' style={{ width: '30%' }} />
+        </Form.Item>
+      )
     },
     {
-      name: 'vehicleTypeId',
+      key: 'vehicleTypeId',
       label: 'Nhà xe',
-      component: (
-        <Select placeholder='Chọn nhà xe' style={{ width: '100%' }}>
-          {dataTypeOfVehicles?.map((item: any) => (
-            <Option key={item.id} value={item.id}>
-              {item.description}
-            </Option>
-          ))}
-        </Select>
-      ),
-      rules: [{ required: true, message: 'Vui lòng chọn nhà xe!' }]
+      value: (
+        <Form.Item name='vehicleTypeId' rules={[{ required: true, message: 'Vui lòng chọn nhà xe!' }]}>
+          <Select placeholder='Chọn nhà xe' style={{ width: '30%' }}>
+            {dataTypeOfVehicles?.map((item: any) => (
+              <Select.Option key={item.id} value={item.id}>
+                {item.description}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      )
     },
     {
-      name: 'vehicleOwner',
+      key: 'vehicleOwner',
       label: 'Chủ nhà xe',
-      component: (
-        <Select placeholder='Chọn nhà xe' style={{ width: '100%' }}>
-          {dataTypeOfVehiclesOwner?.map((item: any) => (
-            <Option key={item.id} value={item.id}>
-              {item.username}
-            </Option>
-          ))}
-        </Select>
-      ),
-      rules: [{ required: true, message: 'Vui lòng chọn chủ nhà xe!' }]
+      value: (
+        <Form.Item name='vehicleOwner' rules={[{ required: true, message: 'Vui lòng chọn chủ nhà xe!' }]}>
+          <Select placeholder='Chọn chủ nhà xe' style={{ width: '30%' }}>
+            {dataTypeOfVehiclesOwner?.map((item: any) => (
+              <Select.Option key={item.id} value={item.id}>
+                {item.username}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      )
     },
     {
-      name: 'status',
+      key: 'status',
       label: 'Trạng thái',
-      component: <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />,
-      valuePropName: 'checked'
+      value: (
+        <Form.Item name='status' valuePropName='checked'>
+          <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />
+        </Form.Item>
+      )
+    }
+  ]
+
+  const columns: TableColumnsType<TableData> = [
+    {
+      title: 'Key',
+      dataIndex: 'label',
+      key: 'label',
+      width: '30%'
+    },
+    {
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+      width: '70%',
+      render: (_, record) => <>{record.value}</>
     }
   ]
 
@@ -110,19 +148,14 @@ const AddVehiclePage: React.FC = () => {
 
   return (
     <Form onFinish={handleFormSubmit} form={form} layout='vertical'>
-      {fields.map((field) => (
-        <Form.Item
-          key={String(field.name)} // Ensure key is a string
-          name={field.name as string} // Ensure name is always a string
-          label={field.label}
-          rules={field.rules || []}
-        >
-          {field.component}
-        </Form.Item>
-      ))}
-      <Button type='primary' htmlType='submit'>
-        Add
-      </Button>
+      <Table columns={columns} dataSource={tableData} pagination={false} bordered rowKey='key' />
+      <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
+        <Col>
+          <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }}>
+            Add
+          </Button>
+        </Col>
+      </Row>
     </Form>
   )
 }
