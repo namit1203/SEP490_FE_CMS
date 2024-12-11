@@ -1,5 +1,6 @@
 import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons'
+import { useQueryClient } from '@tanstack/react-query'
 import { Avatar, Button, theme } from 'antd'
 import { Header } from 'antd/es/layout/layout'
 import { Link, useNavigate } from 'react-router-dom'
@@ -17,9 +18,12 @@ const HeaderLayout: React.FC<HeaderProps> = ({ collapsed, setCollapsed }) => {
 
   const navigate = useNavigate()
 
+  const queryClient = useQueryClient()
+
   const handleLogout = () => {
     useLocalStorage.removeLocalStorageData('role')
     useLocalStorage.removeLocalStorageData('token')
+    queryClient.clear()
     navigate('/login')
   }
 
