@@ -1,8 +1,9 @@
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { formatTime } from '@/helpers'
 import { useQueryRequest, useUpdateConvenientTripMutation } from '@/queries/request'
+import { useQueryVehicles } from '@/queries/vehicle'
 import { DataTypeRequest } from '@/types/DataType'
-import { Button, Col, Form, Input, message, Row, Table, TableColumnsType } from 'antd'
+import { Button, Col, Form, Input, message, Row, Select, Table, TableColumnsType } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -16,6 +17,8 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
 
   const { data: requestData, refetch } = useQueryRequest()
 
+  const { data: vehicleData } = useQueryVehicles()
+
   const [isCheck, setIsCheck] = useState<boolean>(false)
 
   const navigate = useNavigate()
@@ -24,7 +27,7 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
 
   const [isLoadingDeny, setIsLoadingDeny] = useState<boolean>(false)
 
-  const AddVehicleByStaff = useUpdateConvenientTripMutation()
+  const acceptMutation = useUpdateConvenientTripMutation()
 
   const filtered = useMemo(() => {
     return requestData?.find((item: DataTypeRequest) => item.id === data?.requestId)
@@ -42,6 +45,27 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
         key: 'username',
         label: 'Username',
         value: data?.username || 'N/A'
+      },
+      {
+        key: 'vehicleId',
+        label: 'Xe thuê',
+        value: (
+          <Form.Item
+            name='vehicleId'
+            noStyle
+            initialValue={data?.vehicleId}
+            rules={[{ required: true, message: 'Vui lòng chọn xe thuê' }]}
+          >
+            <Select placeholder='Chọn xe thuê' style={{ width: '30%' }}>
+              {vehicleData &&
+                vehicleData.map((item: any) => (
+                  <Select.Option key={item?.id} value={item?.id}>
+                    {item?.licensePlate}
+                  </Select.Option>
+                ))}
+            </Select>
+          </Form.Item>
+        )
       },
       {
         key: 'phoneNumber',
@@ -96,7 +120,7 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
         )
       }
     ],
-    [data]
+    [data, vehicleData]
   )
 
   const columns: TableColumnsType<TableData> = useMemo(
@@ -118,7 +142,12 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
     []
   )
 
-  const handleFormAction = async (choose: boolean, successMessage: string, errorMessage: string) => {
+  const handleFormAction = async (
+    choose: boolean,
+    successMessage: string,
+    errorMessage: string,
+    vehicleId?: number
+  ) => {
     if (isLoading || isLoadingDeny) return
 
     if (choose) {
@@ -128,9 +157,10 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
     }
 
     try {
-      const response = await AddVehicleByStaff.mutateAsync({
+      const response = await acceptMutation.mutateAsync({
         id: data?.requestId ?? null,
-        choose
+        choose,
+        vehicleId: vehicleId ?? null
       })
 
       if (response.status === HttpStatusCode.Ok) {
@@ -153,7 +183,11 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
   }
 
   return (
-    <Form form={form} layout='vertical' onFinish={() => handleFormAction(true, 'Accept successfully', 'Accept failed')}>
+    <Form
+      form={form}
+      layout='vertical'
+      onFinish={(values: any) => handleFormAction(true, 'Accept successfully', 'Accept failed', values.vehicleId)}
+    >
       <Table columns={columns} dataSource={tableData} pagination={false} bordered />
       {!isCheck && (
         <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
