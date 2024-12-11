@@ -1,11 +1,13 @@
 import useColumnSearch from '@/hooks/useColumnSearch'
-import { useQueryAccount } from '@/queries/account'
+import { useDeleteAccountMutation, useQueryAccount } from '@/queries/account'
 import renderWithLoading from '@/utils/renderWithLoading'
-import { Avatar, Button, Popconfirm, Space, Table, TableProps } from 'antd'
-import React from 'react'
+import { Avatar, Button, message, Popconfirm, Space, Table, TableProps } from 'antd'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 interface DataType {
   key: string
+  id: number
   avatar: string
   email: string
   fullName: string
@@ -15,7 +17,32 @@ interface DataType {
 }
 
 const AccountPage: React.FC = () => {
-  const { data, isLoading } = useQueryAccount()
+  const { data, isLoading, refetch } = useQueryAccount()
+
+  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)
+
+  const deleteMutation = useDeleteAccountMutation()
+
+  const handleDeleteAccount = async (id: number) => {
+    try {
+      setIsLoadingDelete(true)
+      await deleteMutation.mutateAsync(
+        { id },
+        {
+          onSuccess: () => {
+            message.success('Delete successfully')
+            refetch()
+          }
+        }
+      )
+    } catch (error) {
+      console.error('Error when delete account:', error)
+      message.error('Delete failed')
+    } finally {
+      setIsLoadingDelete(false)
+    }
+  }
+
   const columns: TableProps<DataType>['columns'] = [
     {
       title: 'Avatar',
@@ -72,12 +99,19 @@ const AccountPage: React.FC = () => {
       title: 'Action',
       key: 'action',
       align: 'center',
-      render: () => (
+      render: (_, record) => (
         <Space size='middle'>
-          <Button type='primary'>Edit</Button>
-          <Popconfirm title='Are you sure to delete this item?' okText='Yes' cancelText='No'>
-            <Button type='primary' danger>
-              Delete
+          <Link to={`edit?id=${record.id}`}>
+            <Button type='primary'>Edit</Button>
+          </Link>
+          <Popconfirm
+            title='Are you sure to lock this item?'
+            okText='Yes'
+            cancelText='No'
+            onConfirm={() => handleDeleteAccount(record.id)}
+          >
+            <Button type='primary' danger loading={isLoadingDelete}>
+              {record.status ? 'Lock' : 'Unlock'}
             </Button>
           </Popconfirm>
         </Space>
