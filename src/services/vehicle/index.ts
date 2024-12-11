@@ -9,6 +9,12 @@ class VehicleApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+  public GetVehiclesOwner(): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.VEHICLES.GET_VEHICLES_OWNER,
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
   public GetTypeOfVehicles(): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.VEHICLES.TYPE_OF_VEHICLES,
