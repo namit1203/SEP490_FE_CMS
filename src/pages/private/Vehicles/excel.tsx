@@ -168,8 +168,7 @@ const ExportExcelComponent = () => {
               {data.invalidEntries.map((entry: any, index) =>
                 entry.errors.length > 0 ? (
                   <p style={{ marginBottom: 20 }} key={index}>
-                    {entry.errors.join(', ')}
-                    {index < data.invalidEntries.length - 1 && ', '}
+                    {entry.errors}
                   </p>
                 ) : null
               )}

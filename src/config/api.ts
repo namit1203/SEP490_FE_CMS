@@ -5,10 +5,13 @@ export const APP_API_ENDPOINT = Object.freeze({
   },
   TRIPS: {
     GET_TRIPS: '/api/Trip',
+    GET_TYPE_OF_TRIPS: '/api/TypeOfTrip',
+    ADD_TRIP: '/api/Trip/addTrip',
     UPDATE_TRIPS: ({ id }: { id: string | number | null }) => `/api/Trip/updateTrip/${id}`
   },
   VEHICLES: {
     GET_VEHICLES: '/api/Vehicle/listVehicle',
+    GET_VEHICLES_OWNER: '/api/User/listVehicleOwner',
     DELETE_VEHICLES: ({ id }: { id: string | number | null }) => `/api/Vehicle/deleteVehicleByStatus/${id}`,
     ADD_VEHICLES_STAFF: ({ id, isApprove }: { id: string | number | null; isApprove: boolean }) =>
       `/api/Vehicle/addVehicleByStaff?requestID=${id}&isApprove=${isApprove}`,
@@ -69,6 +72,7 @@ export const APP_API_ENDPOINT = Object.freeze({
   },
   TICKET: {
     GET_TICKET: '/api/Ticket',
+    GET_TOTAL_TICKET: '/api/Ticket/RevenueTicket',
     CREATE_FOR_RENT_CAR: '/api/Ticket/createTicketForRentCar',
     UPDATE_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/updateTicket/${id}`,
     TICKET_DETAILS: ({ id }: { id: string | number | null }) => `/api/Ticket/ticketById/${id}`,

@@ -5,11 +5,13 @@ import {
   EuroCircleFilled,
   GiftOutlined,
   HistoryOutlined,
+  ReconciliationFilled,
   ShopFilled,
   ShoppingFilled,
   StarFilled,
   SwitcherFilled,
   TruckFilled,
+  TruckOutlined,
   UnlockFilled,
   UserOutlined,
   UserSwitchOutlined
@@ -49,6 +51,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             key: 'vehicles',
             icon: <CarOutlined />,
             label: <Link to='/vehicles'>Vehicles</Link> // Link added
+          },
+          {
+            key: 'vehicles-owner',
+            icon: <TruckOutlined />,
+            label: <Link to='/vehicles-owner'>Vehicles Owner</Link> // Link added
           },
           {
             key: 'vehicles-using',
@@ -94,6 +101,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             key: 'ticket',
             icon: <SwitcherFilled />,
             label: <Link to='/ticket'>Ticket</Link> // Link added
+          },
+          {
+            key: 'total-ticket',
+            icon: <ReconciliationFilled />,
+            label: <Link to='/total-ticket'>Total Ticket</Link> // Link added
           },
           {
             key: 'ticket-not-paid',

@@ -1,20 +1,17 @@
-import ModalForm from '@/components/Modal/ModalForm'
 import { formatPrize } from '@/helpers'
 import useColumnSearch from '@/hooks/useColumnSearch'
 import { useQueryTrips } from '@/queries/trip'
 import { DataType } from '@/types/DataType'
-import { fieldModalTable } from '@/utils/fieldModalTable'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
 import renderWithLoading from '@/utils/renderWithLoading'
-import { Button, Form, Popconfirm, Space, Table, TableProps } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
+import { Button, message, Popconfirm, Space, Table, TableProps } from 'antd'
 
-import React, { useState } from 'react'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import * as XLSX from 'xlsx'
 
 const TripPage: React.FC = () => {
-  const [form] = Form.useForm()
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedItem, setSelectedItem] = useState<DataType | null>(null)
-
   const { data, isLoading } = useQueryTrips()
 
   // Transform data source to ensure each record has a `key`
@@ -23,28 +20,39 @@ const TripPage: React.FC = () => {
     key: item.id || item.someUniqueField
   }))
 
-  const handleEdit = (item: DataType) => {
-    setSelectedItem(item)
-    setIsModalOpen(true)
-    form.setFieldsValue(item)
-  }
-
   const handleDelete = (id: string) => {
     console.log(`Delete item with ID: ${id}`)
     // Implement delete logic
   }
 
-  const handleFormSubmit = (values: DataType) => {
-    console.log('Updated values:', values)
-    setIsModalOpen(false)
-    setSelectedItem(null)
-    // Implement update logic
-  }
+  const handleExportToExcel = () => {
+    if (!data) {
+      message.error('No data to export!')
+      return
+    }
 
-  const filteredFields = fieldModalTable.filter(
-    (field) =>
-      field.name && ['name', 'licensePlate', 'startTime', 'pointStart', 'pointStart', 'price'].includes(field.name)
-  )
+    // Prepare data for Excel
+    const formattedData = data.map((item: any) => ({
+      'Số ghế của xe': item.numberSeat,
+      'Loại xe': item.vehicleTypeId,
+      'Biển số xe': item.licensePlate,
+      'Mô tả': item.description,
+      'Chủ xe': item.vehicleOwner,
+      'Tài xế': item.driverId
+    }))
+
+    // Create a worksheet
+    const worksheet = XLSX.utils.json_to_sheet(formattedData)
+
+    // Create a new workbook
+    const workbook = XLSX.utils.book_new()
+
+    // Append the worksheet to the workbook with a consistent name
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Vehicles')
+
+    // Write the workbook to an Excel file
+    XLSX.writeFile(workbook, 'vehicles.xlsx')
+  }
 
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -86,9 +94,7 @@ const TripPage: React.FC = () => {
       align: 'center',
       render: (_, record) => (
         <Space size='middle'>
-          <Button onClick={() => handleEdit(record)} type='primary'>
-            Edit
-          </Button>
+          <Button type='primary'>Edit</Button>
           <Popconfirm
             title='Are you sure to delete this item?'
             onConfirm={() => handleDelete(record.key)}
@@ -110,16 +116,22 @@ const TripPage: React.FC = () => {
         isLoading,
         content: (
           <>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16, gap: 16 }}>
+              <Link to='add'>
+                <Button type='primary' icon={<PlusOutlined />} ghost>
+                  Thêm mới
+                </Button>
+              </Link>
+              <Link to='excel'>
+                <Button type='primary' icon={<PlusOutlined />} ghost>
+                  Import Excel
+                </Button>
+              </Link>
+              <Button type='primary' onClick={handleExportToExcel} icon={<PlusOutlined />} ghost>
+                Export Excel
+              </Button>
+            </div>
             <Table columns={columns} dataSource={dataSource} />
-            <ModalForm
-              form={form}
-              isVisible={isModalOpen}
-              onSubmit={handleFormSubmit}
-              initialValues={selectedItem}
-              fields={filteredFields}
-              setIsModalOpen={setIsModalOpen}
-              setSelectedItem={setSelectedItem}
-            />
           </>
         )
       })}

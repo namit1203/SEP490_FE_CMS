@@ -14,6 +14,18 @@ export const useQueryTicket = (options?: Omit<UseQueryOptions<any>, 'queryKey' |
     }
   })
 }
+export const useQueryTicketTotal = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['Ticket_total'],
+    queryFn: async () => {
+      const response = await ticketApiRequest.GetTotalTicket()
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
+      }
+    }
+  })
+}
 
 export const useQueryTicketDetails = (
   { id }: { id: string | number | null },

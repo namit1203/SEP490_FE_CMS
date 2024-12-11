@@ -9,6 +9,12 @@ class TicketApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+  public GetTotalTicket(): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TICKET.GET_TOTAL_TICKET,
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
   public GetTicketDetails({ id }: { id: string | number | null }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TICKET.TICKET_DETAILS({ id }),

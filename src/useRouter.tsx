@@ -31,9 +31,12 @@ import TicketPage from './pages/private/Ticket'
 import TicketNotPaidPage from './pages/private/Ticket-Not-Paid'
 import DetailTicketPage from './pages/private/Ticket/detail'
 import EditTicketPage from './pages/private/Ticket/edit'
+import TotalTicketPage from './pages/private/Total-Ticket'
 import TripsPages from './pages/private/trips'
+import AddTripPage from './pages/private/trips/add'
 import UnauthorizedPage from './pages/private/Unauthorized'
 import UserProfilePage from './pages/private/UserProfile'
+import VehicleOwnerPage from './pages/private/Vehicle-Owner'
 import VehiclesPage from './pages/private/Vehicles'
 import AddVehiclePage from './pages/private/Vehicles/add'
 import EditVehiclePage from './pages/private/Vehicles/edit'
@@ -43,10 +46,16 @@ import LoginPage from './pages/public/login'
 
 const staffRoutes = [
   { path: '/trips', component: <TripsPages />, allowedRoles: [RoleType.STAFF] },
+  { path: '/trips/add', component: <AddTripPage />, allowedRoles: [RoleType.STAFF] },
   {
     path: '/vehicles',
     component: <VehiclesPage />,
     allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER, RoleType.DRIVER]
+  },
+  {
+    path: '/vehicles-owner',
+    component: <VehicleOwnerPage />,
+    allowedRoles: [RoleType.STAFF]
   },
   {
     path: '/vehicles/add',
@@ -126,8 +135,9 @@ const staffRoutes = [
     allowedRoles: [RoleType.DRIVER]
   },
   { path: '/revenue', component: <RevenuePage />, allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER] },
-  { path: '/ticket', component: <TicketPage />, allowedRoles: [RoleType.STAFF] },
-  { path: '/ticket/detail', component: <DetailTicketPage />, allowedRoles: [RoleType.STAFF] },
+  { path: '/ticket', component: <TicketPage />, allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER] },
+  { path: '/total-ticket', component: <TotalTicketPage />, allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER] },
+  { path: '/ticket/detail', component: <DetailTicketPage />, allowedRoles: [RoleType.STAFF, RoleType.DRIVER] },
   { path: '/ticket/edit', component: <EditTicketPage />, allowedRoles: [RoleType.STAFF] },
   { path: '/ticket-not-paid', component: <TicketNotPaidPage />, allowedRoles: [RoleType.STAFF, RoleType.DRIVER] },
   { path: '/reviews', component: <ReviewsPage />, allowedRoles: [RoleType.STAFF] },
