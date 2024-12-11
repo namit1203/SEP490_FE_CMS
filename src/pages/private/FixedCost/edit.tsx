@@ -1,14 +1,19 @@
-import { ModalFormProps } from '@/components/Modal/ModalForm'
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useQueryCostType } from '@/queries/cost-type'
 import { useQueryLossCost, useUpdatelossCostMutation } from '@/queries/fixed-cost'
 import { useQueryVehicles } from '@/queries/vehicle'
-import { DataTypeCost, DataTypeFixedCost } from '@/types/DataType'
-import { Button, DatePicker, Form, InputNumber, message, Select } from 'antd'
+import { DataTypeCost } from '@/types/DataType'
+import { Button, Col, DatePicker, Form, InputNumber, message, Row, Select, Table, TableColumnsType } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+
+interface TableData {
+  key: string
+  label: string
+  value: JSX.Element | string | undefined
+}
 
 const EditFixedCostPage: React.FC = () => {
   const [searchParams] = useSearchParams()
@@ -47,60 +52,86 @@ const EditFixedCostPage: React.FC = () => {
     }
   }, [data, fixedcostTypeID, form])
 
-  const fields: ModalFormProps<DataTypeFixedCost>['fields'] = [
+  const tableData: TableData[] = [
     {
-      name: 'description',
+      key: 'description',
       label: 'Mô tả',
-      component: <TextArea />,
-      rules: [{ required: true, message: 'Vui lòng nhập Mô tả!' }]
+      value: (
+        <Form.Item name='description' rules={[{ required: true, message: 'Vui lòng nhập Mô tả!' }]}>
+          <TextArea style={{ width: '30%' }} />
+        </Form.Item>
+      )
     },
     {
-      name: 'price',
-      label: 'Giá vé',
-      component: <InputNumber style={{ width: '100%' }} />,
-      rules: [{ required: true, message: 'Vui lòng nhập giá vé!' }]
+      key: 'price',
+      label: 'Giá chi phí',
+      value: (
+        <Form.Item name='price' rules={[{ required: true, message: 'Vui lòng nhập giá chi phí!' }]}>
+          <InputNumber style={{ width: '30%' }} />
+        </Form.Item>
+      )
     },
     {
-      name: 'vehicleId',
+      key: 'vehicleId',
       label: 'Biển số xe',
-      component: (
-        <Select placeholder='Chọn xe' style={{ width: '100%' }}>
-          {vehicleData?.map((item: any) => (
-            <Select.Option key={item.id} value={item.id}>
-              {item.licensePlate}
-            </Select.Option>
-          ))}
-        </Select>
-      ),
-      rules: [{ required: true, message: 'Vui lòng chọn xe!' }]
+      value: (
+        <Form.Item name='vehicleId' rules={[{ required: true, message: 'Vui lòng chọn xe!' }]}>
+          <Select placeholder='Chọn xe' style={{ width: '30%' }}>
+            {vehicleData?.map((item: any) => (
+              <Select.Option key={item.id} value={item.id}>
+                {item.licensePlate}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      )
     },
     {
-      name: 'lossCostTypeId',
-      label: 'Loại chi phi',
-      component: (
-        <Select placeholder='Chọn loại chi phí' style={{ width: '100%' }}>
-          {costTypeData?.map((item: any) => (
-            <Select.Option key={item.id} value={item.id}>
-              {item.description}
-            </Select.Option>
-          ))}
-        </Select>
-      ),
-      rules: [{ required: true, message: 'Vui lòng chọn loại chi phí!' }]
+      key: 'lossCostTypeId',
+      label: 'Loại chi phí',
+      value: (
+        <Form.Item name='lossCostTypeId' rules={[{ required: true, message: 'Vui lòng chọn loại chi phí!' }]}>
+          <Select placeholder='Chọn loại chi phí' style={{ width: '30%' }}>
+            {costTypeData?.map((item: any) => (
+              <Select.Option key={item.id} value={item.id}>
+                {item.description}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      )
     },
     {
-      name: 'dateIncurred',
+      key: 'dateIncurred',
       label: 'Ngày phát sinh',
-      component: (
-        <DatePicker
-          showTime={{
-            format: 'HH:mm:ss' // Optional: Customize the time format
-          }}
-          format='YYYY-MM-DD HH:mm:ss'
-          onChange={(date) => console.log(date?.toISOString())}
-        />
-      ),
-      rules: [{ required: true, message: 'Vui lòng chọn ngày phát sinh!' }]
+      value: (
+        <Form.Item name='dateIncurred' rules={[{ required: true, message: 'Vui lòng chọn ngày phát sinh!' }]}>
+          <DatePicker
+            showTime={{
+              format: 'HH:mm:ss' // Optional: Customize the time format
+            }}
+            format='YYYY-MM-DD HH:mm:ss'
+            style={{ width: '30%' }}
+            onChange={(date) => console.log(date?.toISOString())}
+          />
+        </Form.Item>
+      )
+    }
+  ]
+
+  const columns: TableColumnsType<TableData> = [
+    {
+      title: 'Key',
+      dataIndex: 'label',
+      key: 'label',
+      width: '30%'
+    },
+    {
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+      width: '70%',
+      render: (_, record) => <>{record.value}</>
     }
   ]
 
@@ -124,14 +155,20 @@ const EditFixedCostPage: React.FC = () => {
 
   return (
     <Form onFinish={handleFormSubmit} form={form} layout='vertical'>
-      {fields.map((field) => (
-        <Form.Item key={String(field.name)} name={field.name as string} label={field.label} rules={field.rules || []}>
-          {field.component}
-        </Form.Item>
-      ))}
-      <Button type='primary' htmlType='submit' loading={isLoading}>
-        Update
-      </Button>
+      <Table columns={columns} dataSource={tableData} pagination={false} bordered rowKey='key' />
+      <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
+        <Col>
+          <Button
+            type='primary'
+            htmlType='submit'
+            style={{ marginRight: '10px' }}
+            loading={isLoading}
+            disabled={isLoading}
+          >
+            Update
+          </Button>
+        </Col>
+      </Row>
     </Form>
   )
 }
