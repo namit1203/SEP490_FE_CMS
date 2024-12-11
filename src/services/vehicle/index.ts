@@ -45,6 +45,24 @@ class VehicleApiRequest {
       config: { method: METHOD_TYPE.POST, body, cors: false }
     })
   }
+  public ImportVehicleExcel({ body }: { body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.VEHICLES.IMPORT_VEHICLE,
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
+  public AddVehiclesFromExcel({ body }: { body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.VEHICLES.ADD_VEHICLES_FROM_EXCEL,
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
+  public ExportVehicleExcel(): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.VEHICLES.EXPORT_VEHICLE,
+      config: { method: METHOD_TYPE.POST, cors: false }
+    })
+  }
 }
 
 const vehicleApiRequest = new VehicleApiRequest()
