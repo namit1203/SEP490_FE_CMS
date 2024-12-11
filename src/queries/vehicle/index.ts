@@ -77,3 +77,22 @@ export const useUpdateVehiclesMutation = (
     mutationFn: ({ id, body }: { id: string | number; body: any }) => vehicleApiRequest.UpdateVehicles({ id, body })
   })
 }
+
+export const useImportExcel = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: (body: Omit<any, 'importExcel'>) => vehicleApiRequest.ImportVehicleExcel({ body })
+  })
+}
+
+export const useAddVehiclesFromExcelMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: (body: Omit<any, 'addVehicleFromExcel'>) => vehicleApiRequest.AddVehiclesFromExcel({ body })
+  })
+}
+export const useExportVehiclesFromExcelMutation = () => {
+  return useMutation({
+    mutationFn: () => vehicleApiRequest.ExportVehicleExcel()
+  })
+}

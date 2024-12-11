@@ -37,3 +37,21 @@ export const useAddDriverMutation = (options?: UseMutationOptions<any, unknown, 
     mutationFn: (body: Omit<any, 'addDriver'>) => driverApiRequest.AddDriver({ body })
   })
 }
+
+export const useUpdateDriverMutation = (
+  options?: UseMutationOptions<any, unknown, { id: string | number; body: any }, unknown>
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id, body }: { id: string | number; body: any }) => driverApiRequest.UpdateDriver({ id, body })
+  })
+}
+
+export const useBlockDriverMutation = (
+  options?: UseMutationOptions<any, unknown, { id: string | number }, unknown>
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id }: { id: string | number }) => driverApiRequest.BlockDriver({ id })
+  })
+}

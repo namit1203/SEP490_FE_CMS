@@ -41,6 +41,15 @@ export const useAcceptCancleRequestMutation = (
   })
 }
 
+export const useDeleteRequestMutation = (
+  options?: UseMutationOptions<any, unknown, { id: string | number | null }, unknown>
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id }: { id: string | number | null }) => requestApiRequest.DeleteRequest({ id })
+  })
+}
+
 export const useAddVehicleByStaffMutation = (
   options?: UseMutationOptions<any, unknown, { id: string | number | null; isApprove: boolean }, unknown>
 ) => {
@@ -51,12 +60,24 @@ export const useAddVehicleByStaffMutation = (
   })
 }
 export const useUpdateConvenientTripMutation = (
-  options?: UseMutationOptions<any, unknown, { id: string | number | null; choose: boolean }, unknown>
+  options?: UseMutationOptions<
+    any,
+    unknown,
+    { id: string | number | null; choose: boolean; vehicleId: string | number | null },
+    unknown
+  >
 ) => {
   return useMutation({
     ...options,
-    mutationFn: ({ id, choose }: { id: string | number | null; choose: boolean }) =>
-      requestApiRequest.UpdateConvenientTrip({ id, choose })
+    mutationFn: ({
+      id,
+      choose,
+      vehicleId
+    }: {
+      id: string | number | null
+      choose: boolean
+      vehicleId: string | number | null
+    }) => requestApiRequest.UpdateConvenientTrip({ id, choose, vehicleId })
   })
 }
 

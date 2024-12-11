@@ -1,5 +1,6 @@
 export interface DataType {
   key: string
+  id: number
   name?: string
   numberSeat?: number
   startTime?: number | string
@@ -58,6 +59,16 @@ export interface DataTypeCost {
   updateAt: number
   status: boolean
 }
+export interface DataTypeDriver {
+  userName: string
+  name: string
+  numberPhone: string
+  password: string
+  license: string
+  avatar: string
+  dob: string // ISO Date string
+  status: boolean
+}
 export interface DataTypeFixedCost {
   id: number | any
   dateIncurred: string // ISO Date string
@@ -97,4 +108,18 @@ export interface RequestOption {
   vehicleId?: number
   price?: number
   driverId?: number
+}
+
+export interface DataTypeUser {
+  id: number
+  username: string
+  email: string
+  numberPhone: string
+  password: string
+  role: string | number
+  avatar: string
+  fullName: string
+  address: string
+  status: boolean
+  dob: string // ISO Date string
 }

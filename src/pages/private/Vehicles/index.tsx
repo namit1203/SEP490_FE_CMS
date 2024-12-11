@@ -4,11 +4,12 @@ import { useDeleteVehiclesMutation, useQueryVehicles } from '@/queries/vehicle'
 import { DataTypeVehicle } from '@/types/DataType'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
 import renderWithLoading from '@/utils/renderWithLoading'
-import { PlusOutlined } from '@ant-design/icons'
+import { DownloadOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons'
 import type { TableProps } from 'antd'
 import { Button, message, Popconfirm, Space, Table } from 'antd'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import * as XLSX from 'xlsx'
 
 const VehiclesPage: React.FC = () => {
   const { data, refetch: refetchVehicles, isLoading } = useQueryVehicles()
@@ -38,9 +39,38 @@ const VehiclesPage: React.FC = () => {
     }
   }
 
+  const handleExportToExcel = () => {
+    if (!data) {
+      message.error('No data to export!')
+      return
+    }
+
+    // Prepare data for Excel
+    const formattedData = data.map((item: any) => ({
+      'Số ghế của xe': item.numberSeat,
+      'Loại xe': item.vehicleTypeId,
+      'Biển số xe': item.licensePlate,
+      'Mô tả': item.description,
+      'Chủ xe': item.vehicleOwner,
+      'Tài xế': item.driverId
+    }))
+
+    // Create a worksheet
+    const worksheet = XLSX.utils.json_to_sheet(formattedData)
+
+    // Create a new workbook
+    const workbook = XLSX.utils.book_new()
+
+    // Append the worksheet to the workbook with a consistent name
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Vehicles')
+
+    // Write the workbook to an Excel file
+    XLSX.writeFile(workbook, 'vehicles.xlsx')
+  }
+
   const columns: TableProps<DataTypeVehicle>['columns'] = [
     {
-      title: 'Tên chuyến đi',
+      title: 'Mô tả',
       dataIndex: 'description',
       key: 'description',
       ...useColumnSearch().getColumnSearchProps('description'),
@@ -58,7 +88,7 @@ const VehiclesPage: React.FC = () => {
       width: '25%'
     },
     {
-      title: 'Số ghế',
+      title: 'Số ghế của xe',
       dataIndex: 'numberSeat',
       key: 'numberSeat',
       sorter: (a, b) => handlingTsUndefined(a.numberSeat) - handlingTsUndefined(b.numberSeat),
@@ -106,12 +136,20 @@ const VehiclesPage: React.FC = () => {
         isLoading,
         content: (
           <>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16, gap: 16 }}>
               <Link to='add'>
                 <Button type='primary' icon={<PlusOutlined />} ghost>
                   Thêm mới
                 </Button>
               </Link>
+              <Link to='excel'>
+                <Button type='primary' icon={<ExportOutlined />} ghost>
+                  Import Excel
+                </Button>
+              </Link>
+              <Button type='primary' onClick={handleExportToExcel} icon={<DownloadOutlined />} ghost>
+                Export Excel
+              </Button>
             </div>
             <Table columns={columns} dataSource={dataSource} />
           </>
