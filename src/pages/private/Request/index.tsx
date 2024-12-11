@@ -1,6 +1,6 @@
 import { ActionType, ActionTypeDescriptions, RoleType } from '@/enums/enum'
 import useColumnSearch from '@/hooks/useColumnSearch'
-import { useAcceptCancleRequestMutation, useQueryRequest } from '@/queries/request'
+import { useAcceptCancleRequestMutation, useDeleteRequestMutation, useQueryRequest } from '@/queries/request'
 import { useQueryUserProfile } from '@/queries/user-profile'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { PlusOutlined } from '@ant-design/icons'
@@ -27,7 +27,11 @@ const RequestPage: React.FC = () => {
 
   const acceptMutaion = useAcceptCancleRequestMutation()
 
+  const deleteMutaion = useDeleteRequestMutation()
+
   const [isAcceptLoading, setIsAcceptLoading] = useState<boolean>(false)
+
+  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)
 
   // Add `key` to each record if not present
   const dataSource = data?.map((item: any) => ({
@@ -50,6 +54,23 @@ const RequestPage: React.FC = () => {
       message.error('Accept failed')
     } finally {
       setIsAcceptLoading(false)
+    }
+  }
+  const handleDeleteRequest = async (id: number) => {
+    try {
+      setIsLoadingDelete(true)
+      const response = await deleteMutaion.mutateAsync({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        message.success('Delete successfully')
+        refetch()
+      } else {
+        message.error('Delete failed')
+      }
+    } catch (error) {
+      console.error('Error when block driver:', error)
+      message.error('Block driver failed')
+    } finally {
+      setIsLoadingDelete(false)
     }
   }
 
@@ -109,8 +130,13 @@ const RequestPage: React.FC = () => {
               <Button type='primary'>Show</Button>
             </Link>
           )}
-          <Popconfirm title='Bạn có chắc chắn muốn xóa yêu cầu này không?' okText='Yes' cancelText='No'>
-            <Button type='primary' danger>
+          <Popconfirm
+            title='Bạn có chắc chắn muốn xóa yêu cầu này không?'
+            okText='Yes'
+            cancelText='No'
+            onConfirm={() => handleDeleteRequest(record.id as number)}
+          >
+            <Button type='primary' danger loading={isLoadingDelete}>
               Delete
             </Button>
           </Popconfirm>
