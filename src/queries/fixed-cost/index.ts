@@ -9,7 +9,8 @@ export const useQueryLossCost = (options?: Omit<UseQueryOptions<any>, 'queryKey'
     queryFn: async () => {
       const response = await lossCostVehicleApiRequest.GetLossCost()
       if (response.status === HttpStatusCode.Ok) {
-        return response.data?.listLossCostVehicle
+        console.log(response.data)
+        return response.data
       }
     }
   })

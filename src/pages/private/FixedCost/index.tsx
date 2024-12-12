@@ -15,7 +15,7 @@ const FixedCostPage: React.FC = () => {
 
   const deleteMutaion = useDeleteLossCostMutation()
 
-  const dataSource = data?.map((item: any) => ({
+  const dataSource = data?.listLossCostVehicle?.map((item: any) => ({
     ...item,
     key: item.id || `${item.description}-${item.licensePlate}-${item.dateIncurred}`
   }))
@@ -34,7 +34,7 @@ const FixedCostPage: React.FC = () => {
     }
   }
 
-  const lossCostTypeFilters = data ? generateFilters(data, 'lossCostType') : []
+  const lossCostTypeFilters = data ? generateFilters(data?.listLossCostVehicle, 'lossCostType') : []
 
   const columns: TableProps<DataTypeFixedCost>['columns'] = [
     {
@@ -128,6 +128,9 @@ const FixedCostPage: React.FC = () => {
               </Link>
             </div>
             <Table columns={columns} dataSource={dataSource} />
+            <div>
+              Total : <span style={{ fontSize: 20 }}>{data?.totalCost ? formatPrize(data.totalCost) : '(Không)'}</span>
+            </div>
           </>
         )
       })}
