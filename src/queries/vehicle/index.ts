@@ -14,18 +14,34 @@ export const useQueryVehicles = (options?: Omit<UseQueryOptions<any>, 'queryKey'
     }
   })
 }
-export const useQueryVehiclesOwner = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+
+export const useQueryVehiclesNoTrip = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
   return useQuery<any>({
     ...options,
-    queryKey: ['vehicles_owner'],
+    queryKey: ['vehicles_no_trips'],
     queryFn: async () => {
-      const response = await vehicleApiRequest.GetVehiclesOwner()
+      const response = await vehicleApiRequest.GetVehiclesNoTrip()
       if (response.status === HttpStatusCode.Ok) {
         return response.data
       }
     }
   })
 }
+
+export const useQueryVehiclesOwner = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['vehicles_owner'],
+    queryFn: async () => {
+      const response = await vehicleApiRequest.GetVehiclesOwner()
+
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
+      }
+    }
+  })
+}
+
 export const useQueryTypeOfVehicles = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
   return useQuery<any>({
     ...options,

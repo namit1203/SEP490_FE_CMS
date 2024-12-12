@@ -110,6 +110,16 @@ export interface RequestOption {
   driverId?: number
 }
 
+export interface Field {
+  name?: string
+  label?: string
+  component?: JSX.Element
+  rules?: { required: boolean; message: string }[]
+  type?: string
+  valuePropName?: string
+  initialValue?: boolean
+}
+
 export interface DataTypeUser {
   id: number
   username: string

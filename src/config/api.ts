@@ -7,9 +7,12 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_TRIPS: '/api/Trip',
     GET_TYPE_OF_TRIPS: '/api/TypeOfTrip',
     ADD_TRIP: '/api/Trip/addTrip',
-    UPDATE_TRIPS: ({ id }: { id: string | number | null }) => `/api/Trip/updateTrip/${id}`
+    UPDATE_TRIPS: ({ id }: { id: string | number | null }) => `/api/Trip/updateTrip/${id}`,
+    GET_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/Trip/getListTripById/${id}`,
+    GET_LIST_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/tripId?TripId=${id}`
   },
   VEHICLES: {
+    GET_NO_TRIPS: '/api/Vehicle/VehicleNoTrip',
     GET_VEHICLES: '/api/Vehicle/listVehicle',
     GET_VEHICLES_OWNER: '/api/User/listVehicleOwner',
     DELETE_VEHICLES: ({ id }: { id: string | number | null }) => `/api/Vehicle/deleteVehicleByStatus/${id}`,
@@ -30,6 +33,7 @@ export const APP_API_ENDPOINT = Object.freeze({
   PROMOTION: {
     GET_PROMOTION: '/api/Promotion',
     DELETE_PROMOTION: ({ id }: { id: string | number | null }) => `/api/Promotion/deletePromotion/id?id=${id}`,
+    UPDATE_PROMOTION: ({ id }: { id: string | number | null }) => `/api/Promotion/updatePromotion/id?id=${id}`,
     PROMOTION_DETAILS: ({ id }: { id: string | number | null }) => `/api/Promotion/getPromotionById/${id}`,
     ADD_PROMOTION: '/api/Promotion/CreatePromotion',
     ADD_PROMOTION_ALL_USER: '/api/Promotion/givePromotionAllUser'

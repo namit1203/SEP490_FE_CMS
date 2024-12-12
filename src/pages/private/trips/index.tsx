@@ -7,18 +7,22 @@ import renderWithLoading from '@/utils/renderWithLoading'
 import { PlusOutlined } from '@ant-design/icons'
 import { Button, message, Popconfirm, Space, Table, TableProps } from 'antd'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import * as XLSX from 'xlsx'
 
 const TripPage: React.FC = () => {
-  const { data, isLoading } = useQueryTrips()
+  const { data, refetch, isLoading } = useQueryTrips()
 
   // Transform data source to ensure each record has a `key`
   const dataSource = data?.map((item: any) => ({
     ...item,
     key: item.id || item.someUniqueField
   }))
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   const handleDelete = (id: string) => {
     console.log(`Delete item with ID: ${id}`)
@@ -94,7 +98,9 @@ const TripPage: React.FC = () => {
       align: 'center',
       render: (_, record) => (
         <Space size='middle'>
-          <Button type='primary'>Edit</Button>
+          <Link to={`edit?id=${record.id}`}>
+            <Button type='primary'>Edit</Button>
+          </Link>
           <Popconfirm
             title='Are you sure to delete this item?'
             onConfirm={() => handleDelete(record.key)}
