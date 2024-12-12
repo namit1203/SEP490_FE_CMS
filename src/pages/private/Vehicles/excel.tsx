@@ -1,7 +1,8 @@
-import { Button, message, Table } from 'antd'
 import React, { useState } from 'react'
+import { Button, message, Table } from 'antd'
 
-import { useAddVehiclesFromExcelMutation, useExportVehiclesFromExcelMutation, useImportExcel } from '@/queries/vehicle'
+import { useLocalStorage } from '@/utils/localStorage/localStorageService'
+import { useAddVehiclesFromExcelMutation, useImportExcel } from '@/queries/vehicle'
 import { HttpStatusCode } from 'axios'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,13 +12,18 @@ interface DownloadExcelProps {
 }
 
 const DownloadExcel: React.FC<DownloadExcelProps> = ({ exportedFile, setExportedFile }) => {
-  const exportMutation = useExportVehiclesFromExcelMutation()
+  const token = useLocalStorage.getLocalStorageData('token')
 
   const downloadFile = async () => {
     try {
-      const response = await exportMutation.mutateAsync()
+      const response = await fetch('https://boring-wiles.202-92-7-204.plesk.page/api/Vehicle/export_template_vehicel', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
 
-      if (response.status !== HttpStatusCode.Ok) {
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
@@ -42,7 +48,7 @@ const DownloadExcel: React.FC<DownloadExcelProps> = ({ exportedFile, setExported
   )
 }
 
-const ExcelVehiclePage = () => {
+const ExportExcelComponent = () => {
   const [exportedFile, setExportedFile] = useState(false)
   const [fileName, setFileName] = useState('')
   const [data, setData] = useState({ validEntries: [], invalidEntries: [], hasData: false })
@@ -89,6 +95,7 @@ const ExcelVehiclePage = () => {
   }
 
   const handleImportToVehicleList = async () => {
+    // console.log(data.validEntries)
     try {
       const values = data.validEntries
 
@@ -168,7 +175,8 @@ const ExcelVehiclePage = () => {
               {data.invalidEntries.map((entry: any, index) =>
                 entry.errors.length > 0 ? (
                   <p style={{ marginBottom: 20 }} key={index}>
-                    {entry.errors}
+                    {entry.errors.join(', ')}
+                    {index < data.invalidEntries.length - 1 && ', '}
                   </p>
                 ) : null
               )}
@@ -184,4 +192,4 @@ const ExcelVehiclePage = () => {
   )
 }
 
-export default ExcelVehiclePage
+export default ExportExcelComponent

@@ -41,6 +41,13 @@ class TripsApiRequest {
       config: { method: METHOD_TYPE.POST, body, cors: false }
     })
   }
+
+  public ImportTripExcel({ id, body }: { id: string | number | null; body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TRIPS.IMPORT_TRIPS({ typeOfTrip: id }),
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
 }
 
 const tripsApiRequest = new TripsApiRequest()

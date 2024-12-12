@@ -9,7 +9,9 @@ export const APP_API_ENDPOINT = Object.freeze({
     ADD_TRIP: '/api/Trip/addTrip',
     UPDATE_TRIPS: ({ id }: { id: string | number | null }) => `/api/Trip/updateTrip/${id}`,
     GET_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/Trip/getListTripById/${id}`,
-    GET_LIST_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/tripId?TripId=${id}`
+    GET_LIST_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/tripId?TripId=${id}`,
+    IMPORT_TRIPS: ({ typeOfTrip }: { typeOfTrip: string | number | null }) =>
+      `/api/Trip/importTrip/typeOfTrip?typeOfTrip=${typeOfTrip}`
   },
   VEHICLES: {
     GET_NO_TRIPS: '/api/Vehicle/VehicleNoTrip',
