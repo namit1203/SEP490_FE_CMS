@@ -34,18 +34,19 @@ import EditTicketPage from './pages/private/Ticket/edit'
 import TotalTicketPage from './pages/private/Total-Ticket'
 import TripsPages from './pages/private/trips'
 import AddTripPage from './pages/private/trips/add'
+import EditTripPage from './pages/private/trips/edit'
+import ExcelTripPage from './pages/private/trips/excel'
+import ListTripDetailPage from './pages/private/trips/list-trip-detail'
 import UnauthorizedPage from './pages/private/Unauthorized'
 import UserProfilePage from './pages/private/UserProfile'
 import VehicleOwnerPage from './pages/private/Vehicle-Owner'
+import EditVehicleOwnerPage from './pages/private/Vehicle-Owner/edit'
 import VehiclesPage from './pages/private/Vehicles'
 import AddVehiclePage from './pages/private/Vehicles/add'
 import EditVehiclePage from './pages/private/Vehicles/edit'
 import ExcelVehiclePage from './pages/private/Vehicles/excel'
 import VehicleUsingPage from './pages/private/VehicleUsing'
 import LoginPage from './pages/public/login'
-import EditTripPage from './pages/private/trips/edit'
-import ListTripDetailPage from './pages/private/trips/list-trip-detail'
-import ExcelTripPage from './pages/private/trips/excel'
 
 const staffRoutes = [
   { path: '/trips', component: <TripsPages />, allowedRoles: [RoleType.STAFF] },
@@ -61,6 +62,11 @@ const staffRoutes = [
   {
     path: '/vehicles-owner',
     component: <VehicleOwnerPage />,
+    allowedRoles: [RoleType.STAFF]
+  },
+  {
+    path: '/vehicles-owner/edit',
+    component: <EditVehicleOwnerPage />,
     allowedRoles: [RoleType.STAFF]
   },
   {

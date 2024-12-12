@@ -16,6 +16,7 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_VEHICLES: '/api/Vehicle/listVehicle',
     GET_VEHICLES_OWNER: '/api/User/listVehicleOwner',
     DELETE_VEHICLES: ({ id }: { id: string | number | null }) => `/api/Vehicle/deleteVehicleByStatus/${id}`,
+    DELETE_VEHICLES_OWNER: ({ id }: { id: string | number | null }) => `/api/Account/deleteVehicleOwner/${id}`,
     ADD_VEHICLES_STAFF: ({ id, isApprove }: { id: string | number | null; isApprove: boolean }) =>
       `/api/Vehicle/addVehicleByStaff?requestID=${id}&isApprove=${isApprove}`,
     VEHICLES_DETAILS: ({ id }: { id: string | number | null }) => `/api/Vehicle/getInforVehicle/${id}`,
@@ -97,6 +98,7 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_ROLE: '/api/Account/listRole',
     ADD_ROLE: '/api/Role/addRole',
     UPDATE_ROLE: ({ id }: { id: string | number | null }) => `/api/Role/updateRole/id?id=${id}`,
+    UPDATE_VEHICLE_OWNER: ({ id }: { id: string | number | null }) => `/api/Account/updateVehicleOwner/${id}`,
     DELETE_ROLE: ({ id }: { id: string | number | null }) => `/api/Role/deleteRole/id?id=${id}`,
     GET_ACCOUNT_DETAILS: ({ id }: { id: string | number | null }) => `/api/Account/detailsAccount/${id}`,
     DELETE_ACCOUNT: ({ id }: { id: string | number | null }) => `/api/Account/deleteAccount/id?id=${id}`,

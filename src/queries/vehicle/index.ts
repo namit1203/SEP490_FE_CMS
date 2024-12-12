@@ -96,6 +96,12 @@ export const useDeleteVehiclesMutation = (options?: UseMutationOptions<any, unkn
     mutationFn: ({ id }: { id: string | number | null }) => vehicleApiRequest.DeleteVehicles({ id })
   })
 }
+export const useDeleteVehiclesOwnerMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id }: { id: string | number | null }) => vehicleApiRequest.DeleteVehiclesOwner({ id })
+  })
+}
 
 export const useUpdateVehiclesMutation = (
   options?: UseMutationOptions<any, unknown, { id: string | number; body: any }, unknown>
@@ -103,6 +109,15 @@ export const useUpdateVehiclesMutation = (
   return useMutation({
     ...options,
     mutationFn: ({ id, body }: { id: string | number; body: any }) => vehicleApiRequest.UpdateVehicles({ id, body })
+  })
+}
+export const useUpdateVehiclesOwnerMutation = (
+  options?: UseMutationOptions<any, unknown, { id: string | number; body: any }, unknown>
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id, body }: { id: string | number; body: any }) =>
+      vehicleApiRequest.UpdateVehiclesOwner({ id, body })
   })
 }
 

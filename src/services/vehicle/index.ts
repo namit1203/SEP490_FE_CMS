@@ -45,6 +45,12 @@ class VehicleApiRequest {
       config: { method: METHOD_TYPE.POST, cors: false }
     })
   }
+  public UpdateVehiclesOwner({ id, body }: { id: string | number | null; body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.ACCOUNT.UPDATE_VEHICLE_OWNER({ id }),
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
   public AddVehicles({ body }: { body: any }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.VEHICLES.ADD_VEHICLES,
@@ -72,6 +78,13 @@ class VehicleApiRequest {
   public ExportVehicleExcel(): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.VEHICLES.EXPORT_VEHICLE,
+      config: { method: METHOD_TYPE.POST, cors: false }
+    })
+  }
+
+  public DeleteVehiclesOwner({ id }: { id: string | number | null }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.VEHICLES.DELETE_VEHICLES_OWNER({ id }),
       config: { method: METHOD_TYPE.POST, cors: false }
     })
   }

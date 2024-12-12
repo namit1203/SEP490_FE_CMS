@@ -43,8 +43,13 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         type: 'group', // Non-clickable heading
         children: [
           {
-            key: 'trips',
+            key: 'dashboard',
             icon: <DashboardOutlined />,
+            label: <Link to='/'>Dashboard</Link> // Link added
+          },
+          {
+            key: 'trips',
+            icon: <TruckOutlined />,
             label: <Link to='/trips'>Trips</Link> // Link added
           },
           {

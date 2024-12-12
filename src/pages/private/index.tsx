@@ -4,6 +4,7 @@ import { routesConfig } from '@/useRouter'
 import { Breadcrumb, Layout, theme } from 'antd'
 import React, { useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import DashBoardChartPage from './Dashboard'
 
 const { Content, Footer } = Layout
 
@@ -55,7 +56,7 @@ const PrivateLayout: React.FC = () => {
               background: colorBgContainer
             }}
           >
-            {isChildRoute() ? <Outlet /> : <p>Private Layout</p>}
+            {isChildRoute() ? <Outlet /> : <DashBoardChartPage />}
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>VeXeRe CMS ©{new Date().getFullYear()}</Footer>
