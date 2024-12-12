@@ -79,3 +79,11 @@ export const useUpdateTripMutation = (
     mutationFn: ({ id, body }: { id: string | number; body: any }) => tripsApiRequest.UpdateTrip({ id, body })
   })
 }
+
+export const useImportExcel = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id, body }: { id: string | number; body: Omit<any, 'importExcel'> }) =>
+      tripsApiRequest.ImportTripExcel({ id, body })
+  })
+}
