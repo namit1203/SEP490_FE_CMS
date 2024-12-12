@@ -5,6 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  assetsInclude: ["**/*.xlsx"], // Tell Vite to treat .xlsx files as assets
   server: {
     port: 3002
   },
