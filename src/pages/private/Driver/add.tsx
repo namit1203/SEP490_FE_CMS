@@ -152,7 +152,7 @@ const AddDriverPage: React.FC = () => {
         refetch()
         navigate('/driver')
       } else {
-        message.error('Add failed')
+        message.error(`Add failed: ${response.errors.id[0]}`)
       }
     } catch (error) {
       console.error('Error values:', error)

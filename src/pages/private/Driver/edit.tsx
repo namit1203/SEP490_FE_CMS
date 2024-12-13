@@ -122,7 +122,7 @@ const EditDriverPage: React.FC = () => {
       key: 'avatar',
       label: 'Hình ảnh',
       value: (
-        <Form.Item name='avatar' rules={[{ required: true, message: 'Vui lòng nhập hình ảnh!' }]}>
+        <Form.Item name='avatar'>
           <Input placeholder='Nhập link ảnh đại diện' style={{ width: '30%' }} />
         </Form.Item>
       )
