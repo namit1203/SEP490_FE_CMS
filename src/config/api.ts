@@ -58,7 +58,7 @@ export const APP_API_ENDPOINT = Object.freeze({
   COST_TYPE: {
     GET_COST_TYPE: '/api/LossCostType/listLossCostType',
     ADD_COST_TYPE: '/api/LossCostType/addLossCostType',
-    DELETE_COST_TYPE: ({ id }: { id: string | number | null }) => `/api/LossCostType/deleteLossCostType/${id}`,
+    DELETE_COST_TYPE: ({ id }: { id: string | number | null }) => `/api/LossCostType/updateStatusLossCostType/${id}`,
     UPDATE_COST_TYPE: ({ id }: { id: string | number | null }) => `/api/LossCostType/updateLossCostType/${id}`
   },
   REQUEST: {
@@ -84,8 +84,9 @@ export const APP_API_ENDPOINT = Object.freeze({
     UPDATE_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/updateTicket/${id}`,
     TICKET_DETAILS: ({ id }: { id: string | number | null }) => `/api/Ticket/ticketById/${id}`,
     TICKET_NOT_PAID: ({ id }: { id: string | number | null }) => `/api/Ticket/tickeNotPaid/${id}`,
-    DELETE_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/deleteTicketTimeOut/${id}`,
-    UPDATE_STATUS_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/updateStatusticketNotPaid/${id}`,
+    DELETE_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/deleteTicket/${id}`,
+    UPDATE_STATUS_TICKET: ({ id }: { id: string | number | null }) =>
+      `/api/Ticket/updateStatusticketNotPaid/id?id=${id}`,
     GET_TRAVEL_CAR_BY_REQUEST: ({ id }: { id: string | number | null }) => `/api/Ticket/GetTravelCarByRequest/${id}`
   },
   REVENUE: {
