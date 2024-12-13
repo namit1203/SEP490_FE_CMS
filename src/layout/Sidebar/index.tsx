@@ -1,3 +1,6 @@
+import { RoleType } from '@/enums/enum'
+import { useLocalStorage } from '@/utils/localStorage/localStorageService'
+import { allowAdminRoute, allowDriverRoute, allowStaffRoute, allowVehicleOwnerRoute } from '@/utils/rolePath'
 import {
   AccountBookOutlined,
   CarOutlined,
@@ -19,9 +22,6 @@ import {
 import type { MenuProps } from 'antd'
 import { Layout, Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
-
-import logo from '@/assets/logo.png'
-import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import { Link } from 'react-router-dom'
 
 interface SidebarProps {
@@ -88,7 +88,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             label: <Link to='/history-rent-vehicle'>History Rent Vehicle</Link> // Link added
           },
           {
-            key: 'cost_type',
+            key: 'cost-type',
             icon: <EuroCircleFilled />,
             label: <Link to='/cost-type'>Cost Type</Link> // Link added
           },
@@ -141,41 +141,39 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       }
     ]
 
-    // const allowAdminRoute = ['account', 'role']
-    // const allowDriverRoute = ['vehicles-using']
-
     const filteredItems = items
-    // .map((group: any) => ({
-    //   ...group,
-    //   children: group.children?.filter((item: any) => {
-    //     switch (role) {
-    //       case 'Admin':
-    //         // Admin chỉ thấy account, role
-    //         return allowAdminRoute.includes(item.key)
+      .map((group: any) => ({
+        ...group,
+        children: group.children?.filter((item: any) => {
+          switch (role) {
+            case RoleType.ADMIN:
+              return allowAdminRoute.includes(item.key)
 
-    //       case 'Staff':
-    //         // Staff thấy tất cả trừ account, role
-    //         return !allowAdminRoute.includes(item.key)
+            case RoleType.STAFF:
+              return allowStaffRoute.includes(item.key)
 
-    //       case 'Driver':
-    //         return allowDriverRoute.includes(item.key)
+            case RoleType.DRIVER:
+              return allowDriverRoute.includes(item.key)
 
-    //       default:
-    //         // Nếu không phải Admin hay Staff, không hiển thị gì
-    //         return false
-    //     }
-    //   })
-    // }))
-    // .filter((group) => group.children?.length > 0) // Loại nhóm không có mục con
+            case RoleType.VEHICLE_OWNER:
+              return allowVehicleOwnerRoute.includes(item.key)
+
+            default:
+              return false
+          }
+        })
+      }))
+      .filter((group) => group.children?.length > 0)
 
     setFilteredItems(filteredItems)
   }, [role])
 
   return (
     <Sider trigger={null} collapsible collapsed={collapsed} width={250}>
-      <Link
-        to='/'
+      <div
         style={{
+          height: '142.84px',
+          backgroundColor: '#1E65B0',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -184,8 +182,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           fontSize: '18px'
         }}
       >
-        <img src={logo} alt='logo' />
-      </Link>
+        <h1>Dashboard</h1>
+      </div>
       <Menu
         mode='inline'
         items={filteredItems}
