@@ -51,3 +51,17 @@ export const useDeletePromotionMutation = (options?: UseMutationOptions<any, unk
     mutationFn: ({ id }: { id: string | number | null }) => promotionApiRequest.DeletePromotion({ id })
   })
 }
+
+export const useUpdatePromotionMutation = (
+  options?: UseMutationOptions<
+    any, // Response type
+    unknown, // Error type
+    { id: string | number; body: any }, // Mutation variables type
+    unknown // Context type
+  >
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id, body }: { id: string | number; body: any }) => promotionApiRequest.UpdatePromotion({ id, body })
+  })
+}
