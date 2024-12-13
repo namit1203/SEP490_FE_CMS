@@ -29,7 +29,7 @@ const VehiclesPage: React.FC = () => {
     try {
       const response = await deleteMutaion.mutateAsync({ id })
       if (response.status === HttpStatusCode.Ok) {
-        message.success('Delete successfully')
+        message.success('Change status success')
         refetchVehicles()
       } else {
         message.error('Delete failed')
@@ -114,7 +114,7 @@ const VehiclesPage: React.FC = () => {
             <Button type='primary'>Edit</Button>
           </Link>
           <Popconfirm
-            title='Are you sure to delete this item?'
+            title='Are you sure to change status?'
             okText='Yes'
             cancelText='No'
             onConfirm={() => {
@@ -122,7 +122,7 @@ const VehiclesPage: React.FC = () => {
             }}
           >
             <Button type='primary' danger>
-              Delete
+              Change
             </Button>
           </Popconfirm>
         </Space>
