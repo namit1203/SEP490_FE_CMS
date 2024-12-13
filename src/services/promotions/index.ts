@@ -33,6 +33,13 @@ class PromotionApiRequest {
       config: { method: METHOD_TYPE.POST, body, cors: false }
     })
   }
+
+  public UpdatePromotion({ id, body }: { id: string | number | null; body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.PROMOTION.UPDATE_PROMOTION({ id }),
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
 }
 
 const promotionApiRequest = new PromotionApiRequest()
