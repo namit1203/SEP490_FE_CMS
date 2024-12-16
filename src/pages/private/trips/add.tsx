@@ -138,13 +138,13 @@ const AddTripPage: React.FC = () => {
               placeholder='Select Time' // Placeholder text for clarity
             />
           ),
-          rules: [{ required: true, message: 'Vui lòng nhập điểm bắt đầu!' }]
+          rules: [{ required: true, message: 'Vui lòng nhập thời gian bắt đầu!' }]
         },
         {
           name: 'description',
           label: 'Description',
           component: <Input />,
-          rules: [{ required: true, message: 'Vui lòng nhập điểm bắt đầu!' }]
+          // rules: [{ required: true, message: 'Vui lòng nhập điểm bắt đầu!' }]
         },
         {
           name: 'status',
@@ -250,8 +250,8 @@ const AddTripPage: React.FC = () => {
       }
 
       // Step 5: Validate the output data
-      if (Object.keys(outputData.pointStartDetail).length < 3) {
-        message.error(`Need ${3 - Object.keys(pointStartDetail).length} or more point start details`)
+      if (Object.keys(outputData.pointStartDetail).length < 2) {
+        message.error(`Need ${2 - Object.keys(pointStartDetail).length} or more point start details`)
         isValid = false
       }
 

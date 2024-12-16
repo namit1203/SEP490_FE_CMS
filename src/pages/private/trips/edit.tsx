@@ -118,7 +118,7 @@ const EditTripPage: React.FC = () => {
           name: 'description',
           label: 'Description',
           component: <TextArea />,
-          rules: [{ required: true, message: 'Vui lòng nhập Mô tả!' }]
+
         },
         {
           type: 'button' // A special type to indicate this is a button

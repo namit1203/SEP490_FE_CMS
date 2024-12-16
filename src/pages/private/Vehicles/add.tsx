@@ -32,7 +32,7 @@ const AddVehiclePage: React.FC = () => {
       key: 'description',
       label: 'Mô tả',
       value: (
-        <Form.Item name='description' rules={[{ required: true, message: 'Vui lòng nhập Mô tả!' }]}>
+        <Form.Item name='description'>
           <TextArea placeholder='Nhập Mô tả' style={{ width: '30%' }} rows={2} />
         </Form.Item>
       )
