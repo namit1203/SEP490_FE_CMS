@@ -4,7 +4,7 @@ import { formatTime } from '@/helpers'
 import { useCreateTicketForRentCarMutation, useQueryRequest } from '@/queries/request'
 import { useQueryTravelCarByRequest } from '@/queries/ticket'
 import { DataTypeRequest } from '@/types/DataType'
-import { Button, Col, Form, Input, message, Row, Select, Table, TableColumnsType } from 'antd'
+import { Button, Col, Form, InputNumber, message, Row, Select, Table, TableColumnsType } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -96,16 +96,8 @@ const RentVehicleForm = ({ data }: { data: DataTypeRequest | undefined }) => {
         key: 'price',
         label: 'Giá tiền',
         value: (
-          <Form.Item
-            name='price'
-            noStyle
-            initialValue={data?.price}
-            rules={[
-              { required: true, message: 'Vui lòng nhập giá tiền' },
-              { pattern: /^\d+$/, message: 'Giá tiền phải là số hợp lệ' }
-            ]}
-          >
-            <Input placeholder='Nhập giá tiền' style={{ width: '30%' }} />
+          <Form.Item name='price' rules={[{ required: true, message: 'Vui lòng nhập giá tiền!' }]}>
+            <InputNumber style={{ width: '30%' }} placeholder='nhập giá tiền' />
           </Form.Item>
         )
       }

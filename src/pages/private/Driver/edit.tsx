@@ -1,5 +1,6 @@
 import UploadComponent from '@/components/upload'
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
+import { useLoading } from '@/context/LoadingContext'
 import { useQueryDriver, useQueryDriverDetails, useUpdateDriverMutation } from '@/queries/driver'
 import { DataTypeDriver } from '@/types/DataType'
 import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType } from 'antd'
@@ -27,6 +28,8 @@ const EditDriverPage: React.FC = () => {
   const updateMutation = useUpdateDriverMutation()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const { isLoadingGlobal } = useLoading()
 
   const navigate = useNavigate()
 
@@ -154,13 +157,7 @@ const EditDriverPage: React.FC = () => {
   const handleFormSubmit = async (values: DataTypeDriver) => {
     setIsLoading(true)
     try {
-      const formData = new FormData()
-
-      Object.entries(values).forEach(([key, value]) => {
-        formData.append(key, value)
-      })
-
-      const response = await updateMutation.mutateAsync({ id: driverId, body: formData })
+      const response = await updateMutation.mutateAsync({ id: driverId, body: values })
       if (response.status === HttpStatusCode.Ok) {
         message.success('Update successfully')
         refetch()
@@ -185,8 +182,8 @@ const EditDriverPage: React.FC = () => {
             type='primary'
             htmlType='submit'
             style={{ marginRight: '10px' }}
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isLoading || isLoadingGlobal}
+            disabled={isLoading || isLoadingGlobal}
           >
             Update
           </Button>

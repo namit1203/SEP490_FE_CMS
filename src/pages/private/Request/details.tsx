@@ -1,7 +1,7 @@
 import { ActionType } from '@/enums/enum'
 import { useQueryRequestDetails } from '@/queries/request'
 import { useQueryUserProfile } from '@/queries/user-profile'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import AddVehicleForm from './AddVehicleForm'
 import RentCarForDriver from './RentCarForDriver'
@@ -14,9 +14,13 @@ const DetailsRequestPage: React.FC = () => {
 
   const requestID = searchParams.get('id')
 
-  const { data, isLoading, error } = useQueryRequestDetails({ id: requestID })
+  const { data, isLoading, error, refetch } = useQueryRequestDetails({ id: requestID })
 
   const { data: account } = useQueryUserProfile()
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   if (isLoading) return <p>Đang tải...</p>
   if (error) return <p>Có lỗi xảy ra: {error.message}</p>
