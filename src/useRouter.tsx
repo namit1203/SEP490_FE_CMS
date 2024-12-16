@@ -36,7 +36,7 @@ import TripsPages from './pages/private/trips'
 import AddTripPage from './pages/private/trips/add'
 import EditTripPage from './pages/private/trips/edit'
 import ExcelTripPage from './pages/private/trips/excel'
-import ListTripDetailPage from './pages/private/trips/list-trip-detail'
+import ListTripDetailPage from './pages/private/trip-list-detail/list-trip-detail'
 import UnauthorizedPage from './pages/private/Unauthorized'
 import UserProfilePage from './pages/private/UserProfile'
 import VehicleOwnerPage from './pages/private/Vehicle-Owner'
@@ -47,6 +47,9 @@ import EditVehiclePage from './pages/private/Vehicles/edit'
 import ExcelVehiclePage from './pages/private/Vehicles/excel'
 import VehicleUsingPage from './pages/private/VehicleUsing'
 import LoginPage from './pages/public/login'
+import ListTripDetailAddPage from './pages/private/trip-list-detail/list-trip-detail-add'
+import ListTripDetailEditPage from './pages/private/trip-list-detail/list-trip-detail-edit'
+import EditUserProfile from './pages/private/UserProfile/edit'
 
 const staffRoutes = [
   { path: '/trips', component: <TripsPages />, allowedRoles: [RoleType.STAFF] },
@@ -54,6 +57,8 @@ const staffRoutes = [
   { path: '/trips/excel', component: <ExcelTripPage />, allowedRoles: [RoleType.STAFF] },
   { path: '/trips/edit', component: <EditTripPage />, allowedRoles: [RoleType.STAFF] },
   { path: '/trips/list-trip-detail', component: <ListTripDetailPage />, allowedRoles: [RoleType.STAFF] },
+  { path: '/trips/list-trip-detail/add', component: <ListTripDetailAddPage />, allowedRoles: [RoleType.STAFF] },
+  { path: '/trips/list-trip-detail/edit', component: <ListTripDetailEditPage />, allowedRoles: [RoleType.STAFF] },
   {
     path: '/vehicles',
     component: <VehiclesPage />,
@@ -72,7 +77,7 @@ const staffRoutes = [
   {
     path: '/vehicles/add',
     component: <AddVehiclePage />,
-    allowedRoles: [RoleType.STAFF]
+    allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER]
   },
   {
     path: '/vehicles/edit',
@@ -135,19 +140,27 @@ const staffRoutes = [
     component: <AddFixedCostPage />,
     allowedRoles: [RoleType.STAFF]
   },
-  { path: '/request', component: <RequestPage />, allowedRoles: [RoleType.STAFF, RoleType.ADMIN, RoleType.DRIVER] },
+  {
+    path: '/request',
+    component: <RequestPage />,
+    allowedRoles: [RoleType.STAFF, RoleType.ADMIN, RoleType.DRIVER, RoleType.VEHICLE_OWNER]
+  },
   {
     path: '/request/details',
     component: <DetailsRequestPage />,
-    allowedRoles: [RoleType.STAFF, RoleType.DRIVER]
+    allowedRoles: [RoleType.STAFF, RoleType.DRIVER, RoleType.VEHICLE_OWNER]
   },
   {
     path: '/request/add',
     component: <AddRequestRentVehiclePage />,
-    allowedRoles: [RoleType.DRIVER]
+    allowedRoles: [RoleType.DRIVER, RoleType.VEHICLE_OWNER]
   },
   { path: '/revenue', component: <RevenuePage />, allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER] },
-  { path: '/ticket', component: <TicketPage />, allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER] },
+  {
+    path: '/ticket',
+    component: <TicketPage />,
+    allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER, RoleType.DRIVER]
+  },
   { path: '/total-ticket', component: <TotalTicketPage />, allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER] },
   { path: '/ticket/detail', component: <DetailTicketPage />, allowedRoles: [RoleType.STAFF, RoleType.DRIVER] },
   { path: '/ticket/edit', component: <EditTicketPage />, allowedRoles: [RoleType.STAFF] },
@@ -156,6 +169,11 @@ const staffRoutes = [
   {
     path: '/user-profile',
     component: <UserProfilePage />,
+    allowedRoles: [RoleType.ADMIN, RoleType.STAFF, RoleType.VEHICLE_OWNER, RoleType.USER, RoleType.DRIVER]
+  },
+  {
+    path: '/user-profile/update',
+    component: <EditUserProfile />,
     allowedRoles: [RoleType.ADMIN, RoleType.STAFF, RoleType.VEHICLE_OWNER, RoleType.USER, RoleType.DRIVER]
   }
 ]
