@@ -58,14 +58,14 @@ const EditTicketPage: React.FC = () => {
     {
       name: 'pricePromotion',
       label: 'Giá khuyến mãi',
-      component: <InputNumber style={{ width: '100%' }} />,
-      rules: [{ required: true, message: 'Vui lòng nhập Giá khuyến mãi!' }]
-    },
+      component: <Input disabled={true} readOnly />,
+      // rules: [{ required: true, message: 'Vui lòng nhập Giá khuyến mãi!' }]
+    },    
     {
       name: 'codePromotion',
       label: 'Mã giảm giá',
       component: <Input disabled={true} />,
-      rules: [{ required: true, message: 'Vui lòng nhập Mã giảm giá!' }]
+      // rules: [{ required: true, message: 'Vui lòng nhập Mã giảm giá!' }]
     },
     {
       name: 'pointStart',
