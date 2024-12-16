@@ -36,7 +36,6 @@ const EditTripPage: React.FC = () => {
 
   const [selectedValue, setSelectedValue] = useState(formData?.vehicleId)
 
-
   const handleChange = (value: string) => {
     setSelectedValue(value)
     console.log('Selected value:', value) // You can handle the selected value here
