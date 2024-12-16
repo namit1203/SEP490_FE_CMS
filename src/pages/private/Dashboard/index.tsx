@@ -8,7 +8,7 @@ import React, { useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 const DashBoardChartPage: React.FC = () => {
-  const { data: account } = useQueryUserProfile()
+  const { data: account, isLoading: accountLoading } = useQueryUserProfile()
   const { data, isLoading } = useQueryRevenue({
     enabled: [RoleType.STAFF, RoleType.VEHICLE_OWNER].includes(account?.role)
   })
@@ -93,6 +93,10 @@ const DashBoardChartPage: React.FC = () => {
       </div>
     </div>
   )
+
+  if (accountLoading) {
+    return null
+  }
 
   if (![RoleType.STAFF, RoleType.VEHICLE_OWNER].includes(account?.role)) {
     return <Result status='warning' title='Phải là Staff hoặc Vehicle Owner mới đươc truy cập' />

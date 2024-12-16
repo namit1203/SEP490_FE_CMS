@@ -40,8 +40,14 @@ export class ApiClient {
     return headers
   }
 
-  public async Http({ path, config = {} }: { path: string; config?: ApiClientConfig }): Promise<any> {
-    const { method = 'GET', body, cors = true } = config
+  public async Http({
+    path,
+    config = {}
+  }: {
+    path: string
+    config?: ApiClientConfig & { responseType?: 'json' | 'blob' }
+  }): Promise<any> {
+    const { method = 'GET', body, cors = true, responseType = 'json' } = config // Default to 'json'
     const headers = this.getHeaders(config)
 
     const axiosConfig: AxiosRequestConfig = {
@@ -49,7 +55,8 @@ export class ApiClient {
       headers,
       url: this.basePath + path,
       data: method !== 'GET' ? body : undefined,
-      withCredentials: cors
+      withCredentials: cors,
+      responseType // Dynamically set the response type
     }
 
     try {
@@ -57,18 +64,14 @@ export class ApiClient {
       return response
     } catch (error: any) {
       if (error.response) {
-        // Axios specific error handling
-
         const { status } = error.response
 
-        // Check for 401 Unauthorized status
         if (status === 401) {
           useLocalStorage.removeLocalStorageData('token')
         }
 
         return error.response.data
       }
-      // Other errors
       throw error
     }
   }

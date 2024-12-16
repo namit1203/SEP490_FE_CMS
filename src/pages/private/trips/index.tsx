@@ -1,11 +1,12 @@
 import { formatPrize } from '@/helpers'
 import useColumnSearch from '@/hooks/useColumnSearch'
-import { useQueryTrips } from '@/queries/trip'
+import { useUpdateStatusTripMutation, useQueryTrips } from '@/queries/trip'
 import { DataType } from '@/types/DataType'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
 import renderWithLoading from '@/utils/renderWithLoading'
-import { PlusOutlined } from '@ant-design/icons'
+import { DownloadOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, message, Popconfirm, Space, Table, TableProps } from 'antd'
+import { HttpStatusCode } from 'axios'
 
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
@@ -20,13 +21,24 @@ const TripPage: React.FC = () => {
     key: item.id || item.someUniqueField
   }))
 
+  const updateStatusMutation = useUpdateStatusTripMutation()
+
   useEffect(() => {
     refetch()
   }, [refetch])
 
-  const handleDelete = (id: string) => {
-    console.log(`Delete item with ID: ${id}`)
-    // Implement delete logic
+  const handleChangeStatus = async (id: string) => {
+    try {
+      const response = await updateStatusMutation.mutateAsync({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        message.success('Update status successfully')
+        refetch()
+      } else {
+        message.error('Update status failed')
+      }
+    } catch (error) {
+      console.log('Error', error)
+    }
   }
 
   const handleExportToExcel = () => {
@@ -37,25 +49,44 @@ const TripPage: React.FC = () => {
 
     // Prepare data for Excel
     const formattedData = data.map((item: any) => ({
-      'Số ghế của xe': item.numberSeat,
-      'Loại xe': item.vehicleTypeId,
+      'Tên chuyến': item.name,
       'Biển số xe': item.licensePlate,
+      'Điểm khởi hành': item.pointStart,
+      'Thời gian khởi hành': item.startTime,
+      'Điểm kết thúc': item.pointEnd,
+      'Loại chuyến': item.typeOfTrip,
+      'Loại xe': item.vehicleId,
       'Mô tả': item.description,
-      'Chủ xe': item.vehicleOwner,
-      'Tài xế': item.driverId
+      // eslint-disable-next-line prettier/prettier
+      'Giá': formatPrize(item.price),
+      'Trạng thái': item.status === true ? 'Khả dụng' : 'Không khả dụng'
     }))
 
     // Create a worksheet
     const worksheet = XLSX.utils.json_to_sheet(formattedData)
 
+    // Set column widths
+    worksheet['!cols'] = [
+      { wch: 20 }, // 'Tên chuyến'
+      { wch: 15 }, // 'Biển số xe'
+      { wch: 20 }, // 'Điểm khởi hành'
+      { wch: 20 }, // 'Thời gian khởi hành'
+      { wch: 20 }, // 'Điểm kết thúc'
+      { wch: 6 }, // 'Loại chuyến'
+      { wch: 6 }, // 'Loại xe'
+      { wch: 25 }, // 'Mô tả'
+      { wch: 15 }, // 'Giá'
+      { wch: 15 } // 'Trạng thái'
+    ]
+
     // Create a new workbook
     const workbook = XLSX.utils.book_new()
 
     // Append the worksheet to the workbook with a consistent name
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Vehicles')
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Trips')
 
     // Write the workbook to an Excel file
-    XLSX.writeFile(workbook, 'vehicles.xlsx')
+    XLSX.writeFile(workbook, 'trips.xlsx')
   }
 
   const columns: TableProps<DataType>['columns'] = [
@@ -102,13 +133,13 @@ const TripPage: React.FC = () => {
             <Button type='primary'>Edit</Button>
           </Link>
           <Popconfirm
-            title='Are you sure to delete this item?'
-            onConfirm={() => handleDelete(record.key)}
+            title='Are you sure to change status?'
+            onConfirm={() => handleChangeStatus(record.key)}
             okText='Yes'
             cancelText='No'
           >
             <Button type='primary' danger>
-              Delete
+              Change Status
             </Button>
           </Popconfirm>
         </Space>
@@ -129,11 +160,11 @@ const TripPage: React.FC = () => {
                 </Button>
               </Link>
               <Link to='excel'>
-                <Button type='primary' icon={<PlusOutlined />} ghost>
+                <Button type='primary' icon={<ExportOutlined />} ghost>
                   Import Excel
                 </Button>
               </Link>
-              <Button type='primary' onClick={handleExportToExcel} icon={<PlusOutlined />} ghost>
+              <Button type='primary' onClick={handleExportToExcel} icon={<DownloadOutlined />} ghost>
                 Export Excel
               </Button>
             </div>

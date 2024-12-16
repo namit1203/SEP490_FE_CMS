@@ -15,12 +15,6 @@ class TripsApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
-  public GetListTripDetail({ id }: { id: string | number | null }): Promise<any> {
-    return apiBaseServiceInstance.Http({
-      path: APP_API_ENDPOINT.TRIPS.GET_LIST_TRIP_DETAIL({ id }),
-      config: { method: METHOD_TYPE.GET, cors: false }
-    })
-  }
   public GetTypeOfTrips(): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TRIPS.GET_TYPE_OF_TRIPS,
@@ -46,6 +40,20 @@ class TripsApiRequest {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TRIPS.IMPORT_TRIPS({ typeOfTrip: id }),
       config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
+
+  public ConfirmImportTripExcel({ id, body }: { id: string | number | null; body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TRIPS.CONFIRM_IMPORT_TRIPS({ typeOfTrip: id }),
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
+
+  public UpdateStatusTrip({ id }: { id: string | number | null }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TRIPS.UPDATE_STATUS_TRIP({ id }),
+      config: { method: METHOD_TYPE.POST, cors: false }
     })
   }
 }

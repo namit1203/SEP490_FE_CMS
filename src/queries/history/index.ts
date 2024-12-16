@@ -38,12 +38,31 @@ export const useQueryDriverRent = (options?: Omit<UseQueryOptions<any>, 'queryKe
     }
   })
 }
-export const useQueryVehicleRent = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+
+export const useQueryVehicleRent = (
+  { id }: { id: string | number | null },
+  options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
   return useQuery<any>({
     ...options,
-    queryKey: ['vehicle_rent'],
+    queryKey: ['vehicle_rent', id],
     queryFn: async () => {
-      const response = await historyApiRequest.GetListVehicleRent()
+      const response = await historyApiRequest.GetListVehicleRent({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
+      }
+    }
+  })
+}
+export const useQueryVehicleUseRent = (
+  { date }: { date: string | null },
+  options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['vehicle_use_rent', date],
+    queryFn: async () => {
+      const response = await historyApiRequest.GetListVehicleUseRent({ date })
       if (response.status === HttpStatusCode.Ok) {
         return response.data
       }

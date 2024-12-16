@@ -111,10 +111,10 @@ const EditDriverPage: React.FC = () => {
     },
     {
       key: 'license',
-      label: 'Biển số xe',
+      label: 'Bằng lái xe',
       value: (
-        <Form.Item name='license' rules={[{ required: true, message: 'Vui lòng nhập biển số xe!' }]}>
-          <Input placeholder='Nhập biển số xe' style={{ width: '30%' }} />
+        <Form.Item name='license' rules={[{ required: true, message: 'Vui lòng nhập bằng lái xe!' }]}>
+          <Input placeholder='Nhập bằng lái xe' style={{ width: '30%' }} />
         </Form.Item>
       )
     },

@@ -27,7 +27,7 @@ const RentVehicleForm = ({ data }: { data: DataTypeRequest | undefined }) => {
   const addMutation = useCreateTicketForRentCarMutation()
 
   const { data: travelData, refetch: refetchTravel } = useQueryTravelCarByRequest(
-    { id: data?.requestId },
+    { id: data?.requestId, startDate: data?.startTime, endDate: data?.endTime },
     {
       enabled: data?.typeRequestId === ActionType.RENT_VEHICLE
     }

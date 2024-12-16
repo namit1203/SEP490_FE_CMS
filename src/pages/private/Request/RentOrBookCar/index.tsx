@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { formatTime } from '@/helpers'
+import { useQueryVehicleUseRent } from '@/queries/history'
 import { useQueryRequest, useUpdateConvenientTripMutation } from '@/queries/request'
-import { useQueryVehicles } from '@/queries/vehicle'
 import { DataTypeRequest } from '@/types/DataType'
 import { Button, Col, Form, Input, message, Row, Select, Table, TableColumnsType } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
@@ -17,7 +17,9 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
 
   const { data: requestData, refetch } = useQueryRequest()
 
-  const { data: vehicleData } = useQueryVehicles()
+  const { data: vehicleData } = useQueryVehicleUseRent({
+    date: data?.startTime ?? null
+  })
 
   const [isCheck, setIsCheck] = useState<boolean>(false)
 
@@ -83,11 +85,6 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
         value: data?.startTime ? formatTime(data.startTime) : 'N/A'
       },
       {
-        key: 'endTime',
-        label: 'Thời gian kết thúc',
-        value: data?.endTime ? formatTime(data.endTime) : 'N/A'
-      },
-      {
         key: 'startLocation',
         label: 'Điểm bắt đầu',
         value: data?.startLocation || 'N/A'
@@ -96,11 +93,6 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
         key: 'endLocation',
         label: 'Điểm kết thúc',
         value: data?.endLocation || 'N/A'
-      },
-      {
-        key: 'seats',
-        label: 'Số ghế ngồi',
-        value: data?.seats || 'N/A'
       },
       {
         key: 'price',

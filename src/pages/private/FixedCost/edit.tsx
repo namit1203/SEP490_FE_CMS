@@ -39,14 +39,13 @@ const EditFixedCostPage: React.FC = () => {
   const { data: costTypeData } = useQueryCostType()
 
   useEffect(() => {
-    if (data && Array.isArray(data)) {
-      const formData = data.find((item) => item.id === Number(fixedcostTypeID))
+    if (data && Array.isArray(data.listLossCostVehicle)) {
+      const formData = data.listLossCostVehicle.find((item: DataTypeCost) => item.id === Number(fixedcostTypeID))
       if (formData) {
         const updatedFormData = {
           ...formData,
           dateIncurred: dayjs(formData.dateIncurred)
         }
-
         form.setFieldsValue(updatedFormData)
       }
     }

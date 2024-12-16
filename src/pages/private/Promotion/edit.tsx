@@ -1,14 +1,19 @@
-import { useQueryPromotionDetails } from '@/queries/promotions'
+import { useQueryPromotionDetails, useUpdatePromotionMutation } from '@/queries/promotions'
+import { DataType } from '@/types/DataType'
 import { fieldModalTable } from '@/utils/fieldModalTable'
-import { Button, Form } from 'antd'
+import { Button, Form, message } from 'antd'
+import { HttpStatusCode } from 'axios'
 import dayjs from 'dayjs'
 import React, { useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const EditPromotionPage: React.FC = () => {
   const [searchParams] = useSearchParams()
   const promotionID = searchParams.get('id')
   const [form] = Form.useForm()
+  const navigate = useNavigate()
+
+  const updateMutation = useUpdatePromotionMutation()
 
   const { data: formData, refetch } = useQueryPromotionDetails({ id: promotionID })
 
@@ -36,8 +41,23 @@ const EditPromotionPage: React.FC = () => {
       )
   )
 
+  const handleSubmit = async (values: DataType) => {
+    try {
+      const response = await updateMutation.mutateAsync({ id: promotionID, body: values })
+      if (response.status === HttpStatusCode.Ok) {
+        message.success('Update successfully')
+
+        navigate('/promotion')
+      } else {
+        message.error('Update failed')
+      }
+    } catch (error) {
+      console.error('Error values:', error)
+    }
+  }
+
   return (
-    <Form form={form} layout='vertical' initialValues={{}}>
+    <Form onFinish={handleSubmit} form={form} layout='vertical' initialValues={{}}>
       {filteredFields.map((field) => (
         <Form.Item
           key={String(field.name)} // Ensure key is a string

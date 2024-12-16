@@ -47,6 +47,12 @@ class RequestApiRequest {
       config: { method: METHOD_TYPE.POST, body, cors: false }
     })
   }
+  public CreateRequestOwner({ body }: { body: RequestOption }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.REQUEST.CREATE_REQUEST_OWNER,
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
   public AddHistoryVehicle({ body }: { body: RequestOption }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.HISTORY_RENT_VEHICLE.ADD_HISTORY_VEHICLE,

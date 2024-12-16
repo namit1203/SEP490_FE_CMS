@@ -162,13 +162,13 @@ const AddTripPage: React.FC = () => {
     const newFields = [
       {
         name: `pointStart_${fields.length}`,
-        label: 'Điểm bắt đầu chi tiết',
+        label: 'Point Start Detail',
         component: <Input />,
         rules: [{ required: true, message: 'Vui lòng nhập chi tiết điểm bắt đầu!' }]
       },
       {
         name: `timeStart_${fields.length}`,
-        label: 'Thời gian bắt đầu chi tiết',
+        label: 'Time Start Detail',
         component: (
           <DatePicker
             showTime={{

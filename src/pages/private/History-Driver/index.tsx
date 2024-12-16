@@ -12,8 +12,8 @@ interface DataType {
   key: string
   price: number
   driverName: string
+  endStart: number
   timeStart: number
-  timeEnd: number
   vehicleOwner: string
   createdAt: string
 }
@@ -49,24 +49,16 @@ const HistoryRentDriverPage: React.FC = () => {
       width: '20%'
     },
     {
-      title: 'Biển số xe',
-      dataIndex: 'licenseVehicle',
-      key: 'licenseVehicle',
-      align: 'center',
-      ...useColumnSearch().getColumnSearchProps('licenseVehicle'),
-      width: '20%'
-    },
-    {
-      title: 'Thời gian',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      title: 'Thời gian bắt đầu',
+      dataIndex: 'timeStart',
+      key: 'timeStart',
       align: 'center',
       filterDropdown: ({ setSelectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8 }}>
-          <DatePicker.RangePicker
-            onChange={(dates, dateStrings: any) => {
-              if (dates) {
-                setSelectedKeys([dateStrings])
+          <DatePicker
+            onChange={(date, dateString: any) => {
+              if (date) {
+                setSelectedKeys([dateString])
               } else {
                 setSelectedKeys([])
               }
@@ -91,17 +83,59 @@ const HistoryRentDriverPage: React.FC = () => {
         </div>
       ),
       onFilter: (value, record) => {
-        if (Array.isArray(value) && value[0]) {
-          const [startDate, endDate] = (value[0] as string).split(',')
-          const recordDate = dayjs(record.createdAt)
-          return recordDate.isAfter(dayjs(startDate)) && recordDate.isBefore(dayjs(endDate))
+        if (value) {
+          const recordDate = dayjs(record.timeStart)
+          return recordDate.isSame(dayjs(value as string), 'day')
+        }
+        return false
+      },
+      render: (text) => <span>{formatTime(text)}</span>
+    },
+    {
+      title: 'Thời gian kết thúc',
+      dataIndex: 'endStart',
+      key: 'endStart',
+      align: 'center',
+      filterDropdown: ({ setSelectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <DatePicker
+            onChange={(date, dateString: any) => {
+              if (date) {
+                setSelectedKeys([dateString])
+              } else {
+                setSelectedKeys([])
+              }
+            }}
+            format='YYYY-MM-DD'
+            style={{ marginBottom: 8, display: 'block' }}
+          />
+          <div>
+            <Button
+              type='primary'
+              onClick={confirm as any}
+              icon={<SearchOutlined />}
+              size='small'
+              style={{ width: 90, marginRight: 8 }}
+            >
+              Search
+            </Button>
+            <Button onClick={clearFilters as any} size='small' style={{ width: 90 }}>
+              Reset
+            </Button>
+          </div>
+        </div>
+      ),
+      onFilter: (value, record) => {
+        if (value) {
+          const recordDate = dayjs(record.endStart)
+          return recordDate.isSame(dayjs(value as string), 'day')
         }
         return false
       },
       render: (text) => <span>{formatTime(text)}</span>
     }
   ]
-  const dataSource = data?.paymentRentDriverDTOs?.map((item: any) => ({
+  const dataSource = data?.map((item: any) => ({
     ...item,
     key: item.id || item.someUniqueField
   }))
@@ -113,9 +147,9 @@ const HistoryRentDriverPage: React.FC = () => {
         content: (
           <>
             <Table columns={columns} dataSource={dataSource} />
-            <div>
+            {/* <div>
               Total : <span style={{ fontSize: 20 }}>{formatPrize(data?.total)}</span>
-            </div>
+            </div> */}
           </>
         )
       })}

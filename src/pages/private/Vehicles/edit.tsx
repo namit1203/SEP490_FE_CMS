@@ -7,7 +7,23 @@ import {
   useUpdateVehiclesMutation
 } from '@/queries/vehicle'
 import { DataTypeVehicle } from '@/types/DataType'
-import { Button, Col, Form, Input, InputNumber, message, Row, Select, Switch, Table, TableColumnsType } from 'antd'
+import { addWebImageLink } from '@/utils/showImage'
+import { UploadOutlined } from '@ant-design/icons'
+import {
+  Button,
+  Col,
+  Form,
+  Image,
+  Input,
+  InputNumber,
+  message,
+  Row,
+  Select,
+  Switch,
+  Table,
+  TableColumnsType,
+  Upload
+} from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -72,9 +88,28 @@ const EditVehiclePage: React.FC = () => {
       key: 'image',
       label: 'Link ảnh',
       value: (
-        <Form.Item name='image' rules={[{ required: true, message: 'Vui lòng nhập link ảnh!' }]}>
-          <Input placeholder='Nhập link ảnh' style={{ width: '30%' }} type='url' />
-        </Form.Item>
+        <>
+          <Form.Item name='image' rules={[{ required: true, message: 'Vui lòng nhập link ảnh!' }]}>
+            <Upload
+              beforeUpload={() => false} // Prevent automatic upload to the server
+              onChange={({ fileList }) => {
+                const file = fileList[fileList.length - 1]
+                if (file.status === 'done') {
+                  form.setFieldsValue({
+                    image: file.response?.url || file.url // Set the image URL in the form
+                  })
+                  message.success('Image uploaded successfully')
+                } else if (file.status === 'error') {
+                  message.error('Image upload failed')
+                }
+              }}
+            >
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </Form.Item>
+          {/* Display image preview */}
+          {formData?.image && <Image width={100} src={addWebImageLink(formData?.image)} alt='Image' />}
+        </>
       )
     },
     {
@@ -155,7 +190,23 @@ const EditVehiclePage: React.FC = () => {
   const handleFormSubmit = async (values: DataTypeVehicle) => {
     try {
       if (vehicleID) {
-        const response = await updateMutation.mutateAsync({ id: vehicleID, body: values })
+        const formData = new FormData()
+
+        // Append form fields to FormData
+        Object.keys(values).forEach((key) => {
+          // If the field is not the image, append it normally
+          if (key !== 'image') {
+            formData.append(key, values[key])
+          }
+        })
+
+        // Check if there's an image file, and append it
+        if (values.image && values.image.fileList && values.image.fileList[0]) {
+          const imageFile = values.image.fileList[0].originFileObj
+          formData.append('imageFile', imageFile)
+        }
+
+        const response = await updateMutation.mutateAsync({ id: vehicleID, body: formData })
         console.log(response)
 
         if (response.status === HttpStatusCode.Ok) {
@@ -171,7 +222,7 @@ const EditVehiclePage: React.FC = () => {
   }
 
   return (
-    <Form onFinish={handleFormSubmit} form={form} layout='vertical'>
+    <Form form={form} onFinish={handleFormSubmit} layout='vertical'>
       <Table columns={columns} dataSource={tableData} pagination={false} bordered rowKey='key' />
       <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
         <Col>

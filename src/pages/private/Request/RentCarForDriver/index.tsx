@@ -36,9 +36,12 @@ const RentCarForDriver = ({
 
   const { data: requestData, refetch } = useQueryRequest()
 
-  const { data: rentVehicleData } = useQueryVehicleRent({
-    enabled: data?.typeRequestId === ActionType.DRIVER_RENT_VEHICLE
-  })
+  const { data: rentVehicleData } = useQueryVehicleRent(
+    { id: data?.requestId ?? null },
+    {
+      enabled: data?.typeRequestId === ActionType.DRIVER_RENT_VEHICLE
+    }
+  )
 
   const filtered = useMemo(() => {
     return requestData?.find((item: DataTypeRequest) => item.id === data?.requestId)

@@ -10,9 +10,8 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 const EditTripPage: React.FC = () => {
   const [searchParams] = useSearchParams()
-  const { Option } = Select
-
   const tripID: string | number | null = searchParams.get('id')
+  const { Option } = Select
 
   if (tripID === null) {
     throw new Error('Invalid trip ID')

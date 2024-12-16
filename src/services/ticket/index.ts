@@ -27,9 +27,17 @@ class TicketApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
-  public GetTravelCarByRequest({ id }: { id: string | number | null }): Promise<any> {
+  public GetTravelCarByRequest({
+    id,
+    startDate,
+    endDate
+  }: {
+    id: string | number | null
+    startDate: string | number | null
+    endDate: string | number | null
+  }): Promise<any> {
     return apiBaseServiceInstance.Http({
-      path: APP_API_ENDPOINT.TICKET.GET_TRAVEL_CAR_BY_REQUEST({ id }),
+      path: APP_API_ENDPOINT.TICKET.GET_TRAVEL_CAR_BY_REQUEST({ id, startDate, endDate }),
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }

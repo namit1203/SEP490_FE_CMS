@@ -1,10 +1,11 @@
+import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { formatDate } from '@/helpers'
 import useColumnSearch from '@/hooks/useColumnSearch'
-import { useQueryReviews } from '@/queries/reviews'
+import { useQueryReviews, useRemoveReviewsMutation } from '@/queries/reviews'
 import { useQueryTrips } from '@/queries/trip'
 import renderWithLoading from '@/utils/renderWithLoading'
-import { Button, Popconfirm, Space, Table, TableProps } from 'antd'
-import React from 'react'
+import { Button, message, Popconfirm, Space, Table, TableProps } from 'antd'
+import React, { useState } from 'react'
 
 interface DataType {
   key: string
@@ -16,8 +17,28 @@ interface DataType {
 }
 
 const ReviewsPage: React.FC = () => {
-  const { data, isLoading } = useQueryReviews()
+  const { data, isLoading, refetch } = useQueryReviews()
   const { data: tripData } = useQueryTrips()
+  const deleteMutaion = useRemoveReviewsMutation()
+  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)
+
+  const handleDeleteRequest = async (id: number) => {
+    try {
+      setIsLoadingDelete(true)
+      const response = await deleteMutaion.mutateAsync({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        message.success('Delete successfully')
+        refetch()
+      } else {
+        message.error('Delete failed')
+      }
+    } catch (error) {
+      console.error('Error when block driver:', error)
+      message.error('Block driver failed')
+    } finally {
+      setIsLoadingDelete(false)
+    }
+  }
 
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -64,10 +85,15 @@ const ReviewsPage: React.FC = () => {
       title: 'Action',
       key: 'action',
       align: 'center',
-      render: () => (
+      render: (_, record) => (
         <Space size='middle'>
-          <Popconfirm title='Are you sure to delete this item?' okText='Yes' cancelText='No'>
-            <Button type='primary' danger>
+          <Popconfirm
+            title='Are you sure to delete this item?'
+            okText='Yes'
+            cancelText='No'
+            onConfirm={() => handleDeleteRequest(record.id as number)}
+          >
+            <Button type='primary' danger loading={isLoadingDelete} disabled={isLoadingDelete}>
               Delete
             </Button>
           </Popconfirm>

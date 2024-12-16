@@ -43,14 +43,22 @@ export const useQueryTicketDetails = (
   })
 }
 export const useQueryTravelCarByRequest = (
-  { id }: { id: string | number | null | any },
+  {
+    id,
+    startDate,
+    endDate
+  }: {
+    id: string | number | null | any
+    startDate: string | number | null | any
+    endDate: string | number | null | any
+  },
   options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
   return useQuery<any>({
     ...options,
     queryKey: ['TravelCar_details', id],
     queryFn: async () => {
-      const response = await ticketApiRequest.GetTravelCarByRequest({ id })
+      const response = await ticketApiRequest.GetTravelCarByRequest({ id, startDate, endDate })
       if (response.status === HttpStatusCode.Ok) {
         return response.data
       }

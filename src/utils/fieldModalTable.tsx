@@ -1,5 +1,5 @@
 import { ModalFormProps } from '@/components/Modal/ModalForm'
-import { DataType } from '@/types/DataType'
+import { DataType, DataTypeUser } from '@/types/DataType'
 import { DatePicker, Input, InputNumber, Switch } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 
@@ -100,9 +100,126 @@ export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
     rules: [{ required: true, message: 'Vui lòng nhập Thời gian kết thúc khuyến mãi!' }]
   },
   {
+    name: 'timeStartDetils',
+    label: 'Time Start Detail',
+    component: (
+      <DatePicker
+        showTime={{
+          format: 'HH:mm:ss' // Ensures the popup time format is clear
+        }}
+        format='HH:mm:ss' // Format for the input field
+        picker='time' // Ensure this matches 'time' for selecting only time
+        placeholder='Select Time' // Placeholder text for clarity
+      />
+    ),
+    rules: [{ required: true, message: 'Vui lòng nhập Thời gian bắt đầu chi tiết!' }]
+  },
+  {
+    name: 'timeEndDetails',
+    label: 'Time End Detail',
+    component: (
+      <DatePicker
+        showTime={{
+          format: 'HH:mm:ss' // Ensures the popup time format is clear
+        }}
+        format='HH:mm:ss' // Format for the input field
+        picker='time' // Ensure this matches 'time' for selecting only time
+        placeholder='Select Time' // Placeholder text for clarity
+      />
+    ),
+    rules: [{ required: true, message: 'Vui lòng nhập Thời gian kết thúc chi tiết!' }]
+  },
+  {
+    name: 'pointStartDetails',
+    label: 'Point Start Details',
+    component: <Input />,
+    rules: [{ required: true, message: 'Vui lòng nhập điểm bắt đầu chi tiết!' }]
+  },
+  {
+    name: 'pointEndDetails',
+    label: 'Point End Details',
+    component: <Input />,
+    rules: [{ required: true, message: 'Vui lòng nhập điểm kết thúc chi tiết!' }]
+  },
+  {
     name: 'imagePromotion',
     label: 'Ảnh mã khuyến mại',
     component: <Input />,
     rules: [{ required: true, message: 'Vui lòng nhập ảnh mã khuyến mại!' }]
+  }
+]
+
+export const fieldUser: ModalFormProps<DataTypeUser>['fields'] = [
+  {
+    name: 'username',
+    label: 'Username',
+    component: <Input />,
+    rules: [{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]
+  },
+  {
+    name: 'email',
+    label: 'Email',
+    component: <Input />,
+    rules: [{ required: true, type: 'email', message: 'Vui lòng nhập email hợp lệ!' }]
+  },
+  {
+    name: 'role',
+    label: 'Role',
+    component: <Input />,
+    rules: [{ required: true, message: 'Vui lòng nhập vai trò!' }]
+  },
+  {
+    name: 'numberPhone',
+    label: 'Phone Number',
+    component: <Input />,
+    rules: [{ required: true, message: 'Vui lòng nhập số điện thoại!' }]
+  },
+  {
+    name: 'password',
+    label: 'Password',
+    component: <Input.Password />,
+    rules: [{ required: true, message: 'Vui lòng nhập mật khẩu!' }]
+  },
+  {
+    name: 'liscense',
+    label: 'License',
+    component: <Input />,
+    rules: [{ required: false }]
+  },
+  {
+    name: 'avatar',
+    label: 'Avatar',
+    component: <Input />,
+    rules: [{ required: false }]
+  },
+  {
+    name: 'fullName',
+    label: 'Full Name',
+    component: <Input />,
+    rules: [{ required: true, message: 'Vui lòng nhập họ và tên!' }]
+  },
+  {
+    name: 'address',
+    label: 'Address',
+    component: <TextArea />,
+    rules: [{ required: true, message: 'Vui lòng nhập địa chỉ!' }]
+  },
+  {
+    name: 'activeCode',
+    label: 'Active Code',
+    component: <Input />,
+    rules: [{ required: false }]
+  },
+  {
+    name: 'status',
+    label: 'Status',
+    component: <Switch checkedChildren='Active' unCheckedChildren='Inactive' />,
+    valuePropName: 'checked'
+  },
+  {
+    name: 'dob',
+    label: 'Date of Birth',
+    component: <DatePicker format='DD-MM-YYYY' placeholder='Select Date' />,
+    rules: [{ required: false }]
   }
 ]

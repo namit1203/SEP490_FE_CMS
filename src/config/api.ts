@@ -7,11 +7,21 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_TRIPS: '/api/Trip',
     GET_TYPE_OF_TRIPS: '/api/TypeOfTrip',
     ADD_TRIP: '/api/Trip/addTrip',
+    ADD_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/addTripDetails/${id}`,
     UPDATE_TRIPS: ({ id }: { id: string | number | null }) => `/api/Trip/updateTrip/${id}`,
+    UPDATE_STATUS_TRIP: ({ id }: { id: string | number | null }) => `/api/Trip/updateStatusTrip/${id}`,
     GET_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/Trip/getListTripById/${id}`,
-    GET_LIST_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/tripId?TripId=${id}`,
     IMPORT_TRIPS: ({ typeOfTrip }: { typeOfTrip: string | number | null }) =>
-      `/api/Trip/importTrip/typeOfTrip?typeOfTrip=${typeOfTrip}`
+      `/api/Trip/importTrip/typeOfTrip?typeOfTrip=${typeOfTrip}`,
+    CONFIRM_IMPORT_TRIPS: ({ typeOfTrip }: { typeOfTrip: string | number | null }) =>
+      `/api/Trip/confirmImportTrip/typeOfTrip?typeOfTrip=${typeOfTrip}`
+  },
+  TRIP_DETAIL: {
+    ADD_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/addTripDetails/${id}`,
+    UPDATE_TRIP_DETAIL: ({ id, tripID }: { id: string | number | null; tripID: string | number | null }) =>
+      `/api/TripDetails/updateTripDetails/${tripID}/${id}`,
+    GET_LIST_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/tripId?TripId=${id}`,
+    GET_TRIP_DETAIL_ID: ({ id }: { id: string | number | null }) => `/api/TripDetails/GetTripDetailData/${id}`
   },
   VEHICLES: {
     GET_NO_TRIPS: '/api/Vehicle/VehicleNoTrip',
@@ -64,6 +74,7 @@ export const APP_API_ENDPOINT = Object.freeze({
   REQUEST: {
     GET_REQUEST: '/api/Request',
     CREATE_REQUEST_DRIVER: '/api/Request/CreateRentVehicleForDriverRequest',
+    CREATE_REQUEST_OWNER: '/api/Request/CreateRentDriverForOwnerRequest',
     REQUEST_DETAILS: ({ id }: { id: string | number | null }) => `/GetRequestDetailById/${id}`,
     ACCEPT_CANCLE_REQUEST: ({ id }: { id: string | number | null }) => `/api/Request/acceptCancleTicket/${id}`,
     DELETE_REQUEST: ({ id }: { id: string | number | null }) => `/api/Request/Delete/${id}`,
@@ -87,10 +98,19 @@ export const APP_API_ENDPOINT = Object.freeze({
     DELETE_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/deleteTicket/${id}`,
     UPDATE_STATUS_TICKET: ({ id }: { id: string | number | null }) =>
       `/api/Ticket/updateStatusticketNotPaid/id?id=${id}`,
-    GET_TRAVEL_CAR_BY_REQUEST: ({ id }: { id: string | number | null }) => `/api/Ticket/GetTravelCarByRequest/${id}`
+    GET_TRAVEL_CAR_BY_REQUEST: ({
+      id,
+      startDate,
+      endDate
+    }: {
+      id: string | number | null
+      startDate: string | number | null
+      endDate: string | number | null
+    }) => `/api/Ticket/GetTravelCarByRequest/${id}/startDate/endDate?startDate=${startDate}&endDate=${endDate}`
   },
   REVENUE: {
-    GET_REVENUE: '/api/Revenue/getRevenue'
+    GET_REVENUE: '/api/Revenue/getRevenue',
+    EXPORT_REVENUE: '/api/Revenue/exportRevenue'
   },
   REVIEWS: {
     GET_REVIEW: '/api/Review',
@@ -109,16 +129,20 @@ export const APP_API_ENDPOINT = Object.freeze({
       `/api/Account/updateAccount/userId/newRoleId?userId=${id}&newRoleId=${newRoleId}`
   },
   HISTORY_RENT_VEHICLE: {
-    GET_HISTORY_RENT_VEHICLE: '/api/PaymentRentVehicel/getPaymentRentVehicle',
-    GET_LIST_VEHICLE_RENT: '/api/HistoryRentVehicle/ListVehicleUseRent',
+    GET_HISTORY_RENT_VEHICLE: '/api/HistoryRentVehicle/listHistoryRentVehicle',
+    GET_LIST_VEHICLE_RENT: ({ id }: { id: string | number | null }) =>
+      `/api/HistoryRentVehicle/GetVehicleForDriverRent/${id}`,
+    GET_LIST_VEHICLE_USE_RENT: ({ date }: { date: string | null }) =>
+      `/api/HistoryRentVehicle/listVehicleUseRent/dateTime?date=${date}`,
     ADD_HISTORY_VEHICLE: '/api/HistoryRentVehicle/AddHistoryVehicle'
   },
   HISTORY_RENT_DRIVER: {
-    GET_HISTORY_RENT_DRIVER: '/api/HistoryRentDriver/rent-details-with-total-for-owner',
+    GET_HISTORY_RENT_DRIVER: '/api/HistoryRentDriver/listHistoryRentDriver',
     GET_LIST_DRIVER_RENT: '/api/HistoryRentDriver/ListDriverRent',
     ADD_HISTORY_DRIVER: '/api/HistoryRentDriver/AddHistoryDriver'
   },
   USER_PROFILE: {
-    GET_DATA: '/api/Auth/userProfile'
+    GET_DATA: '/api/Auth/userProfile',
+    UPDATE_DATA: '/api/User/EditProfile'
   }
 })

@@ -9,6 +9,13 @@ class UserProfileApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+
+  public UpdateUser({ body }: { body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.USER_PROFILE.UPDATE_DATA,
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
 }
 
 const userProfileApiRequest = new UserProfileApiRequest()

@@ -10,13 +10,13 @@ import React from 'react'
 
 interface DataType {
   key: string
-  vehiclePrice: number
+  vehiclevehiclePrice: number
   driverName: string
-  timeStart: number
   timeEnd: number
-  price: number
-  carOwner: string
-  createdAt: string // ISO string for date-time
+  vehiclePrice: number
+  vehicleOwner: string
+  timeStart: string // ISO string for date-time
+  endStart: string // ISO string for date-time
 }
 
 const HistoryRentVehiclePage: React.FC = () => {
@@ -33,41 +33,33 @@ const HistoryRentVehiclePage: React.FC = () => {
     },
     {
       title: 'Giá xe',
-      dataIndex: 'price',
-      key: 'price',
+      dataIndex: 'vehiclePrice',
+      key: 'vehiclePrice',
       align: 'center',
       render: (text) => <span>{formatPrize(text)}</span>,
-      sorter: (a, b) => handlingTsUndefined(a.price) - handlingTsUndefined(b.price),
+      sorter: (a, b) => handlingTsUndefined(a.vehiclePrice) - handlingTsUndefined(b.vehiclePrice),
       width: '20%'
     },
     {
       title: 'Chủ xe',
-      dataIndex: 'carOwner',
-      key: 'carOwner',
+      dataIndex: 'vehicleOwner',
+      key: 'vehicleOwner',
       align: 'center',
-      ...useColumnSearch().getColumnSearchProps('carOwner'),
+      ...useColumnSearch().getColumnSearchProps('vehicleOwner'),
       render: (text) => <span>{text ?? 'null'}</span>,
       width: '20%'
     },
     {
-      title: 'Biển số xe',
-      dataIndex: 'licenseVehicle',
-      key: 'licenseVehicle',
-      align: 'center',
-      ...useColumnSearch().getColumnSearchProps('licenseVehicle'),
-      width: '20%'
-    },
-    {
-      title: 'Thời gian',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      title: 'Thời gian bắt đầu',
+      dataIndex: 'timeStart',
+      key: 'timeStart',
       align: 'center',
       filterDropdown: ({ setSelectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8 }}>
-          <DatePicker.RangePicker
-            onChange={(dates, dateStrings: any) => {
-              if (dates) {
-                setSelectedKeys([dateStrings])
+          <DatePicker
+            onChange={(date, dateString: any) => {
+              if (date) {
+                setSelectedKeys([dateString])
               } else {
                 setSelectedKeys([])
               }
@@ -92,17 +84,59 @@ const HistoryRentVehiclePage: React.FC = () => {
         </div>
       ),
       onFilter: (value, record) => {
-        if (Array.isArray(value) && value[0]) {
-          const [startDate, endDate] = (value[0] as string).split(',')
-          const recordDate = dayjs(record.createdAt)
-          return recordDate.isAfter(dayjs(startDate)) && recordDate.isBefore(dayjs(endDate))
+        if (value) {
+          const recordDate = dayjs(record.timeStart)
+          return recordDate.isSame(dayjs(value as string), 'day')
+        }
+        return false
+      },
+      render: (text) => <span>{formatTime(text)}</span>
+    },
+    {
+      title: 'Thời gian kết thúc',
+      dataIndex: 'endStart',
+      key: 'endStart',
+      align: 'center',
+      filterDropdown: ({ setSelectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <DatePicker
+            onChange={(date, dateString: any) => {
+              if (date) {
+                setSelectedKeys([dateString])
+              } else {
+                setSelectedKeys([])
+              }
+            }}
+            format='YYYY-MM-DD'
+            style={{ marginBottom: 8, display: 'block' }}
+          />
+          <div>
+            <Button
+              type='primary'
+              onClick={confirm as any}
+              icon={<SearchOutlined />}
+              size='small'
+              style={{ width: 90, marginRight: 8 }}
+            >
+              Search
+            </Button>
+            <Button onClick={clearFilters as any} size='small' style={{ width: 90 }}>
+              Reset
+            </Button>
+          </div>
+        </div>
+      ),
+      onFilter: (value, record) => {
+        if (value) {
+          const recordDate = dayjs(record.endStart)
+          return recordDate.isSame(dayjs(value as string), 'day')
         }
         return false
       },
       render: (text) => <span>{formatTime(text)}</span>
     }
   ]
-  const dataSource = data?.paymentRentVehicelDTOs?.map((item: any) => ({
+  const dataSource = data?.map((item: any) => ({
     ...item,
     key: item.id || item.someUniqueField
   }))
@@ -114,9 +148,9 @@ const HistoryRentVehiclePage: React.FC = () => {
         content: (
           <>
             <Table columns={columns} dataSource={dataSource} />
-            <div>
+            {/* <div>
               Total : <span style={{ fontSize: 20 }}>{formatPrize(data?.total)}</span>
-            </div>
+            </div> */}
           </>
         )
       })}

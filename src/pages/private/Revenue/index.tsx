@@ -1,10 +1,12 @@
 import React from 'react'
-import { Table } from 'antd'
-import { useQueryRevenue } from '@/queries/revenue'
+import { Button, message, Table } from 'antd'
+import { useExportRevenueMutation, useQueryRevenue } from '@/queries/revenue'
 import useColumnSearch from '@/hooks/useColumnSearch'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { generateColumn } from '@/utils/tableColumns'
 import { formatDate, formatPrize } from '@/helpers'
+import { HttpStatusCode } from 'axios'
+import { DownloadOutlined } from '@ant-design/icons'
 
 const RevenuePage: React.FC = () => {
   const { data, isLoading } = useQueryRevenue()
@@ -61,7 +63,6 @@ const RevenuePage: React.FC = () => {
     }),
     generateColumn('driverName', 'Driver Name'),
     generateColumn('carOwner', 'Vehicle Owner'),
-    generateColumn('price', 'Price'),
     generateColumn('price', 'Price', { formatter: formatPrize }),
     generateColumn('createdAt', 'Date', { formatter: formatDate })
   ]
@@ -77,12 +78,47 @@ const RevenuePage: React.FC = () => {
   const rentVehicleSource = generateDataSource(rentVehicleData, 'id')
   const lossCostSource = generateDataSource(totalLossCosts, 'id')
 
+  const updateMutation = useExportRevenueMutation()
+
+  const downloadFile = async () => {
+    try {
+      const response = await updateMutation.mutateAsync({ body: data })
+
+      if (response.status === HttpStatusCode.Ok) {
+        // Extract headers and handle the Blob
+        const contentDisposition = response.headers['content-disposition']
+        const fileName = contentDisposition
+          ? contentDisposition.split('filename=')[1]?.replace(/"/g, '') || 'Export_Revenue.xlsx'
+          : 'Export_Revenue.xlsx'
+
+        const url = window.URL.createObjectURL(response.data)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = fileName
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+
+        message.success('Export successfully')
+      } else {
+        message.error('Export failed')
+      }
+    } catch (error) {
+      console.error('Error downloading the file:', error)
+    }
+  }
+
   return (
     <>
       {renderWithLoading({
         isLoading,
         content: (
           <>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16, gap: 16 }}>
+              <Button onClick={downloadFile} type='primary' icon={<DownloadOutlined />} ghost>
+                Export revenue
+              </Button>
+            </div>
             <div>
               <h4 style={{ fontSize: 24, marginBottom: 30 }}>Ticket</h4>
               <Table columns={revenueTicketDataColumns} dataSource={revenueTicketSource} />
