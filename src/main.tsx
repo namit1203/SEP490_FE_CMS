@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import { AuthProvider } from './context/AuthContext.tsx'
 import './index.scss'
+import { LoadingProvider } from './context/LoadingContext.tsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,7 +25,9 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <App />
+          <LoadingProvider>
+            <App />
+          </LoadingProvider>
         </AuthProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

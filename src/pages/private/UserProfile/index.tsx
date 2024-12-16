@@ -1,16 +1,20 @@
 import { useQueryUserProfile } from '@/queries/user-profile'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { Col, Form, Row, Table, Image, Button } from 'antd'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const UserProfilePage: React.FC = () => {
-  const { data, isLoading } = useQueryUserProfile()
+  const { data, isLoading, refetch } = useQueryUserProfile()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   const userData = useMemo(() => {
     return [
-      { key: 'avatar', label: 'Avatar' },
+      { key: 'avatar', label: 'Avatar', value: data?.avatar || 'N/A' },
       { key: 'username', label: 'User Name', value: data?.username || 'N/A' },
       { key: 'fullName', label: 'Full Name', value: data?.fullName || 'N/A' },
       { key: 'email', label: 'Email ', value: data?.email || 'N/A' },
@@ -39,13 +43,7 @@ const UserProfilePage: React.FC = () => {
         render: (value: any, record: any) => {
           if (record.key === 'avatar') {
             return value !== null ? (
-              <Image
-                src={
-                  'https://boring-wiles.202-92-7-204.plesk.page/uploads/pngtree-hello-2025-flash-sale-text-effect-png-image_14519770_638696346565510662.png'
-                }
-                alt='Avatar'
-                style={{ width: '100px', height: '100px', borderRadius: '50%' }}
-              />
+              <Image src={value} alt='Avatar' style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
             ) : (
               'N/A'
             )

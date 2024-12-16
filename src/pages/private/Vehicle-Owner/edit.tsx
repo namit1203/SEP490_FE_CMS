@@ -1,3 +1,5 @@
+import UploadComponent from '@/components/upload'
+import { useLoading } from '@/context/LoadingContext'
 import { useQueryVehiclesOwner, useUpdateVehiclesOwnerMutation } from '@/queries/vehicle'
 import { DataTypeUser } from '@/types/DataType'
 import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType } from 'antd'
@@ -31,14 +33,22 @@ const EditVehicleOwnerPage: React.FC = () => {
 
   const [form] = Form.useForm()
 
+  const { isLoadingGlobal } = useLoading()
+
+  const [image, setImage] = useState()
+
   useEffect(() => {
     if (data && Array.isArray(data)) {
       const selectedItem = data.find((item) => item.id === Number(route_id))
+
       if (selectedItem) {
         const updatedFormData = {
           ...selectedItem,
           dob: dayjs(selectedItem.dob)
         }
+
+        setImage(updatedFormData.avatar)
+
         form.setFieldsValue(updatedFormData)
       }
     }
@@ -93,11 +103,7 @@ const EditVehicleOwnerPage: React.FC = () => {
     {
       key: 'avatar',
       label: 'Hình ảnh',
-      value: (
-        <Form.Item name='avatar' rules={[{ required: true, message: 'Vui lòng nhập hình ảnh!' }]}>
-          <Input placeholder='Nhập link ảnh đại diện' style={{ width: '30%' }} />
-        </Form.Item>
-      )
+      value: <UploadComponent fieldName='avatar' initialImage={image} form={form} />
     },
     {
       key: 'address',
@@ -153,6 +159,14 @@ const EditVehicleOwnerPage: React.FC = () => {
   const handleFormSubmit = async (values: DataTypeUser) => {
     setIsLoading(true)
     try {
+      console.log(values)
+
+      const formData = new FormData()
+
+      Object.entries(values).forEach(([key, value]) => {
+        formData.append(key, value)
+      })
+
       const response = await updateMutation.mutateAsync({ id: route_id, body: values })
       if (response.status === HttpStatusCode.Ok) {
         message.success('Update successfully')
@@ -177,8 +191,8 @@ const EditVehicleOwnerPage: React.FC = () => {
             type='primary'
             htmlType='submit'
             style={{ marginRight: '10px' }}
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isLoading || isLoadingGlobal}
+            disabled={isLoading || isLoadingGlobal}
           >
             Update
           </Button>

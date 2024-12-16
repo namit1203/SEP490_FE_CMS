@@ -3,6 +3,7 @@ import useColumnSearch from '@/hooks/useColumnSearch'
 import { useDeleteVehiclesMutation, useQueryVehicles } from '@/queries/vehicle'
 import { DataTypeVehicle } from '@/types/DataType'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
+import { getUserRoles, hasRole } from '@/utils/hasRole'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { DownloadOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons'
 import type { TableProps } from 'antd'
@@ -12,6 +13,8 @@ import { Link } from 'react-router-dom'
 import * as XLSX from 'xlsx'
 
 const VehiclesPage: React.FC = () => {
+  const userRoles = getUserRoles()
+
   const { data, refetch: refetchVehicles, isLoading } = useQueryVehicles()
 
   const deleteMutaion = useDeleteVehiclesMutation()
@@ -137,19 +140,25 @@ const VehiclesPage: React.FC = () => {
         content: (
           <>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16, gap: 16 }}>
-              <Link to='add'>
-                <Button type='primary' icon={<PlusOutlined />} ghost>
-                  Thêm mới
+              {hasRole(userRoles, ['Staff', 'VehicleOwner']) && (
+                <Link to='add'>
+                  <Button type='primary' icon={<PlusOutlined />} ghost>
+                    Thêm mới
+                  </Button>
+                </Link>
+              )}
+              {hasRole(userRoles, 'Staff') && (
+                <Link to='excel'>
+                  <Button type='primary' icon={<ExportOutlined />} ghost>
+                    Import Excel
+                  </Button>
+                </Link>
+              )}
+              {hasRole(userRoles, 'Staff') && (
+                <Button type='primary' onClick={handleExportToExcel} icon={<DownloadOutlined />} ghost>
+                  Export Excel
                 </Button>
-              </Link>
-              <Link to='excel'>
-                <Button type='primary' icon={<ExportOutlined />} ghost>
-                  Import Excel
-                </Button>
-              </Link>
-              <Button type='primary' onClick={handleExportToExcel} icon={<DownloadOutlined />} ghost>
-                Export Excel
-              </Button>
+              )}
             </div>
             <Table columns={columns} dataSource={dataSource} />
           </>

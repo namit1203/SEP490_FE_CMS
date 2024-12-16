@@ -66,8 +66,15 @@ const DriverPage: React.FC = () => {
       dataIndex: 'avatar',
       key: 'avatar',
       align: 'center',
-      render: () => (
-        <Avatar src={'https://statics.oeg.vn/storage/DEFAULT%20AVATAR%20PROFILE/akirov6.webp'} alt='Avatar' />
+      render: (_, record) => (
+        <Avatar
+          src={
+            record.avatar !== ''
+              ? record.avatar
+              : 'https://statics.oeg.vn/storage/DEFAULT%20AVATAR%20PROFILE/akirov6.webp'
+          }
+          alt='Avatar'
+        />
       ),
       width: '15%'
     },

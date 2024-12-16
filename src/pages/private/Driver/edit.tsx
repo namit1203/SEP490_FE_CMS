@@ -1,3 +1,4 @@
+import UploadComponent from '@/components/upload'
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useQueryDriver, useQueryDriverDetails, useUpdateDriverMutation } from '@/queries/driver'
 import { DataTypeDriver } from '@/types/DataType'
@@ -19,7 +20,7 @@ const EditDriverPage: React.FC = () => {
 
   const [form] = Form.useForm()
 
-  const { data: formData, refetch: refetchDriver } = useQueryDriverDetails({ id: driverId })
+  const { data, refetch: refetchDriver } = useQueryDriverDetails({ id: driverId })
 
   const { refetch } = useQueryDriver()
 
@@ -34,15 +35,15 @@ const EditDriverPage: React.FC = () => {
   }
 
   useEffect(() => {
-    if (formData) {
+    if (data) {
       const updatedFormData = {
-        ...formData,
-        dob: dayjs(formData.dob)
+        ...data,
+        dob: dayjs(data.dob)
       }
 
       form.setFieldsValue(updatedFormData)
     }
-  }, [formData, form])
+  }, [data, form])
 
   useEffect(() => {
     refetchDriver()
@@ -64,21 +65,6 @@ const EditDriverPage: React.FC = () => {
       value: (
         <Form.Item name='userName' rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}>
           <Input placeholder='Nhập tên đăng nhập' style={{ width: '30%' }} />
-        </Form.Item>
-      )
-    },
-    {
-      key: 'password',
-      label: 'Mật khẩu',
-      value: (
-        <Form.Item
-          name='password'
-          rules={[
-            { required: true, message: 'Vui lòng nhập mật khẩu!' },
-            { min: 6, message: 'Mật khẩu phải có tối thiểu 6 ký tự!' }
-          ]}
-        >
-          <Input placeholder='Nhập mật khẩu' style={{ width: '30%' }} type='password' />
         </Form.Item>
       )
     },
@@ -111,21 +97,17 @@ const EditDriverPage: React.FC = () => {
     },
     {
       key: 'license',
-      label: 'Bằng lái xe',
+      label: 'Biển số xe',
       value: (
-        <Form.Item name='license' rules={[{ required: true, message: 'Vui lòng nhập bằng lái xe!' }]}>
-          <Input placeholder='Nhập bằng lái xe' style={{ width: '30%' }} />
+        <Form.Item name='license' rules={[{ required: true, message: 'Vui lòng nhập biển số xe!' }]}>
+          <Input placeholder='Nhập biển số xe' style={{ width: '30%' }} />
         </Form.Item>
       )
     },
     {
       key: 'avatar',
       label: 'Hình ảnh',
-      value: (
-        <Form.Item name='avatar'>
-          <Input placeholder='Nhập link ảnh đại diện' style={{ width: '30%' }} />
-        </Form.Item>
-      )
+      value: <UploadComponent initialImage={data?.avatar} fieldName={'avatar'} form={form} />
     },
     {
       key: 'dob',
@@ -172,7 +154,13 @@ const EditDriverPage: React.FC = () => {
   const handleFormSubmit = async (values: DataTypeDriver) => {
     setIsLoading(true)
     try {
-      const response = await updateMutation.mutateAsync({ id: driverId, body: values })
+      const formData = new FormData()
+
+      Object.entries(values).forEach(([key, value]) => {
+        formData.append(key, value)
+      })
+
+      const response = await updateMutation.mutateAsync({ id: driverId, body: formData })
       if (response.status === HttpStatusCode.Ok) {
         message.success('Update successfully')
         refetch()

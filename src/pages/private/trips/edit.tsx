@@ -34,6 +34,13 @@ const EditTripPage: React.FC = () => {
     label: vehicle.licensePlate
   }))
 
+  const [selectedValue, setSelectedValue] = useState(formData?.vehicleId)
+
+  const handleChange = (value: string) => {
+    setSelectedValue(value)
+    console.log('Selected value:', value) // You can handle the selected value here
+  }
+
   const [fields, setFields] = useState<Field[]>([])
 
   useEffect(() => {
@@ -82,6 +89,8 @@ const EditTripPage: React.FC = () => {
               showSearch
               placeholder='Select a Vehicle'
               filterOption={(input: any, option: any) => (option?.label ?? '').includes(input.toLowerCase())}
+              onChange={handleChange} // Handle the change event
+              value={selectedValue} // Optionally set the selected value if you want to control it
               options={getOnlyLicensePlate.map((item: any) => ({
                 value: `${item.value}`, // Ensure uniqueness by appending the index
                 label: item.label,
@@ -145,7 +154,7 @@ const EditTripPage: React.FC = () => {
   const handleFormSubmit = async (values: any) => {
     const outputData = {
       name: values.name,
-      vehicleId: values.licensePlate,
+      vehicleId: selectedValue,
       startTime: dayjs(values.startTime).format('HH:mm:ss'), // Ensure startTime is in 'HH:mm:ss' format
       price: values.price,
       pointStart: values.pointStart,
@@ -154,6 +163,8 @@ const EditTripPage: React.FC = () => {
       description: values.description,
       status: values.status
     }
+
+    console.log(values)
 
     try {
       if (tripID) {

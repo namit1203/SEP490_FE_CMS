@@ -1,4 +1,6 @@
+import UploadComponent from '@/components/upload'
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
+import { useLoading } from '@/context/LoadingContext'
 import { useAddDriverMutation, useQueryDriver } from '@/queries/driver'
 import { DataTypeDriver } from '@/types/DataType'
 import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType } from 'antd'
@@ -17,6 +19,8 @@ const AddDriverPage: React.FC = () => {
   const addMutation = useAddDriverMutation()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const { isLoadingGlobal } = useLoading()
 
   const navigate = useNavigate()
 
@@ -95,11 +99,7 @@ const AddDriverPage: React.FC = () => {
     {
       key: 'avatar',
       label: 'Hình ảnh',
-      value: (
-        <Form.Item name='avatar' rules={[{ required: true, message: 'Vui lòng nhập hình ảnh!' }]}>
-          <Input placeholder='Nhập link ảnh đại diện' style={{ width: '30%' }} />
-        </Form.Item>
-      )
+      value: <UploadComponent fieldName='avatar' form={form} />
     },
     {
       key: 'dob',
@@ -147,7 +147,8 @@ const AddDriverPage: React.FC = () => {
     setIsLoading(true)
     try {
       const response = await addMutation.mutateAsync(values)
-      if (response.status === HttpStatusCode.Ok) {
+
+      if (response.status === HttpStatusCode.Created) {
         message.success('Add successfully')
         refetch()
         navigate('/driver')
@@ -171,8 +172,8 @@ const AddDriverPage: React.FC = () => {
             type='primary'
             htmlType='submit'
             style={{ marginRight: '10px' }}
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isLoading || isLoadingGlobal}
+            disabled={isLoading || isLoadingGlobal}
           >
             Add
           </Button>
