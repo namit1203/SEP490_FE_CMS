@@ -63,7 +63,17 @@ export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
     name: 'discount',
     label: 'Giá trị',
     component: <InputNumber style={{ width: '100%' }} />,
-    rules: [{ required: true, message: 'Vui lòng nhập giá trị!' }]
+    rules: [
+      { required: true, message: 'Vui lòng nhập giá trị!' },
+      {
+        validator: (_, value) => {
+          if (!value || parseInt(value, 10) <= 100) {
+            return Promise.resolve() // Validation passed
+          }
+          return Promise.reject(new Error('Giá trị không được lớn hơn 100!')) // Validation failed
+        }
+      }
+    ]
   },
   {
     name: 'exchangePoint',
