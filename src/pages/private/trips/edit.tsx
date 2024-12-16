@@ -36,6 +36,7 @@ const EditTripPage: React.FC = () => {
 
   const [selectedValue, setSelectedValue] = useState(formData?.vehicleId)
 
+
   const handleChange = (value: string) => {
     setSelectedValue(value)
     console.log('Selected value:', value) // You can handle the selected value here
@@ -142,7 +143,7 @@ const EditTripPage: React.FC = () => {
           ? dayjs(formData.startTime, 'HH:mm:ss') // Parse time-only format
           : null
       }
-
+      setSelectedValue(updatedFormData.vehicleId)
       form.setFieldsValue(updatedFormData)
     }
   }, [formData, form])
