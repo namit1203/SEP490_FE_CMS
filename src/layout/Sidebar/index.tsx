@@ -1,3 +1,4 @@
+import logo from '@/assets/logo.png'
 import { RoleType } from '@/enums/enum'
 import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import { allowAdminRoute, allowDriverRoute, allowStaffRoute, allowVehicleOwnerRoute } from '@/utils/rolePath'
@@ -182,7 +183,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           fontSize: '18px'
         }}
       >
-        <h1>Dashboard</h1>
+        <img src={logo} alt='logo' />
       </div>
       <Menu
         mode='inline'
