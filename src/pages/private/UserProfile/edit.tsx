@@ -1,3 +1,5 @@
+import UploadComponent from '@/components/upload'
+import { useLoading } from '@/context/LoadingContext'
 import { useQueryUserProfile, useUpdateUserMutation } from '@/queries/user-profile'
 import { DataType } from '@/types/DataType'
 import { fieldUser } from '@/utils/fieldModalTable'
@@ -10,8 +12,9 @@ import { useNavigate } from 'react-router-dom'
 
 const EditUserProfile = () => {
   const [form] = Form.useForm()
-  const { data, isLoading } = useQueryUserProfile()
+  const { data, isLoading: loadingUserProfile } = useQueryUserProfile()
   const navigate = useNavigate()
+  const { isLoadingGlobal } = useLoading()
 
   useEffect(() => {
     if (data) {
@@ -54,7 +57,13 @@ const EditUserProfile = () => {
         dob: dayjs(values.dob)
       }
 
-      const response = await updateMutation.mutateAsync({ body: data })
+      const formData = new FormData()
+
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value)
+      })
+
+      const response = await updateMutation.mutateAsync(formData)
 
       if (response.status === HttpStatusCode.Ok) {
         message.success('Update successfully')
@@ -70,7 +79,7 @@ const EditUserProfile = () => {
   return (
     <>
       {renderWithLoading({
-        isLoading,
+        isLoading: loadingUserProfile,
         content: (
           <Form onFinish={handleFormSubmit} form={form} layout='vertical'>
             {filteredFields.map((field) => (
@@ -80,10 +89,14 @@ const EditUserProfile = () => {
                 label={field.label}
                 rules={field.rules || []}
               >
-                {field.component}
+                {field.name === 'avatar' ? (
+                  <UploadComponent initialImage={data?.avatar} fieldName={'avatar'} form={form} /> // Hiển thị component upload khi field là avatar
+                ) : (
+                  field.component // Hiển thị component mặc định cho các field khác
+                )}
               </Form.Item>
             ))}
-            <Button type='primary' htmlType='submit'>
+            <Button disabled={isLoadingGlobal} type='primary' htmlType='submit'>
               Update
             </Button>
           </Form>

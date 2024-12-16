@@ -1,10 +1,11 @@
+import UploadComponent from '@/components/upload'
+import { useLoading } from '@/context/LoadingContext'
 import { useAddPromotionMutation, useAddPromotionToAllUserMutation } from '@/queries/promotions'
 import { DataTypeVehicle } from '@/types/DataType'
 import { fieldModalTable } from '@/utils/fieldModalTable'
 import { PlusOutlined } from '@ant-design/icons'
 import { Form, Button, message } from 'antd'
 import { HttpStatusCode } from 'axios'
-// import TextArea from 'antd/es/input/TextArea'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,6 +14,7 @@ const AddPromotionPage: React.FC = () => {
   const addMutation = useAddPromotionMutation()
   const addAllMutation = useAddPromotionToAllUserMutation()
   const navigate = useNavigate()
+  const { isLoadingGlobal } = useLoading()
 
   const filteredFields = fieldModalTable.filter(
     (field) =>
@@ -24,7 +26,13 @@ const AddPromotionPage: React.FC = () => {
 
   const handleFormSubmit = async (values: DataTypeVehicle) => {
     try {
-      const response = await addMutation.mutateAsync(values)
+      const formData = new FormData()
+
+      Object.entries(values).forEach(([key, value]) => {
+        formData.append(key, value)
+      })
+
+      const response = await addMutation.mutateAsync(formData)
       console.log(response)
 
       if (response.status === HttpStatusCode.Created) {
@@ -39,16 +47,21 @@ const AddPromotionPage: React.FC = () => {
   }
 
   const handleAddPromotionToAllUser = async () => {
-    const values = form.getFieldsValue()
-
     try {
-      const response = await addAllMutation.mutateAsync(values)
+      const values = form.getFieldsValue()
+      const formData = new FormData()
 
-      if (response.status === HttpStatusCode.Created) {
+      Object.entries(values).forEach(([key, value]) => {
+        formData.append(key, value)
+      })
+
+      const response = await addAllMutation.mutateAsync(formData)
+
+      if (response.status === HttpStatusCode.Ok) {
         message.success('Create promotion success')
         navigate('/promotion')
       } else {
-        message.error(response.message)
+        message.error(response.data)
       }
     } catch (error) {
       console.error('Error values:', error)
@@ -56,7 +69,7 @@ const AddPromotionPage: React.FC = () => {
   }
 
   return (
-    <Form onFinish={handleFormSubmit} form={form} layout='vertical'>
+    <Form onFinish={handleFormSubmit} form={form} layout='vertical' initialValues={{}}>
       {filteredFields.map((field) => (
         <Form.Item
           key={String(field.name)} // Ensure key is a string
@@ -64,10 +77,14 @@ const AddPromotionPage: React.FC = () => {
           label={field.label}
           rules={field.rules || []}
         >
-          {field.component}
+          {field.name === 'imagePromotion' ? (
+            <UploadComponent fieldName={'imagePromotion'} form={form} /> // Hiển thị component upload khi field là avatar
+          ) : (
+            field.component // Hiển thị component mặc định cho các field khác
+          )}
         </Form.Item>
       ))}
-      <Button type='primary' htmlType='submit'>
+      <Button disabled={isLoadingGlobal} type='primary' htmlType='submit'>
         Add
       </Button>
       <Button
@@ -76,6 +93,7 @@ const AddPromotionPage: React.FC = () => {
         type='primary'
         icon={<PlusOutlined />}
         ghost
+        disabled={isLoadingGlobal}
       >
         Thêm promotion cho tất cả user
       </Button>

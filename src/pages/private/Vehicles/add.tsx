@@ -1,4 +1,6 @@
+import UploadComponent from '@/components/upload'
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
+import { useLoading } from '@/context/LoadingContext'
 import { useQueryDriver } from '@/queries/driver'
 import { useAddVehiclesMutation, useQueryTypeOfVehicles, useQueryTypeVehiclesOwner } from '@/queries/vehicle'
 import { DataTypeVehicle } from '@/types/DataType'
@@ -22,6 +24,8 @@ const AddVehiclePage: React.FC = () => {
   const addMutation = useAddVehiclesMutation()
 
   const navigate = useNavigate()
+
+  const { isLoadingGlobal } = useLoading()
 
   const tableData: TableData[] = [
     {
@@ -51,11 +55,7 @@ const AddVehiclePage: React.FC = () => {
     {
       key: 'image',
       label: 'Link ảnh',
-      value: (
-        <Form.Item name='image' rules={[{ required: true, message: 'Vui lòng nhập link ảnh!' }]}>
-          <Input placeholder='Nhập link ảnh' style={{ width: '30%' }} type='url' />
-        </Form.Item>
-      )
+      value: <UploadComponent fieldName='image' form={form} />
     },
     {
       key: 'numberSeat',
@@ -134,7 +134,13 @@ const AddVehiclePage: React.FC = () => {
 
   const handleFormSubmit = async (values: DataTypeVehicle) => {
     try {
-      const response = await addMutation.mutateAsync(values)
+      const formData = new FormData()
+
+      Object.entries(values).forEach(([key, value]) => {
+        formData.append(key, value)
+      })
+
+      const response = await addMutation.mutateAsync(formData)
       if (response.status === HttpStatusCode.Ok) {
         message.success('Add successfully')
         navigate('/vehicles')
@@ -151,7 +157,7 @@ const AddVehiclePage: React.FC = () => {
       <Table columns={columns} dataSource={tableData} pagination={false} bordered rowKey='key' />
       <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
         <Col>
-          <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }}>
+          <Button disabled={isLoadingGlobal} type='primary' htmlType='submit' style={{ marginRight: '10px' }}>
             Add
           </Button>
         </Col>

@@ -1,4 +1,6 @@
+import UploadComponent from '@/components/upload'
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
+import { useLoading } from '@/context/LoadingContext'
 import { useQueryDriver } from '@/queries/driver'
 import {
   useQueryTypeOfVehicles,
@@ -7,23 +9,8 @@ import {
   useUpdateVehiclesMutation
 } from '@/queries/vehicle'
 import { DataTypeVehicle } from '@/types/DataType'
-import { addWebImageLink } from '@/utils/showImage'
-import { UploadOutlined } from '@ant-design/icons'
-import {
-  Button,
-  Col,
-  Form,
-  Image,
-  Input,
-  InputNumber,
-  message,
-  Row,
-  Select,
-  Switch,
-  Table,
-  TableColumnsType,
-  Upload
-} from 'antd'
+
+import { Button, Col, Form, Input, InputNumber, message, Row, Select, Switch, Table, TableColumnsType } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -43,17 +30,19 @@ const EditVehiclePage: React.FC = () => {
   const { data: dataTypeOfVehicles } = useQueryTypeOfVehicles()
   const { data: dataTypeOfVehiclesOwner } = useQueryTypeVehiclesOwner()
 
-  const { data: formData, refetch } = useQueryVehiclesDetails({ id: vehicleID })
+  const { data, refetch } = useQueryVehiclesDetails({ id: vehicleID })
 
   const updateMutation = useUpdateVehiclesMutation()
 
   const navigate = useNavigate()
 
+  const { isLoadingGlobal } = useLoading()
+
   useEffect(() => {
-    if (formData) {
-      form.setFieldsValue(formData)
+    if (data) {
+      form.setFieldsValue(data)
     }
-  }, [formData, form])
+  }, [data, form])
 
   useEffect(() => {
     refetch()
@@ -87,30 +76,7 @@ const EditVehiclePage: React.FC = () => {
     {
       key: 'image',
       label: 'Link ảnh',
-      value: (
-        <>
-          <Form.Item name='image' rules={[{ required: true, message: 'Vui lòng nhập link ảnh!' }]}>
-            <Upload
-              beforeUpload={() => false} // Prevent automatic upload to the server
-              onChange={({ fileList }) => {
-                const file = fileList[fileList.length - 1]
-                if (file.status === 'done') {
-                  form.setFieldsValue({
-                    image: file.response?.url || file.url // Set the image URL in the form
-                  })
-                  message.success('Image uploaded successfully')
-                } else if (file.status === 'error') {
-                  message.error('Image upload failed')
-                }
-              }}
-            >
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
-          </Form.Item>
-          {/* Display image preview */}
-          {formData?.image && <Image width={100} src={addWebImageLink(formData?.image)} alt='Image' />}
-        </>
-      )
+      value: <UploadComponent fieldName='image' initialImage={data?.image} form={form} />
     },
     {
       key: 'numberSeat',
@@ -192,22 +158,11 @@ const EditVehiclePage: React.FC = () => {
       if (vehicleID) {
         const formData = new FormData()
 
-        // Append form fields to FormData
-        Object.keys(values).forEach((key) => {
-          // If the field is not the image, append it normally
-          if (key !== 'image') {
-            formData.append(key, values[key])
-          }
+        Object.entries(values).forEach(([key, value]) => {
+          formData.append(key, value)
         })
 
-        // Check if there's an image file, and append it
-        if (values.image && values.image.fileList && values.image.fileList[0]) {
-          const imageFile = values.image.fileList[0].originFileObj
-          formData.append('imageFile', imageFile)
-        }
-
         const response = await updateMutation.mutateAsync({ id: vehicleID, body: formData })
-        console.log(response)
 
         if (response.status === HttpStatusCode.Ok) {
           message.success('Update successfully')
@@ -226,7 +181,7 @@ const EditVehiclePage: React.FC = () => {
       <Table columns={columns} dataSource={tableData} pagination={false} bordered rowKey='key' />
       <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
         <Col>
-          <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }}>
+          <Button disabled={isLoadingGlobal} type='primary' htmlType='submit' style={{ marginRight: '10px' }}>
             Update
           </Button>
         </Col>

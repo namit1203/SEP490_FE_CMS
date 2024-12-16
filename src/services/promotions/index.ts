@@ -29,7 +29,7 @@ class PromotionApiRequest {
   }
   public AddPromotionToAllUsers({ body }: { body: any }): Promise<any> {
     return apiBaseServiceInstance.Http({
-      path: APP_API_ENDPOINT.PROMOTION.ADD_PROMOTION,
+      path: APP_API_ENDPOINT.PROMOTION.ADD_PROMOTION_ALL_USER,
       config: { method: METHOD_TYPE.POST, body, cors: false }
     })
   }

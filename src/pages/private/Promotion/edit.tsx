@@ -1,3 +1,5 @@
+import UploadComponent from '@/components/upload'
+import { useLoading } from '@/context/LoadingContext'
 import { useQueryPromotionDetails, useUpdatePromotionMutation } from '@/queries/promotions'
 import { DataType } from '@/types/DataType'
 import { fieldModalTable } from '@/utils/fieldModalTable'
@@ -15,19 +17,21 @@ const EditPromotionPage: React.FC = () => {
 
   const updateMutation = useUpdatePromotionMutation()
 
-  const { data: formData, refetch } = useQueryPromotionDetails({ id: promotionID })
+  const { isLoadingGlobal } = useLoading()
+
+  const { data, refetch } = useQueryPromotionDetails({ id: promotionID })
 
   useEffect(() => {
-    if (formData) {
+    if (data) {
       const updatedFormData = {
-        ...formData,
-        startDate: dayjs(formData.startDate),
-        endDate: dayjs(formData.endDate)
+        ...data,
+        startDate: dayjs(data.startDate),
+        endDate: dayjs(data.endDate)
       }
 
       form.setFieldsValue(updatedFormData)
     }
-  }, [formData, form])
+  }, [data, form])
 
   useEffect(() => {
     refetch()
@@ -43,13 +47,21 @@ const EditPromotionPage: React.FC = () => {
 
   const handleSubmit = async (values: DataType) => {
     try {
-      const response = await updateMutation.mutateAsync({ id: promotionID, body: values })
-      if (response.status === HttpStatusCode.Ok) {
-        message.success('Update successfully')
+      if (promotionID) {
+        const formData = new FormData()
 
-        navigate('/promotion')
-      } else {
-        message.error('Update failed')
+        Object.entries(values).forEach(([key, value]) => {
+          formData.append(key, value)
+        })
+
+        const response = await updateMutation.mutateAsync({ id: promotionID, body: formData })
+        if (response.status === HttpStatusCode.Ok) {
+          message.success('Update successfully')
+
+          navigate('/promotion')
+        } else {
+          message.error('Update failed')
+        }
       }
     } catch (error) {
       console.error('Error values:', error)
@@ -65,10 +77,14 @@ const EditPromotionPage: React.FC = () => {
           label={field.label}
           rules={field.rules || []}
         >
-          {field.component}
+          {field.name === 'imagePromotion' ? (
+            <UploadComponent initialImage={data?.imagePromotion} fieldName={'imagePromotion'} form={form} /> // Hiển thị component upload khi field là avatar
+          ) : (
+            field.component // Hiển thị component mặc định cho các field khác
+          )}
         </Form.Item>
       ))}
-      <Button type='primary' htmlType='submit'>
+      <Button disabled={isLoadingGlobal} type='primary' htmlType='submit'>
         Update
       </Button>
     </Form>
