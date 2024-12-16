@@ -20,7 +20,7 @@ export const APP_API_ENDPOINT = Object.freeze({
     ADD_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/addTripDetails/${id}`,
     UPDATE_TRIP_DETAIL: ({ id, tripID }: { id: string | number | null; tripID: string | number | null }) =>
       `/api/TripDetails/updateTripDetails/${tripID}/${id}`,
-    GET_LIST_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/tripId?TripId=${id}`,
+    GET_LIST_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/tripIdStaff/TripId?TripId=${id}`,
     GET_TRIP_DETAIL_ID: ({ id }: { id: string | number | null }) => `/api/TripDetails/GetTripDetailData/${id}`
   },
   VEHICLES: {
