@@ -116,3 +116,16 @@ export const formatLastChangedTime = (date: string): string => {
   }
   return Math.floor(seconds) + ' giây trước'
 }
+
+type FilterOption = { text: string; value: string }
+
+export function generateFilters<T>(data: T[], key: keyof T): FilterOption[] {
+  const uniqueValues = Array.from(
+    new Set(data.map((item) => item[key]).filter((value) => typeof value === 'string'))
+  ) as string[]
+
+  return uniqueValues.map((value) => ({
+    text: value,
+    value
+  }))
+}

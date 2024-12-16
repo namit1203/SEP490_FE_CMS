@@ -1,11 +1,14 @@
-import { SearchOutlined } from '@ant-design/icons'
-import type { InputRef, TableColumnType, TableProps } from 'antd'
-import { Button, Input, Popconfirm, Space, Table } from 'antd'
-import { FilterDropdownProps } from 'antd/es/table/interface'
-import React, { useRef, useState } from 'react'
-import Highlighter from 'react-highlight-words'
-import { ActionType, ActionTypeDescriptions } from '../../../enums/enum'
-import { useQueryRequest } from '../../../queries/request'
+import { ActionType, ActionTypeDescriptions, RoleType } from '@/enums/enum'
+import useColumnSearch from '@/hooks/useColumnSearch'
+import { useAcceptCancleRequestMutation, useDeleteRequestMutation, useQueryRequest } from '@/queries/request'
+import { useQueryUserProfile } from '@/queries/user-profile'
+import renderWithLoading from '@/utils/renderWithLoading'
+import { PlusOutlined } from '@ant-design/icons'
+import type { TableProps } from 'antd'
+import { Button, message, Popconfirm, Space, Table } from 'antd'
+import { HttpStatusCode } from 'axios'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 interface DataType {
   key: string
@@ -14,133 +17,101 @@ interface DataType {
   note: string
   userName: number
   typeId: string | number
+  status: boolean
 }
 
-type DataIndex = keyof DataType
-
 const RequestPage: React.FC = () => {
-  const { data } = useQueryRequest()
+  const { data, isLoading, refetch } = useQueryRequest()
 
-  const [searchText, setSearchText] = useState('')
-  const [searchedColumn, setSearchedColumn] = useState('')
-  const searchInput = useRef<InputRef>(null)
+  const { data: account } = useQueryUserProfile()
 
-  const handleSearch = (selectedKeys: string[], confirm: FilterDropdownProps['confirm'], dataIndex: DataIndex) => {
-    confirm()
-    setSearchText(selectedKeys[0])
-    setSearchedColumn(dataIndex)
-  }
+  const acceptMutaion = useAcceptCancleRequestMutation()
 
-  const handleReset = (clearFilters: () => void) => {
-    clearFilters()
-    setSearchText('')
-  }
+  const deleteMutaion = useDeleteRequestMutation()
 
-  const getColumnSearchProps = (dataIndex: DataIndex): TableColumnType<DataType> => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
-      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
-        <Input
-          ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-          style={{ marginBottom: 8, display: 'block' }}
-        />
-        <Space>
-          <Button
-            type='primary'
-            onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size='small'
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button onClick={() => clearFilters && handleReset(clearFilters)} size='small' style={{ width: 90 }}>
-            Reset
-          </Button>
-          <Button
-            type='link'
-            size='small'
-            onClick={() => {
-              confirm({ closeDropdown: false })
-              setSearchText((selectedKeys as string[])[0])
-              setSearchedColumn(dataIndex)
-            }}
-          >
-            Filter
-          </Button>
-          <Button
-            type='link'
-            size='small'
-            onClick={() => {
-              close()
-            }}
-          >
-            close
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />,
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ?.toString()
-        ?.toLowerCase()
-        ?.includes((value as string).toLowerCase()),
-    filterDropdownProps: {
-      onOpenChange(open) {
-        if (open) {
-          setTimeout(() => searchInput.current?.select(), 100)
-        }
+  const [isAcceptLoading, setIsAcceptLoading] = useState<boolean>(false)
+
+  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)
+
+  // Add `key` to each record if not present
+  const dataSource = data?.map((item: any) => ({
+    ...item,
+    key: item.id || item.someUniqueField
+  }))
+
+  const handleAccept = async (id: number) => {
+    try {
+      setIsAcceptLoading(true)
+      const response = await acceptMutaion.mutateAsync({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        message.success('Accept successfully')
+        refetch()
+      } else {
+        message.error('Accept failed')
       }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ''}
-        />
-      ) : (
-        text
-      )
-  })
+    } catch (error) {
+      console.error('Error values:', error)
+      message.error('Accept failed')
+    } finally {
+      setIsAcceptLoading(false)
+    }
+  }
+  const handleDeleteRequest = async (id: number) => {
+    try {
+      setIsLoadingDelete(true)
+      const response = await deleteMutaion.mutateAsync({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        message.success('Delete successfully')
+        refetch()
+      } else {
+        message.error('Delete failed')
+      }
+    } catch (error) {
+      console.error('Error when block driver:', error)
+      message.error('Block driver failed')
+    } finally {
+      setIsLoadingDelete(false)
+    }
+  }
 
   const columns: TableProps<DataType>['columns'] = [
     {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
+      align: 'center',
       width: '10%'
     },
     {
       title: 'Tên',
       dataIndex: 'userName',
       key: 'userName',
+      align: 'center',
       width: '20%',
-      ...getColumnSearchProps('userName')
+      ...useColumnSearch().getColumnSearchProps('userName')
     },
     {
       title: 'Mô tả',
       dataIndex: 'description',
       key: 'description',
-      ...getColumnSearchProps('description'),
+      align: 'center',
+      ...useColumnSearch().getColumnSearchProps('description'),
       render: (text) => <a>{text}</a>,
       width: '25%'
     },
     {
       title: 'Trạng thái',
-      dataIndex: 'note',
-      key: 'note',
-      width: '20%'
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center',
+      width: '20%',
+      render: (status: boolean) => <span>{status ? 'Đã xác nhận' : 'Chưa xác nhận'}</span>
     },
     {
       title: 'Type',
       dataIndex: 'typeId',
       key: 'typeId',
+      align: 'center',
       width: '20%',
       render: (type: ActionType) => <span>{ActionTypeDescriptions[type]}</span>,
       filters: Object.entries(ActionTypeDescriptions).map(([key, value]) => ({
@@ -150,31 +121,61 @@ const RequestPage: React.FC = () => {
       onFilter: (value, record) => record.typeId === value
     },
     {
-      title: 'Action',
+      title: <div style={{ textAlign: 'center' }}>Action</div>,
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <Button type='primary'>Show</Button>
-          <Popconfirm title='Bạn có chắc chắn muốn xóa yêu cầu này không?' okText='Yes' cancelText='No'>
-            <Button type='primary' danger>
+          {record.typeId !== 3 && (
+            <Link to={`details?id=${record.id}`}>
+              <Button type='primary'>Show</Button>
+            </Link>
+          )}
+          <Popconfirm
+            title='Bạn có chắc chắn muốn xóa yêu cầu này không?'
+            okText='Yes'
+            cancelText='No'
+            onConfirm={() => handleDeleteRequest(record.id as number)}
+          >
+            <Button type='primary' danger loading={isLoadingDelete}>
               Delete
             </Button>
           </Popconfirm>
-          {record.typeId === 3 && (
-            <Popconfirm title='Bạn có chắc chắn muốn hủy yêu cầu này không?' okText='Xác nhận' cancelText='Hủy'>
-              <Button type='default'>Cancel</Button>
+          {record.typeId === 3 && !record.status && (
+            <Popconfirm
+              title='Bạn có chắc chắn muốn hủy yêu cầu này không?'
+              okText='Xác nhận'
+              cancelText='Hủy'
+              onConfirm={() => handleAccept(record.id as number)}
+            >
+              <Button type='default' loading={isAcceptLoading} disabled={isAcceptLoading}>
+                Cancel
+              </Button>
             </Popconfirm>
           )}
         </Space>
       )
     }
   ]
-  // Add `key` to each record if not present
-  const dataSource = data?.map((item: any) => ({
-    ...item,
-    key: item.id || item.someUniqueField
-  }))
-
-  return <Table<DataType> columns={columns} dataSource={dataSource} />
+  return (
+    <>
+      {renderWithLoading({
+        isLoading,
+        content: (
+          <>
+            {account && [RoleType.DRIVER, RoleType.VEHICLE_OWNER].includes(account?.role as RoleType) && (
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+                <Link to='add'>
+                  <Button type='primary' icon={<PlusOutlined />} ghost>
+                    {account?.role === RoleType.DRIVER ? 'Thuê xe' : 'Thuê tài xế'}
+                  </Button>
+                </Link>
+              </div>
+            )}
+            <Table columns={columns} dataSource={dataSource} />
+          </>
+        )
+      })}
+    </>
+  )
 }
 export default RequestPage

@@ -17,3 +17,11 @@ export const ActionTypeDescriptions: Record<ActionType, string> = {
   [ActionType.CHARTER_TRIP]: 'Bao xe tiện chuyến',
   [ActionType.DRIVER_RENT_VEHICLE]: 'Lái xe muốn thuê xe'
 }
+
+export enum RoleType {
+  ADMIN = 'Admin',
+  USER = 'User',
+  STAFF = 'Staff',
+  DRIVER = 'Driver',
+  VEHICLE_OWNER = 'VehicleOwner'
+}

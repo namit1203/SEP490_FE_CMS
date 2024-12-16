@@ -1,9 +1,9 @@
+import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
+import { useAuth } from '@/context/AuthContext'
+import authApiRequest from '@/services/auth'
+import { TLoginAuth } from '@/types/auth'
+import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
-import { HttpStatusCode } from '../../constants/httpStatusCode.enum'
-import { useAuth } from '../../context/AuthContext'
-import authApiRequest from '../../services/auth'
-import { TLoginAuth } from '../../types/auth'
-import { useLocalStorage } from '../../utils/localStorage/localStorageService'
 
 export const useLoginMutation = (options?: UseMutationOptions<any, unknown, TLoginAuth, unknown>) => {
   const { setIsAuthenticated } = useAuth()

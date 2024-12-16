@@ -53,3 +53,8 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   display: none;
 }
+
+.ant-menu-item-group {
+  position: sticky;
+  top: 0;
+}

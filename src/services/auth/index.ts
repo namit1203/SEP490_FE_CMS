@@ -1,7 +1,7 @@
-import { apiBaseServiceInstance } from '../../api'
-import { APP_API_ENDPOINT } from '../../config/api'
-import { METHOD_TYPE } from '../../config/method'
-import { TLoginAuth } from '../../types/auth'
+import { apiBaseServiceInstance } from '@/api'
+import { APP_API_ENDPOINT } from '@/config/api'
+import { METHOD_TYPE } from '@/config/method'
+import { TLoginAuth } from '@/types/auth'
 
 class AuthApiRequest {
   public Login({ body }: { body: TLoginAuth }): Promise<any> {

@@ -1,11 +1,17 @@
-import { apiBaseServiceInstance } from '../../api'
-import { APP_API_ENDPOINT } from '../../config/api'
-import { METHOD_TYPE } from '../../config/method'
+import { apiBaseServiceInstance } from '@/api'
+import { APP_API_ENDPOINT } from '@/config/api'
+import { METHOD_TYPE } from '@/config/method'
 
 class TicketApiRequest {
   public GetTicket(): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TICKET.GET_TICKET,
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
+  public GetTotalTicket(): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TICKET.GET_TOTAL_TICKET,
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
@@ -21,6 +27,20 @@ class TicketApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+  public GetTravelCarByRequest({
+    id,
+    startDate,
+    endDate
+  }: {
+    id: string | number | null
+    startDate: string | number | null
+    endDate: string | number | null
+  }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TICKET.GET_TRAVEL_CAR_BY_REQUEST({ id, startDate, endDate }),
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
   public DeleteTicket({ id }: { id: string | number | null }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TICKET.DELETE_TICKET({ id }),
@@ -31,6 +51,12 @@ class TicketApiRequest {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TICKET.UPDATE_STATUS_TICKET({ id }),
       config: { method: METHOD_TYPE.POST, cors: false }
+    })
+  }
+  public UpdateTicket({ id, body }: { id: string | number | null; body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TICKET.UPDATE_TICKET({ id }),
+      config: { method: METHOD_TYPE.POST, body, cors: false }
     })
   }
 }

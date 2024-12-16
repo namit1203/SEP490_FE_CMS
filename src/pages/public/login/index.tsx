@@ -1,12 +1,12 @@
+import Footer from '@/components/auth/Footer'
+import Header from '@/components/auth/Header'
+import LoginForm from '@/components/auth/LoginForm'
+import getStyles from '@/components/auth/styles'
+import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
+import { useLoginDriverMutation, useLoginMutation } from '@/queries/auth'
 import { Card, Grid, message, theme } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Footer from '../../../components/auth/Footer'
-import Header from '../../../components/auth/Header'
-import LoginForm from '../../../components/auth/LoginForm'
-import getStyles from '../../../components/auth/styles'
-import { HttpStatusCode } from '../../../constants/httpStatusCode.enum'
-import { useLoginDriverMutation, useLoginMutation } from '../../../queries/auth'
 
 const { useToken } = theme
 const { useBreakpoint } = Grid
