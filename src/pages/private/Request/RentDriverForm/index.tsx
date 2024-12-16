@@ -32,73 +32,70 @@ const RentDriverForm = ({ data }: { data: DataTypeRequest | undefined }) => {
 
   const { data: requestData, refetch } = useQueryRequest()
 
-  const tableData: TableData[] = useMemo(
-    () => [
-      {
-        key: 'driverId',
-        label: 'Tài xế',
-        value: (
-          <Form.Item name='driverId' noStyle initialValue={data?.driverId}>
-            <Select placeholder='Chọn tài xế' style={{ width: '30%' }}>
-              {driverData &&
-                driverData.map((item: any) => (
-                  <Select.Option key={item?.id} value={item?.id}>
-                    <Tooltip
-                      title={`Tên: ${item?.name}, email: ${item?.email}, sdt: ${item?.numberPhone}, tên đăng nhập: ${item?.userName}`}
-                    >
-                      <span>{item?.name}</span>
-                    </Tooltip>
-                  </Select.Option>
-                ))}
-            </Select>
-          </Form.Item>
-        )
-      },
-      {
-        key: 'startTime',
-        label: 'Thời gian khởi hành',
-        value: data?.startTime ? formatTime(data.startTime) : 'N/A'
-      },
-      {
-        key: 'endTime',
-        label: 'Thời gian kết thúc',
-        value: data?.endTime ? formatTime(data.endTime) : 'N/A'
-      },
-      {
-        key: 'startLocation',
-        label: 'Điểm bắt đầu',
-        value: data?.startLocation || 'N/A'
-      },
-      {
-        key: 'endLocation',
-        label: 'Điểm kết thúc',
-        value: data?.endLocation || 'N/A'
-      },
-      {
-        key: 'seats',
-        label: 'Số ghế ngồi',
-        value: data?.seats || 'N/A'
-      },
-      {
-        key: 'price',
-        label: 'Giá tiền',
-        value: (
-          <Form.Item
-            name='price'
-            noStyle
-            initialValue={data?.price}
-            rules={[
-              { required: true, message: 'Vui lòng nhập giá tiền' },
-              { pattern: /^\d+$/, message: 'Giá tiền phải là số hợp lệ' }
-            ]}
-          >
-            <Input placeholder='Nhập giá tiền' style={{ width: '30%' }} />
-          </Form.Item>
-        )
-      }
-    ],
-    [data, driverData]
-  )
+  const tableData: TableData[] = [
+    {
+      key: 'driverId',
+      label: 'Tài xế',
+      value: (
+        <Form.Item name='driverId' noStyle initialValue={data?.driverId}>
+          <Select placeholder='Chọn tài xế' style={{ width: '30%' }}>
+            {driverData &&
+              driverData.map((item: any) => (
+                <Select.Option key={item?.id} value={item?.id}>
+                  <Tooltip
+                    title={`Tên: ${item?.name}, email: ${item?.email}, sdt: ${item?.numberPhone}, tên đăng nhập: ${item?.userName}`}
+                  >
+                    <span>{item?.name}</span>
+                  </Tooltip>
+                </Select.Option>
+              ))}
+          </Select>
+        </Form.Item>
+      )
+    },
+    {
+      key: 'startTime',
+      label: 'Thời gian khởi hành',
+      value: data?.startTime ? formatTime(data.startTime) : 'N/A'
+    },
+    {
+      key: 'endTime',
+      label: 'Thời gian kết thúc',
+      value: data?.endTime ? formatTime(data.endTime) : 'N/A'
+    },
+    {
+      key: 'startLocation',
+      label: 'Điểm bắt đầu',
+      value: data?.startLocation || 'N/A'
+    },
+    {
+      key: 'endLocation',
+      label: 'Điểm kết thúc',
+      value: data?.endLocation || 'N/A'
+    },
+    {
+      key: 'seats',
+      label: 'Số ghế ngồi',
+      value: data?.seats || 'N/A'
+    },
+    {
+      key: 'price',
+      label: 'Giá tiền',
+      value: (
+        <Form.Item
+          name='price'
+          noStyle
+          initialValue={data?.price}
+          rules={[
+            { required: true, message: 'Vui lòng nhập giá tiền' },
+            { pattern: /^\d+$/, message: 'Giá tiền phải là số hợp lệ' }
+          ]}
+        >
+          <Input placeholder='Nhập giá tiền' style={{ width: '30%' }} />
+        </Form.Item>
+      )
+    }
+  ]
 
   const filtered = useMemo(() => {
     return requestData?.find((item: DataTypeRequest) => item.id === data?.requestId)
@@ -110,24 +107,27 @@ const RentDriverForm = ({ data }: { data: DataTypeRequest | undefined }) => {
     }
   }, [filtered, isCheck])
 
-  const columns: TableColumnsType<TableData> = useMemo(
-    () => [
-      {
-        title: 'Key',
-        dataIndex: 'label',
-        key: 'label',
-        width: '30%'
-      },
-      {
-        title: 'Value',
-        dataIndex: 'value',
-        key: 'value',
-        width: '70%',
-        render: (_, record) => <>{record.value}</>
-      }
-    ],
-    []
-  )
+  useEffect(() => {
+    if (data) {
+      form.setFieldsValue(data)
+    }
+  }, [data, form])
+
+  const columns: TableColumnsType<TableData> = [
+    {
+      title: 'Key',
+      dataIndex: 'label',
+      key: 'label',
+      width: '30%'
+    },
+    {
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+      width: '70%',
+      render: (_, record) => <>{record.value}</>
+    }
+  ]
 
   const handleAction = async (options: { choose: boolean; driverId?: string; price?: number }) => {
     if (options.choose) {

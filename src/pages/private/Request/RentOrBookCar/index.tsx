@@ -36,103 +36,103 @@ const RentOrBookCar = ({ data }: { data: DataTypeRequest | undefined }) => {
   }, [data?.requestId, requestData])
 
   useEffect(() => {
+    if (data) {
+      form.setFieldsValue(data)
+    }
+  }, [data, form])
+
+  useEffect(() => {
     if (filtered && filtered.status !== isCheck) {
       setIsCheck(filtered.status)
     }
   }, [filtered, isCheck])
 
-  const tableData: TableData[] = useMemo(
-    () => [
-      {
-        key: 'username',
-        label: 'Username',
-        value: data?.username || 'N/A'
-      },
-      {
-        key: 'vehicleId',
-        label: 'Xe thuê',
-        value: (
-          <Form.Item
-            name='vehicleId'
-            noStyle
-            initialValue={data?.vehicleId}
-            rules={[{ required: true, message: 'Vui lòng chọn xe thuê' }]}
-          >
-            <Select placeholder='Chọn xe thuê' style={{ width: '30%' }}>
-              {vehicleData &&
-                vehicleData.map((item: any) => (
-                  <Select.Option key={item?.id} value={item?.id}>
-                    {item?.licensePlate}
-                  </Select.Option>
-                ))}
-            </Select>
-          </Form.Item>
-        )
-      },
-      {
-        key: 'phoneNumber',
-        label: 'Số điện thoại',
-        value: data?.phoneNumber || 'N/A'
-      },
-      {
-        key: 'promotionCode',
-        label: 'Mã khuyến mãi',
-        value: data?.promotionCode || 'N/A'
-      },
-      {
-        key: 'startTime',
-        label: 'Thời gian khởi hành',
-        value: data?.startTime ? formatTime(data.startTime) : 'N/A'
-      },
-      {
-        key: 'startLocation',
-        label: 'Điểm bắt đầu',
-        value: data?.startLocation || 'N/A'
-      },
-      {
-        key: 'endLocation',
-        label: 'Điểm kết thúc',
-        value: data?.endLocation || 'N/A'
-      },
-      {
-        key: 'price',
-        label: 'Giá tiền',
-        value: (
-          <Form.Item
-            name='price'
-            noStyle
-            initialValue={data?.price}
-            rules={[
-              { required: true, message: 'Vui lòng nhập giá tiền' },
-              { pattern: /^\d+$/, message: 'Giá tiền phải là số hợp lệ' }
-            ]}
-          >
-            <Input placeholder='Nhập giá tiền' style={{ width: '30%' }} />
-          </Form.Item>
-        )
-      }
-    ],
-    [data, vehicleData]
-  )
+  const tableData: TableData[] = [
+    {
+      key: 'username',
+      label: 'Username',
+      value: data?.username || 'N/A'
+    },
+    {
+      key: 'vehicleId',
+      label: 'Xe thuê',
+      value: (
+        <Form.Item
+          name='vehicleId'
+          noStyle
+          initialValue={data?.vehicleId}
+          rules={[{ required: true, message: 'Vui lòng chọn xe thuê' }]}
+        >
+          <Select placeholder='Chọn xe thuê' style={{ width: '30%' }}>
+            {vehicleData &&
+              vehicleData.map((item: any) => (
+                <Select.Option key={item?.id} value={item?.id}>
+                  {item?.licensePlate}
+                </Select.Option>
+              ))}
+          </Select>
+        </Form.Item>
+      )
+    },
+    {
+      key: 'phoneNumber',
+      label: 'Số điện thoại',
+      value: data?.phoneNumber || 'N/A'
+    },
+    {
+      key: 'promotionCode',
+      label: 'Mã khuyến mãi',
+      value: data?.promotionCode || 'N/A'
+    },
+    {
+      key: 'startTime',
+      label: 'Thời gian khởi hành',
+      value: data?.startTime ? formatTime(data.startTime) : 'N/A'
+    },
+    {
+      key: 'startLocation',
+      label: 'Điểm bắt đầu',
+      value: data?.startLocation || 'N/A'
+    },
+    {
+      key: 'endLocation',
+      label: 'Điểm kết thúc',
+      value: data?.endLocation || 'N/A'
+    },
+    {
+      key: 'price',
+      label: 'Giá tiền',
+      value: (
+        <Form.Item
+          name='price'
+          noStyle
+          initialValue={data?.price}
+          rules={[
+            { required: true, message: 'Vui lòng nhập giá tiền' },
+            { pattern: /^\d+$/, message: 'Giá tiền phải là số hợp lệ' }
+          ]}
+        >
+          <Input placeholder='Nhập giá tiền' style={{ width: '30%' }} />
+        </Form.Item>
+      )
+    }
+  ]
 
-  const columns: TableColumnsType<TableData> = useMemo(
-    () => [
-      {
-        title: 'Key',
-        dataIndex: 'label',
-        key: 'label',
-        width: '30%'
-      },
-      {
-        title: 'Value',
-        dataIndex: 'value',
-        key: 'value',
-        width: '70%',
-        render: (_, record) => <>{record.value}</>
-      }
-    ],
-    []
-  )
+  const columns: TableColumnsType<TableData> = [
+    {
+      title: 'Key',
+      dataIndex: 'label',
+      key: 'label',
+      width: '30%'
+    },
+    {
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+      width: '70%',
+      render: (_, record) => <>{record.value}</>
+    }
+  ]
 
   const handleFormAction = async (
     choose: boolean,
