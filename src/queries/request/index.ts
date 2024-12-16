@@ -107,3 +107,9 @@ export const useCreateRequestDriverMutation = (options?: UseMutationOptions<any,
     mutationFn: (body: Omit<any, 'addDriverOwner'>) => requestApiRequest.CreateRequestDriver({ body })
   })
 }
+export const useCreateRequestOwnerMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: (body: Omit<any, 'addDriverVehicleOwner'>) => requestApiRequest.CreateRequestOwner({ body })
+  })
+}
