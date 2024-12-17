@@ -15,6 +15,8 @@ export const useLoginMutation = (options?: UseMutationOptions<any, unknown, TLog
         setIsAuthenticated(true)
         useLocalStorage.setLocalStorageData('token', data.data.token)
         useLocalStorage.setLocalStorageData('role', data.data.role)
+        useLocalStorage.setLocalStorageData('userName', data.data.userName)
+        useLocalStorage.setLocalStorageData('id', data.data.id)
       }
     }
   })

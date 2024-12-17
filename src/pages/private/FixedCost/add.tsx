@@ -34,7 +34,7 @@ const AddFixedCostPage: React.FC = () => {
       key: 'description',
       label: 'Mô tả',
       value: (
-        <Form.Item name='description' rules={[{ required: true, message: 'Vui lòng nhập Mô tả!' }]}>
+        <Form.Item name='description'>
           <TextArea style={{ width: '30%' }} />
         </Form.Item>
       )

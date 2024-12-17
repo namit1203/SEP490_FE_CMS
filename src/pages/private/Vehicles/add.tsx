@@ -4,6 +4,7 @@ import { useLoading } from '@/context/LoadingContext'
 import { useQueryDriver } from '@/queries/driver'
 import { useAddVehiclesMutation, useQueryTypeOfVehicles, useQueryTypeVehiclesOwner } from '@/queries/vehicle'
 import { DataTypeVehicle } from '@/types/DataType'
+import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import { Button, Col, Form, Input, InputNumber, message, Row, Select, Switch, Table, TableColumnsType } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { useNavigate } from 'react-router-dom'
@@ -27,12 +28,27 @@ const AddVehiclePage: React.FC = () => {
 
   const { isLoadingGlobal } = useLoading()
 
+  const role = useLocalStorage.getLocalStorageData('role')
+  const id = useLocalStorage.getLocalStorageData('id')
+  const userName = useLocalStorage.getLocalStorageData('userName')
+
+  const initialValues = {
+    description: '',
+    driverId: '',
+    image: '',
+    numberSeat: null,
+    licensePlate: null,
+    vehicleTypeId: null,
+    vehicleOwner: role === 'VehicleOwner' ? userName : '',
+    status: true
+  }
+
   const tableData: TableData[] = [
     {
       key: 'description',
       label: 'Mô tả',
       value: (
-        <Form.Item name='description' rules={[{ required: true, message: 'Vui lòng nhập Mô tả!' }]}>
+        <Form.Item name='description'>
           <TextArea placeholder='Nhập Mô tả' style={{ width: '30%' }} rows={2} />
         </Form.Item>
       )
@@ -43,11 +59,12 @@ const AddVehiclePage: React.FC = () => {
       value: (
         <Form.Item name='driverId'>
           <Select placeholder='Chọn tài xế' style={{ width: '30%' }}>
-            {dataTypeDriver?.map((item: any) => (
-              <Select.Option key={item.id} value={item.id}>
-                {item.userName}
-              </Select.Option>
-            ))}
+            {dataTypeDriver?.length > 0 &&
+              dataTypeDriver?.map((item: any) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.userName}
+                </Select.Option>
+              ))}
           </Select>
         </Form.Item>
       )
@@ -77,10 +94,10 @@ const AddVehiclePage: React.FC = () => {
     },
     {
       key: 'vehicleTypeId',
-      label: 'Nhà xe',
+      label: 'Loại xe',
       value: (
-        <Form.Item name='vehicleTypeId' rules={[{ required: true, message: 'Vui lòng chọn nhà xe!' }]}>
-          <Select placeholder='Chọn nhà xe' style={{ width: '30%' }}>
+        <Form.Item name='vehicleTypeId' rules={[{ required: true, message: 'Vui lòng chọn loại xe!' }]}>
+          <Select placeholder='Chọn loại xe' style={{ width: '30%' }}>
             {dataTypeOfVehicles?.map((item: any) => (
               <Select.Option key={item.id} value={item.id}>
                 {item.description}
@@ -95,13 +112,17 @@ const AddVehiclePage: React.FC = () => {
       label: 'Chủ nhà xe',
       value: (
         <Form.Item name='vehicleOwner' rules={[{ required: true, message: 'Vui lòng chọn chủ nhà xe!' }]}>
-          <Select placeholder='Chọn chủ nhà xe' style={{ width: '30%' }}>
-            {dataTypeOfVehiclesOwner?.map((item: any) => (
-              <Select.Option key={item.id} value={item.id}>
-                {item.username}
-              </Select.Option>
-            ))}
-          </Select>
+          {role === 'VehicleOwner' ? (
+            <Input value={userName} />
+          ) : (
+            <Select placeholder='Chọn chủ nhà xe' style={{ width: '30%' }}>
+              {dataTypeOfVehiclesOwner?.map((item: any) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.username}
+                </Select.Option>
+              ))}
+            </Select>
+          )}
         </Form.Item>
       )
     },
@@ -134,9 +155,14 @@ const AddVehiclePage: React.FC = () => {
 
   const handleFormSubmit = async (values: DataTypeVehicle) => {
     try {
+      const newData = {
+        ...values,
+        vehicleOwner: id
+      }
+
       const formData = new FormData()
 
-      Object.entries(values).forEach(([key, value]) => {
+      Object.entries(newData).forEach(([key, value]) => {
         formData.append(key, value)
       })
 
@@ -153,7 +179,7 @@ const AddVehiclePage: React.FC = () => {
   }
 
   return (
-    <Form onFinish={handleFormSubmit} form={form} layout='vertical'>
+    <Form onFinish={handleFormSubmit} form={form} layout='vertical' initialValues={initialValues}>
       <Table columns={columns} dataSource={tableData} pagination={false} bordered rowKey='key' />
       <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
         <Col>

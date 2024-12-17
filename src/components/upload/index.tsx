@@ -34,10 +34,8 @@ const UploadComponent: React.FC<Props> = ({ initialImage, form, fieldName }) => 
   useEffect(() => {
     // Check if initialImage is either the string 'null', undefined, or the string 'undefined'
     if (initialImage === 'null' || initialImage == undefined || initialImage == 'undefined') {
-      console.log(initialImage)
       setFileList([]) // Set empty file list when initialImage is invalid
     } else {
-      console.log('ok 2')
       setFileList([
         {
           uid: '-1',

@@ -133,8 +133,6 @@ const AddRequestVehicleOwner: React.FC = () => {
       } else {
         message.error('Add Driver failed')
       }
-
-      console.log(values)
     } catch (error) {
       console.error('Error values:', error)
       message.error('Add Driver failed')
