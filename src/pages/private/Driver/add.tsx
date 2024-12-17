@@ -106,13 +106,7 @@ const AddDriverPage: React.FC = () => {
       label: 'Ngày sinh',
       value: (
         <Form.Item name='dob' rules={[{ required: true, message: 'Vui lòng nhập ngày sinh!' }]}>
-          <DatePicker
-            showTime={{
-              format: 'HH:mm:ss'
-            }}
-            format='YYYY-MM-DD HH:mm:ss'
-            onChange={(date) => console.log(date?.toISOString())}
-          />
+          <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
         </Form.Item>
       )
     },

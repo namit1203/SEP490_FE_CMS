@@ -40,15 +40,15 @@ const EditUserProfile = () => {
 
   const handleFormSubmit = async (values: DataType) => {
     try {
-      const data = {
-        ...values,
-        dob: dayjs(values.dob)
-      }
-
       const formData = new FormData()
 
-      Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value)
+      Object.entries(values).forEach(([key, value]) => {
+        if (key === 'dob') {
+          const date = dayjs(value)
+          formData.append(key, date.format('YYYY-MM-DD'))
+        } else {
+          formData.append(key, value)
+        }
       })
 
       const response = await updateMutation.mutateAsync(formData)

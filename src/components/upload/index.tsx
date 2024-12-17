@@ -32,7 +32,12 @@ const UploadComponent: React.FC<Props> = ({ initialImage, form, fieldName }) => 
   const { isLoadingGlobal, setLoading } = useLoading()
 
   useEffect(() => {
-    if (initialImage) {
+    // Check if initialImage is either the string 'null', undefined, or the string 'undefined'
+    if (initialImage === 'null' || initialImage == undefined || initialImage == 'undefined') {
+      console.log(initialImage)
+      setFileList([]) // Set empty file list when initialImage is invalid
+    } else {
+      console.log('ok 2')
       setFileList([
         {
           uid: '-1',
@@ -92,7 +97,10 @@ const UploadComponent: React.FC<Props> = ({ initialImage, form, fieldName }) => 
         setLoading(false)
       }
     } else {
-      console.log('ok delete')
+      form.setFieldsValue({
+        [fieldName]: null
+      })
+      message.success('remove image success')
     }
   }
 

@@ -117,8 +117,7 @@ const EditTripPage: React.FC = () => {
         {
           name: 'description',
           label: 'Description',
-          component: <TextArea />,
-
+          component: <TextArea />
         },
         {
           type: 'button' // A special type to indicate this is a button

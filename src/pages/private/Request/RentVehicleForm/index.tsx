@@ -1,10 +1,10 @@
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
-import { ActionType } from '@/enums/enum'
-import { formatTime } from '@/helpers'
+import { ActionType, RoleType } from '@/enums/enum'
+import { formatPrize, formatTime } from '@/helpers'
 import { useCreateTicketForRentCarMutation, useQueryRequest } from '@/queries/request'
 import { useQueryTravelCarByRequest } from '@/queries/ticket'
 import { DataTypeRequest } from '@/types/DataType'
-import { Button, Col, Form, Input, message, Row, Select, Table, TableColumnsType } from 'antd'
+import { Button, Col, Form, InputNumber, message, Row, Select, Table, TableColumnsType } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,7 +13,7 @@ interface TableData {
   label: string
   value: string | number | JSX.Element | undefined
 }
-const RentVehicleForm = ({ data }: { data: DataTypeRequest | undefined }) => {
+const RentVehicleForm = ({ data, account }: { data: DataTypeRequest | undefined; account: { role: string } }) => {
   const [form] = Form.useForm()
 
   const navigate = useNavigate()
@@ -59,7 +59,13 @@ const RentVehicleForm = ({ data }: { data: DataTypeRequest | undefined }) => {
     {
       key: 'vehicleId',
       label: 'Xe',
-      value: (
+      value: isCheck ? (
+        data?.licensePlate ? (
+          data.licensePlate
+        ) : (
+          'N/A'
+        )
+      ) : (
         <Form.Item name='vehicleId' noStyle initialValue={data?.vehicleId}>
           <Select placeholder='Chọn xe' style={{ width: '30%' }}>
             {travelData &&
@@ -100,17 +106,15 @@ const RentVehicleForm = ({ data }: { data: DataTypeRequest | undefined }) => {
     {
       key: 'price',
       label: 'Giá tiền',
-      value: (
-        <Form.Item
-          name='price'
-          noStyle
-          initialValue={data?.price}
-          rules={[
-            { required: true, message: 'Vui lòng nhập giá tiền' },
-            { pattern: /^\d+$/, message: 'Giá tiền phải là số hợp lệ' }
-          ]}
-        >
-          <Input placeholder='Nhập giá tiền' style={{ width: '30%' }} />
+      value: isCheck ? (
+        data?.price ? (
+          `${formatPrize(data.price)}`
+        ) : (
+          'N/A'
+        )
+      ) : (
+        <Form.Item name='price' rules={[{ required: true, message: 'Vui lòng nhập giá tiền!' }]}>
+          <InputNumber style={{ width: '30%' }} placeholder='nhập giá tiền' />
         </Form.Item>
       )
     }
@@ -175,7 +179,7 @@ const RentVehicleForm = ({ data }: { data: DataTypeRequest | undefined }) => {
       onFinish={(values) => handleAction({ choose: true, vehicleId: values.vehicleId, price: values.price })}
     >
       <Table columns={columns} dataSource={tableData} pagination={false} bordered />
-      {!isCheck && (
+      {!isCheck && [RoleType.STAFF].includes(account.role as RoleType) && (
         <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
           <Col>
             <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }} loading={isLoading}>

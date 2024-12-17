@@ -51,7 +51,12 @@ const EditPromotionPage: React.FC = () => {
         const formData = new FormData()
 
         Object.entries(values).forEach(([key, value]) => {
-          formData.append(key, value)
+          if (key === 'startDate' || key === 'endDate') {
+            const date = dayjs(value)
+            formData.append(key, date.format('YYYY-MM-DD'))
+          } else {
+            formData.append(key, value)
+          }
         })
 
         const response = await updateMutation.mutateAsync({ id: promotionID, body: formData })
