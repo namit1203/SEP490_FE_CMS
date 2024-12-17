@@ -119,13 +119,7 @@ const EditVehicleOwnerPage: React.FC = () => {
       label: 'Ngày sinh',
       value: (
         <Form.Item name='dob' rules={[{ required: true, message: 'Vui lòng nhập ngày sinh!' }]}>
-          <DatePicker
-            showTime={{
-              format: 'HH:mm:ss'
-            }}
-            format='YYYY-MM-DD HH:mm:ss'
-            onChange={(date) => console.log(date?.toISOString())}
-          />
+          <DatePicker format='DD-MM-YYYY' />
         </Form.Item>
       )
     },
@@ -159,15 +153,12 @@ const EditVehicleOwnerPage: React.FC = () => {
   const handleFormSubmit = async (values: DataTypeUser) => {
     setIsLoading(true)
     try {
-      console.log(values)
+      const newValue = {
+        ...values,
+        dob: dayjs(values.dob).format('YYYY-MM-DD')
+      }
 
-      const formData = new FormData()
-
-      Object.entries(values).forEach(([key, value]) => {
-        formData.append(key, value)
-      })
-
-      const response = await updateMutation.mutateAsync({ id: route_id, body: values })
+      const response = await updateMutation.mutateAsync({ id: route_id, body: newValue })
       if (response.status === HttpStatusCode.Ok) {
         message.success('Update successfully')
         refetch()

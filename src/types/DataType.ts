@@ -93,6 +93,7 @@ export interface DataTypeRequest {
   ticketId: number | null // Nullable field
   vehicleId: number | any
   driverId: number
+  driverName: string
   note: string | null // Nullable field
   typeRequestId: string | number | null
   typeName: string
@@ -105,6 +106,7 @@ export interface DataTypeRequest {
   username: string
   phoneNumber: string
   promotionCode: string
+  licensePlate: string
 }
 
 export interface RequestOption {

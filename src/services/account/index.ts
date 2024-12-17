@@ -58,6 +58,13 @@ class AccountApiRequest {
       config: { method: METHOD_TYPE.POST, body, cors: false }
     })
   }
+
+  public AddVehicleOwner({ body }: { body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.ACCOUNT.REGISTER_VEHICLE_OWNER,
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
 }
 
 const accountApiRequest = new AccountApiRequest()

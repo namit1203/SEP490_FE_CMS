@@ -174,7 +174,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       <div
         style={{
           height: '142.84px',
-          backgroundColor: '#1E65B0',
+          backgroundColor: '#fff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

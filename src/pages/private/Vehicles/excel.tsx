@@ -185,9 +185,7 @@ const ExportExcelComponent = () => {
         )}
       </div>
 
-      {data.hasData && data.invalidEntries.length === 0 && (
-        <Button onClick={() => handleImportToVehicleList()}>Import to Vehicle List</Button>
-      )}
+      {data.hasData && <Button onClick={() => handleImportToVehicleList()}>Import to Vehicle List</Button>}
     </div>
   )
 }
