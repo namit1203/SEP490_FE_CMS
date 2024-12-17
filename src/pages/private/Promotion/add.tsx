@@ -28,7 +28,7 @@ const AddPromotionPage: React.FC = () => {
     try {
       const formData = new FormData()
 
-      Object.entries(values).forEach(([key, value]) => {
+      Object.entries(values).forEach(([key, value]: any) => {
         if (key === 'startDate' || key === 'endDate') {
           const date = new Date(value)
           date.setDate(date.getDate() + 1) // Add one day to the date
@@ -57,7 +57,7 @@ const AddPromotionPage: React.FC = () => {
       const values = form.getFieldsValue()
       const formData = new FormData()
 
-      Object.entries(values).forEach(([key, value]) => {
+      Object.entries(values).forEach(([key, value]: any) => {
         formData.append(key, value)
       })
 
@@ -67,7 +67,9 @@ const AddPromotionPage: React.FC = () => {
         message.success('Create promotion success')
         navigate('/promotion')
       } else {
-        message.error(response.data)
+        Object.entries(response.errors).forEach(([, messages]: any) => {
+          message.error(messages)
+        })
       }
     } catch (error) {
       console.error('Error values:', error)

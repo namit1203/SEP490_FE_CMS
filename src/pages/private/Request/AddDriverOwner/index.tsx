@@ -111,8 +111,6 @@ const AddRequestDriverOwner: React.FC = () => {
       } else {
         message.error('Accept failed')
       }
-
-      console.log(values)
     } catch (error) {
       console.error('Error values:', error)
       message.error('Accept failed')

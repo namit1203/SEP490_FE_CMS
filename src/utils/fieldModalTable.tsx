@@ -65,7 +65,7 @@ export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
     rules: [
       { required: true, message: 'Vui lòng nhập giá trị!' },
       {
-        validator: (_, value) => {
+        validator: (_: any, value: any) => {
           if (!value || parseInt(value, 10) <= 100) {
             return Promise.resolve() // Validation passed
           }
@@ -83,23 +83,13 @@ export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
   {
     name: 'startDate',
     label: 'Thời gian bắt đầu khuyến mãi',
-    component: (
-      <DatePicker
-        format='DD-MM-YYYY'
-        // onChange={(date) => console.log(date?.toISOString())}
-      />
-    ),
+    component: <DatePicker format='DD-MM-YYYY' />,
     rules: [{ required: true, message: 'Vui lòng nhập Thời gian bắt đầu khuyến mãi!' }]
   },
   {
     name: 'endDate',
     label: 'Thời gian kết thúc khuyến mãi',
-    component: (
-      <DatePicker
-        format='DD-MM-YYYY'
-        // onChange={(date) => console.log(date?.toISOString())}
-      />
-    ),
+    component: <DatePicker format='DD-MM-YYYY' />,
     rules: [{ required: true, message: 'Vui lòng nhập Thời gian kết thúc khuyến mãi!' }]
   },
   {

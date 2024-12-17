@@ -95,7 +95,6 @@ const ExportExcelComponent = () => {
   }
 
   const handleImportToVehicleList = async () => {
-    // console.log(data.validEntries)
     try {
       const values = data.validEntries
 

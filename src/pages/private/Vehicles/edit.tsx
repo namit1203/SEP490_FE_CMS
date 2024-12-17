@@ -9,7 +9,6 @@ import {
   useUpdateVehiclesMutation
 } from '@/queries/vehicle'
 import { DataTypeVehicle } from '@/types/DataType'
-
 import { Button, Col, Form, Input, InputNumber, message, Row, Select, Switch, Table, TableColumnsType } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { useEffect } from 'react'
@@ -38,9 +37,22 @@ const EditVehiclePage: React.FC = () => {
 
   const { isLoadingGlobal } = useLoading()
 
+  const initialValues = {
+    description: '',
+    driverId: ''
+  }
+
   useEffect(() => {
     if (data) {
       form.setFieldsValue(data)
+    }
+
+    if (data?.driverId === null) {
+      form.setFieldsValue({ driverId: '' })
+    }
+
+    if (data?.description === 'null') {
+      form.setFieldsValue({ description: '' })
     }
   }, [data, form])
 
@@ -53,7 +65,7 @@ const EditVehiclePage: React.FC = () => {
       key: 'description',
       label: 'Mô tả',
       value: (
-        <Form.Item name='description' rules={[{ required: true, message: 'Vui lòng nhập Mô tả!' }]}>
+        <Form.Item name='description'>
           <TextArea placeholder='Nhập Mô tả' style={{ width: '30%' }} rows={2} />
         </Form.Item>
       )
@@ -63,7 +75,10 @@ const EditVehiclePage: React.FC = () => {
       label: 'Tài xế',
       value: (
         <Form.Item name='driverId'>
-          <Select placeholder='Chọn tài xế' style={{ width: '30%' }}>
+          <Select placeholder='Chọn tài xế' style={{ width: '30%' }} allowClear>
+            <Select.Option key='no_driver' value={''}>
+              Không có tài xế
+            </Select.Option>
             {dataTypeDriver?.map((item: any) => (
               <Select.Option key={item.id} value={item.id}>
                 {item.userName}
@@ -177,7 +192,7 @@ const EditVehiclePage: React.FC = () => {
   }
 
   return (
-    <Form form={form} onFinish={handleFormSubmit} layout='vertical'>
+    <Form form={form} onFinish={handleFormSubmit} layout='vertical' initialValues={initialValues}>
       <Table columns={columns} dataSource={tableData} pagination={false} bordered rowKey='key' />
       <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
         <Col>
