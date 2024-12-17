@@ -3,7 +3,7 @@ import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useLoading } from '@/context/LoadingContext'
 import { useAddDriverMutation, useQueryDriver } from '@/queries/driver'
 import { DataTypeDriver } from '@/types/DataType'
-import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType } from 'antd'
+import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType,Select } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -89,11 +89,28 @@ const AddDriverPage: React.FC = () => {
     },
     {
       key: 'license',
-      label: 'Biển số xe',
+      label: 'Hạng Bằng Lái',
       value: (
-        <Form.Item name='license' rules={[{ required: true, message: 'Vui lòng nhập biển số xe!' }]}>
-          <Input placeholder='Nhập biển số xe' style={{ width: '30%' }} />
-        </Form.Item>
+        <Form.Item
+        name="license"
+        rules={[{ required: true, message: 'Vui lòng chọn hạng bằng lái!' }]}
+      >
+        <Select
+          placeholder="Chọn hạng bằng lái"
+          style={{ width: '30%' }}
+        >
+          <Select.Option value="A1">A1</Select.Option>
+          <Select.Option value="A2">A2</Select.Option>
+          <Select.Option value="A3">A3</Select.Option>
+          <Select.Option value="A4">A4</Select.Option>
+          <Select.Option value="B2">B2</Select.Option>
+          <Select.Option value="C">C</Select.Option>
+          <Select.Option value="D">D</Select.Option>
+          <Select.Option value="E">E</Select.Option>
+          <Select.Option value="F">F</Select.Option>
+        </Select>
+      </Form.Item>
+      
       )
     },
     {
