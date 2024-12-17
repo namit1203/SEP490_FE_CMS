@@ -27,11 +27,11 @@ const DetailsRequestPage: React.FC = () => {
   if (!data) return <p>Không tìm thấy dữ liệu yêu cầu.</p>
 
   const componentsMap: Partial<Record<ActionType, React.ReactNode>> = {
-    [ActionType.ADD_VEHICLE]: <AddVehicleForm data={data} />,
-    [ActionType.RENT_VEHICLE]: <RentVehicleForm data={data} />,
-    [ActionType.RENT_DRIVER]: <RentDriverForm data={data} />,
-    [ActionType.RENT_TRIP]: <RentOrBookCar data={data} />,
-    [ActionType.CHARTER_TRIP]: <RentOrBookCar data={data} />,
+    [ActionType.ADD_VEHICLE]: <AddVehicleForm data={data} account={account} />,
+    [ActionType.RENT_VEHICLE]: <RentVehicleForm data={data} account={account} />,
+    [ActionType.RENT_DRIVER]: <RentDriverForm data={data} account={account} />,
+    [ActionType.RENT_TRIP]: <RentOrBookCar data={data} account={account} />,
+    [ActionType.CHARTER_TRIP]: <RentOrBookCar data={data} account={account} />,
     [ActionType.DRIVER_RENT_VEHICLE]: <RentCarForDriver data={data} account={account} />
   }
 

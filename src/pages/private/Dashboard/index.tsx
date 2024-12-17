@@ -3,7 +3,7 @@ import { formatPrize } from '@/helpers'
 import { useQueryRevenue } from '@/queries/revenue'
 import { useQueryUserProfile } from '@/queries/user-profile'
 import renderWithLoading from '@/utils/renderWithLoading'
-import { Button, Result } from 'antd'
+import { Button, Empty, Result } from 'antd'
 import React, { useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
@@ -46,6 +46,15 @@ const DashBoardChartPage: React.FC = () => {
 
   const chartStyle = {
     marginBottom: 40
+  }
+
+  if (
+    totalLossCostsData.length === 0 &&
+    revenueTicketChartData.length === 0 &&
+    rentDriverChartData.length === 0 &&
+    rentVehicleChartData.length === 0
+  ) {
+    return <Empty />
   }
 
   const renderChart = (data: any[], barColor: string, title: string) => (

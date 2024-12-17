@@ -44,8 +44,7 @@ export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
   {
     name: 'description',
     label: 'Mô tả',
-    component: <TextArea />,
-    // rules: [{ required: true, message: 'Vui lòng nhập Mô tả!' }]
+    component: <TextArea />
   },
   {
     name: 'status',
@@ -86,11 +85,8 @@ export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
     label: 'Thời gian bắt đầu khuyến mãi',
     component: (
       <DatePicker
-        showTime={{
-          format: 'HH:mm:ss' // Optional: Customize the time format
-        }}
-        format='YYYY-MM-DD HH:mm:ss'
-        onChange={(date) => console.log(date?.toISOString())}
+        format='DD-MM-YYYY'
+        // onChange={(date) => console.log(date?.toISOString())}
       />
     ),
     rules: [{ required: true, message: 'Vui lòng nhập Thời gian bắt đầu khuyến mãi!' }]
@@ -100,10 +96,7 @@ export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
     label: 'Thời gian kết thúc khuyến mãi',
     component: (
       <DatePicker
-        showTime={{
-          format: 'HH:mm:ss' // Optional: Customize the time format
-        }}
-        format='YYYY-MM-DD HH:mm:ss'
+        format='DD-MM-YYYY'
         // onChange={(date) => console.log(date?.toISOString())}
       />
     ),
@@ -154,8 +147,7 @@ export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
   {
     name: 'imagePromotion',
     label: 'Ảnh mã khuyến mại',
-    component: <Input />,
-    rules: [{ required: true, message: 'Vui lòng nhập ảnh mã khuyến mại!' }]
+    component: <Input />
   }
 ]
 

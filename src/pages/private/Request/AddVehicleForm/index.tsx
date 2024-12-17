@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
-import { ActionType } from '@/enums/enum'
+import { ActionType, RoleType } from '@/enums/enum'
 import { useAddVehicleByStaffMutation, useQueryRequest } from '@/queries/request'
 import { useQueryVehiclesDetails } from '@/queries/vehicle'
 import { DataTypeRequest } from '@/types/DataType'
@@ -7,7 +7,15 @@ import { Button, Col, Form, message, Row, Table } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const AddVehicleForm = ({ data }: { data: DataTypeRequest | undefined }) => {
+const AddVehicleForm = ({
+  data,
+  account
+}: {
+  data: DataTypeRequest | undefined
+  account: {
+    role: string
+  }
+}) => {
   const [form] = Form.useForm()
 
   const { data: requestData, refetch } = useQueryRequest()
@@ -109,7 +117,7 @@ const AddVehicleForm = ({ data }: { data: DataTypeRequest | undefined }) => {
   return (
     <Form form={form} layout='vertical' onFinish={() => handleFormAction(true, 'Accept successfully', 'Accept failed')}>
       <Table columns={columns} dataSource={tableData} pagination={false} bordered />
-      {!isCheck && (
+      {!isCheck && [RoleType.STAFF].includes(account.role as RoleType) && (
         <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
           <Col>
             <Button type='primary' htmlType='submit' style={{ marginRight: '10px' }} loading={isLoading}>

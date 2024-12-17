@@ -50,6 +50,7 @@ import LoginPage from './pages/public/login'
 import ListTripDetailAddPage from './pages/private/trip-list-detail/list-trip-detail-add'
 import ListTripDetailEditPage from './pages/private/trip-list-detail/list-trip-detail-edit'
 import EditUserProfile from './pages/private/UserProfile/edit'
+import AddVehicleOwnerPage from './pages/private/Vehicle-Owner/add'
 
 const staffRoutes = [
   { path: '/trips', component: <TripsPages />, allowedRoles: [RoleType.STAFF] },
@@ -67,6 +68,11 @@ const staffRoutes = [
   {
     path: '/vehicles-owner',
     component: <VehicleOwnerPage />,
+    allowedRoles: [RoleType.STAFF]
+  },
+  {
+    path: '/vehicles-owner/add',
+    component: <AddVehicleOwnerPage />,
     allowedRoles: [RoleType.STAFF]
   },
   {

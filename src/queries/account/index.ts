@@ -67,6 +67,14 @@ export const useAddRoleMutation = (options?: UseMutationOptions<any, unknown, an
     mutationFn: (body: Omit<any, 'addLossCost'>) => accountApiRequest.AddRole({ body })
   })
 }
+
+export const useAddVehicleOwner = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: (body: Omit<any, 'addLossCost'>) => accountApiRequest.AddVehicleOwner({ body })
+  })
+}
+
 export const useDeleteAccountMutation = (
   options?: UseMutationOptions<any, unknown, { id: string | number | null }, unknown>
 ) => {

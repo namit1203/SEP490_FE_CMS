@@ -130,16 +130,19 @@ const RequestPage: React.FC = () => {
               <Button type='primary'>Show</Button>
             </Link>
           )}
-          <Popconfirm
-            title='Bạn có chắc chắn muốn xóa yêu cầu này không?'
-            okText='Yes'
-            cancelText='No'
-            onConfirm={() => handleDeleteRequest(record.id as number)}
-          >
-            <Button type='primary' danger loading={isLoadingDelete}>
-              Delete
-            </Button>
-          </Popconfirm>
+
+          {account && [RoleType.STAFF].includes(account?.role as RoleType) && (
+            <Popconfirm
+              title='Bạn có chắc chắn muốn xóa yêu cầu này không?'
+              okText='Yes'
+              cancelText='No'
+              onConfirm={() => handleDeleteRequest(record.id as number)}
+            >
+              <Button type='primary' danger loading={isLoadingDelete}>
+                Delete
+              </Button>
+            </Popconfirm>
+          )}
           {record.typeId === 3 && !record.status && (
             <Popconfirm
               title='Bạn có chắc chắn muốn hủy yêu cầu này không?'

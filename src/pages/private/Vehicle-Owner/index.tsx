@@ -1,6 +1,7 @@
 import useColumnSearch from '@/hooks/useColumnSearch'
 import { useDeleteVehiclesOwnerMutation, useQueryVehiclesOwner } from '@/queries/vehicle'
 import renderWithLoading from '@/utils/renderWithLoading'
+import { PlusOutlined } from '@ant-design/icons'
 import { Button, message, Popconfirm, Space, Table, TableProps } from 'antd'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -139,6 +140,13 @@ const VehicleOwnerPage: React.FC = () => {
         isLoading,
         content: (
           <>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+              <Link to='add'>
+                <Button type='primary' icon={<PlusOutlined />} ghost>
+                  Thêm mới
+                </Button>
+              </Link>
+            </div>
             <Table columns={columns} dataSource={dataSource} />
           </>
         )

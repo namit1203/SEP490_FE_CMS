@@ -1,12 +1,11 @@
 import UploadComponent from '@/components/upload'
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useLoading } from '@/context/LoadingContext'
-import { useQueryDriver, useQueryDriverDetails, useUpdateDriverMutation } from '@/queries/driver'
+import { useAddVehicleOwner } from '@/queries/account'
 import { DataTypeDriver } from '@/types/DataType'
 import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType } from 'antd'
-import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface TableData {
   key: string
@@ -14,18 +13,8 @@ interface TableData {
   value: JSX.Element | string | undefined
 }
 
-const EditDriverPage: React.FC = () => {
-  const [searchParams] = useSearchParams()
-
-  const driverId = searchParams.get('id')
-
+const AddVehicleOwnerPage: React.FC = () => {
   const [form] = Form.useForm()
-
-  const { data, refetch: refetchDriver } = useQueryDriverDetails({ id: driverId })
-
-  const { refetch } = useQueryDriver()
-
-  const updateMutation = useUpdateDriverMutation()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -33,41 +22,39 @@ const EditDriverPage: React.FC = () => {
 
   const navigate = useNavigate()
 
-  if (driverId === null) {
-    throw new Error('Invalid driverId')
-  }
-
-  useEffect(() => {
-    if (data) {
-      const updatedFormData = {
-        ...data,
-        dob: dayjs(data.dob)
-      }
-
-      form.setFieldsValue(updatedFormData)
-    }
-  }, [data, form])
-
-  useEffect(() => {
-    refetchDriver()
-  }, [driverId, refetchDriver])
+  const addMutation = useAddVehicleOwner()
 
   const tableData: TableData[] = [
     {
-      key: 'name',
+      key: 'fullName',
       label: 'Họ và tên',
       value: (
-        <Form.Item name='name' rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}>
+        <Form.Item name='fullName' rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}>
           <Input placeholder='Nhập họ và tên' style={{ width: '30%' }} />
         </Form.Item>
       )
     },
     {
-      key: 'userName',
+      key: 'username',
       label: 'Tên đăng nhập',
       value: (
-        <Form.Item name='userName' rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}>
+        <Form.Item name='username' rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}>
           <Input placeholder='Nhập tên đăng nhập' style={{ width: '30%' }} />
+        </Form.Item>
+      )
+    },
+    {
+      key: 'password',
+      label: 'Mật khẩu',
+      value: (
+        <Form.Item
+          name='password'
+          rules={[
+            { required: true, message: 'Vui lòng nhập mật khẩu!' },
+            { min: 6, message: 'Mật khẩu phải có tối thiểu 6 ký tự!' }
+          ]}
+        >
+          <Input placeholder='Nhập mật khẩu' style={{ width: '30%' }} type='password' />
         </Form.Item>
       )
     },
@@ -99,18 +86,18 @@ const EditDriverPage: React.FC = () => {
       )
     },
     {
-      key: 'license',
-      label: 'Biển số xe',
+      key: 'address',
+      label: 'Địa chỉ',
       value: (
-        <Form.Item name='license' rules={[{ required: true, message: 'Vui lòng nhập biển số xe!' }]}>
-          <Input placeholder='Nhập biển số xe' style={{ width: '30%' }} />
+        <Form.Item name='address' rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}>
+          <Input placeholder='Nhập địa chỉ' style={{ width: '30%' }} />
         </Form.Item>
       )
     },
     {
       key: 'avatar',
       label: 'Hình ảnh',
-      value: <UploadComponent initialImage={data?.avatar} fieldName={'avatar'} form={form} />
+      value: <UploadComponent fieldName='avatar' form={form} />
     },
     {
       key: 'dob',
@@ -151,22 +138,23 @@ const EditDriverPage: React.FC = () => {
   const handleFormSubmit = async (values: DataTypeDriver) => {
     setIsLoading(true)
     try {
-      const newValue = {
-        ...values,
-        dob: dayjs(values.dob).format('YYYY-MM-DD')
-      }
+      const formData = new FormData()
 
-      const response = await updateMutation.mutateAsync({ id: driverId, body: newValue })
+      Object.entries(values).forEach(([key, value]) => {
+        formData.append(key, value)
+      })
+
+      const response = await addMutation.mutateAsync(values)
+
       if (response.status === HttpStatusCode.Ok) {
-        message.success('Update successfully')
-        refetch()
-        navigate('/driver')
+        message.success('Add successfully')
+        navigate('/vehicles-owner')
       } else {
-        message.error('Update failed')
+        message.error(`Add failed: ${response.errors.id[0]}`)
       }
     } catch (error) {
       console.error('Error values:', error)
-      message.error('Update failed')
+      message.error('Add failed')
     } finally {
       setIsLoading(false)
     }
@@ -184,7 +172,7 @@ const EditDriverPage: React.FC = () => {
             loading={isLoading || isLoadingGlobal}
             disabled={isLoading || isLoadingGlobal}
           >
-            Update
+            Add
           </Button>
         </Col>
       </Row>
@@ -192,4 +180,4 @@ const EditDriverPage: React.FC = () => {
   )
 }
 
-export default EditDriverPage
+export default AddVehicleOwnerPage

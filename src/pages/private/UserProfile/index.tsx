@@ -1,6 +1,7 @@
 import { useQueryUserProfile } from '@/queries/user-profile'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { Col, Form, Row, Table, Image, Button } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -22,7 +23,7 @@ const UserProfilePage: React.FC = () => {
       { key: 'numberPhone', label: 'Number Phone ', value: data?.numberPhone || 'N/A' },
       { key: 'liscense', label: 'Liscense ', value: data?.liscense || 'N/A' },
       { key: 'activeCode', label: 'Active Code ', value: data?.activeCode || 'N/A' },
-      { key: 'dob', label: 'Date Of Birth ', value: data?.dob || 'N/A' },
+      { key: 'dob', label: 'Date Of Birth ', value: dayjs(data?.dob).format('DD-MM-YYYY') || 'N/A' },
       { key: 'status', label: 'Status', value: data?.status === true ? 'Active' : 'Inactive' }
     ]
   }, [data])

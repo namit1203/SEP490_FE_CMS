@@ -29,11 +29,17 @@ const AddPromotionPage: React.FC = () => {
       const formData = new FormData()
 
       Object.entries(values).forEach(([key, value]) => {
-        formData.append(key, value)
+        if (key === 'startDate' || key === 'endDate') {
+          const date = new Date(value)
+          date.setDate(date.getDate() + 1) // Add one day to the date
+          const updatedDate = date.toISOString() // Convert to ISO string
+          formData.append(key, updatedDate) // Append updated date to formData
+        } else {
+          formData.append(key, value)
+        }
       })
 
       const response = await addMutation.mutateAsync(formData)
-      console.log(response)
 
       if (response.status === HttpStatusCode.Created) {
         message.success('Create promotion success')
