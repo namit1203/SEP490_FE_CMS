@@ -20,17 +20,19 @@ const RevenuePage: React.FC = () => {
   const total = data?.totalRevenue
 
   const revenueTicketDataColumns = [
-    generateColumn('pricePromotion', 'Price Promotion', {
-      formatter: formatPrize,
-      width: '10%'
-    }),
-    generateColumn('vehicleOwner', 'Vehicle Owner', { width: '25%' }),
+   
+    generateColumn('vehicleOwner', 'Vehicle Owner', { width: '20%' }),
     generateColumn('liscenseVehicle', 'Liscense Vehicle', {
       searchable: true,
       getColumnSearchProps,
-      width: '25%'
+      width: '20%'
     }),
-    generateColumn('typeOfTicket', 'Type Of Ticket', { width: '25%' }),
+    
+    generateColumn('typeOfTicket', 'Type Of Ticket', { width: '20%' }),
+    generateColumn('pricePromotion', 'Price Promotion', {
+      formatter: formatPrize,
+      width: '20%'
+    }),
     generateColumn('typeOfPayment', 'Type Of Payment', { width: '25%' })
   ]
 
@@ -41,6 +43,7 @@ const RevenuePage: React.FC = () => {
     }),
     generateColumn('vehicleId', 'Vehicle Id'),
     generateColumn('vehicleOwner', 'Vehicle Owner'),
+    generateColumn('price', 'Price', { formatter: formatPrize }),
     generateColumn('createdAt', 'Date', { formatter: formatDate })
   ]
 
