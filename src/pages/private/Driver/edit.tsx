@@ -5,7 +5,7 @@ import { useQueryDriver, useQueryDriverDetails, useUpdateDriverMutation } from '
 import { DataTypeDriver } from '@/types/DataType'
 import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useState, Form, Select } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 interface TableData {
@@ -100,24 +100,11 @@ const EditDriverPage: React.FC = () => {
     },
     {
       key: 'license',
-      label: 'Hạng Bằng Lái',
+      label: 'Biển số xe',
       value: (
-        <Form.Item
-        name="license"
-        rules={[{ required: true, message: 'Vui lòng chọn hạng bằng lái!' }]}
-      >
-        <Select
-          placeholder="Chọn hạng bằng lái"
-          style={{ width: '30%' }}
-        >
-          <Select.Option value="B2">B2</Select.Option>
-          <Select.Option value="C">C</Select.Option>
-          <Select.Option value="D">D</Select.Option>
-          <Select.Option value="E">E</Select.Option>
-          <Select.Option value="F">F</Select.Option>
-        </Select>
-      </Form.Item>
-      
+        <Form.Item name='license' rules={[{ required: true, message: 'Vui lòng nhập biển số xe!' }]}>
+          <Input placeholder='Nhập biển số xe' style={{ width: '30%' }} />
+        </Form.Item>
       )
     },
     {
