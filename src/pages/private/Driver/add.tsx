@@ -127,7 +127,7 @@ const AddDriverPage: React.FC = () => {
       key: 'status',
       label: 'Trạng thái',
       value: (
-        <Form.Item name='status' rules={[{ required: true, message: 'Vui lòng nhập trạng thái!' }]}>
+        <Form.Item name='status' >
           <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />
         </Form.Item>
       )
