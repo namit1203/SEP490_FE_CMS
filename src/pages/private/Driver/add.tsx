@@ -99,10 +99,6 @@ const AddDriverPage: React.FC = () => {
           placeholder="Chọn hạng bằng lái"
           style={{ width: '30%' }}
         >
-          <Select.Option value="A1">A1</Select.Option>
-          <Select.Option value="A2">A2</Select.Option>
-          <Select.Option value="A3">A3</Select.Option>
-          <Select.Option value="A4">A4</Select.Option>
           <Select.Option value="B2">B2</Select.Option>
           <Select.Option value="C">C</Select.Option>
           <Select.Option value="D">D</Select.Option>
