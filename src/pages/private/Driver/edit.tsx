@@ -66,11 +66,16 @@ const EditDriverPage: React.FC = () => {
       key: 'userName',
       label: 'Tên đăng nhập',
       value: (
-        <Form.Item name='userName' rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}>
-          <Input placeholder='Nhập tên đăng nhập' style={{ width: '30%' }} />
+        <Form.Item name='userName'>
+          <Input 
+            placeholder='Nhập tên đăng nhập' 
+            style={{ width: '30%' }} 
+            disabled 
+          />
         </Form.Item>
       )
     },
+    
     {
       key: 'email',
       label: 'Email',

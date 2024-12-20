@@ -109,13 +109,13 @@ const AddVehiclePage: React.FC = () => {
     },
     {
       key: 'vehicleOwner',
-      label: 'Chủ nhà xe',
+      label: 'Loại xe',
       value: (
         <Form.Item name='vehicleOwner' rules={[{ required: true, message: 'Vui lòng chọn chủ nhà xe!' }]}>
           {role === 'VehicleOwner' ? (
             <Input value={userName} />
           ) : (
-            <Select placeholder='Chọn chủ nhà xe' style={{ width: '30%' }}>
+            <Select placeholder='Chọn loại xe' style={{ width: '30%' }}>
               {dataTypeOfVehiclesOwner?.map((item: any) => (
                 <Select.Option key={item.id} value={item.id}>
                   {item.username}
