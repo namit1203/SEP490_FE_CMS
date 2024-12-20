@@ -66,11 +66,16 @@ const EditDriverPage: React.FC = () => {
       key: 'userName',
       label: 'Tên đăng nhập',
       value: (
-        <Form.Item name='userName' rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}>
-          <Input placeholder='Nhập tên đăng nhập' style={{ width: '30%' }} />
+        <Form.Item name='userName'>
+          <Input 
+            placeholder='Nhập tên đăng nhập' 
+            style={{ width: '30%' }} 
+            disabled 
+          />
         </Form.Item>
       )
     },
+    
     {
       key: 'email',
       label: 'Email',
@@ -129,10 +134,31 @@ const EditDriverPage: React.FC = () => {
       key: 'dob',
       label: 'Ngày sinh',
       value: (
-        <Form.Item name='dob' rules={[{ required: true, message: 'Vui lòng nhập ngày sinh!' }]}>
+        <Form.Item
+          name='dob'
+          rules={[
+            { required: true, message: 'Vui lòng nhập ngày sinh!' },
+            {
+              validator: (_, value) => {
+                if (!value) {
+                  return Promise.reject('Vui lòng nhập ngày sinh!');
+                }
+                const today = new Date();
+                const selectedDate = value.toDate(); // Chuyển đổi moment object sang Date
+                const age = today.getFullYear() - selectedDate.getFullYear();
+                const isOldEnough =
+                  age > 18 || (age === 18 && today >= new Date(selectedDate.setFullYear(selectedDate.getFullYear() + 18)));
+    
+                return isOldEnough
+                  ? Promise.resolve()
+                  : Promise.reject('Tài xế phải trên 18 tuổi!');
+              },
+            },
+          ]}
+        >
           <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
         </Form.Item>
-      )
+      ),
     },
     {
       key: 'status',

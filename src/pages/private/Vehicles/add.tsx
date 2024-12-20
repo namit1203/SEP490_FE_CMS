@@ -87,11 +87,25 @@ const AddVehiclePage: React.FC = () => {
       key: 'licensePlate',
       label: 'Biển số xe',
       value: (
-        <Form.Item name='licensePlate' rules={[{ required: true, message: 'Vui lòng nhập Biển số xe!' }]}>
-          <Input placeholder='Biển số xe' style={{ width: '30%' }} />
+        <Form.Item
+          name="licensePlate"
+          rules={[
+            { required: true, message: 'Vui lòng nhập Biển số xe!' },
+            {
+              validator: (_, value) => {
+                const licensePlatePattern = /^(?!80)\d{2}[A-Z]{1,2}(?:LD)?-\d{3}\.?\d{2}$/;
+                if (!value || licensePlatePattern.test(value)) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('Biển số xe không hợp lệ!'));
+              }
+            }
+          ]}
+        >
+          <Input placeholder="Biển số xe" style={{ width: '30%' }} />
         </Form.Item>
       )
-    },
+    },    
     {
       key: 'vehicleTypeId',
       label: 'Loại xe',
@@ -109,13 +123,13 @@ const AddVehiclePage: React.FC = () => {
     },
     {
       key: 'vehicleOwner',
-      label: 'Chủ nhà xe',
+      label: 'Loại xe',
       value: (
         <Form.Item name='vehicleOwner' rules={[{ required: true, message: 'Vui lòng chọn chủ nhà xe!' }]}>
           {role === 'VehicleOwner' ? (
             <Input value={userName} />
           ) : (
-            <Select placeholder='Chọn chủ nhà xe' style={{ width: '30%' }}>
+            <Select placeholder='Chọn loại xe' style={{ width: '30%' }}>
               {dataTypeOfVehiclesOwner?.map((item: any) => (
                 <Select.Option key={item.id} value={item.id}>
                   {item.username}
