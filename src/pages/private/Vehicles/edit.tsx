@@ -106,8 +106,22 @@ const EditVehiclePage: React.FC = () => {
       key: 'licensePlate',
       label: 'Biển số xe',
       value: (
-        <Form.Item name='licensePlate' rules={[{ required: true, message: 'Vui lòng nhập Biển số xe!' }]}>
-          <Input placeholder='Biển số xe' style={{ width: '30%' }} />
+        <Form.Item
+          name="licensePlate"
+          rules={[
+            { required: true, message: 'Vui lòng nhập Biển số xe!' },
+            {
+              validator: (_, value) => {
+                const licensePlatePattern = /^(?!80)\d{2}[A-Z]{1,2}(?:LD)?-\d{3}\.?\d{2}$/;
+                if (!value || licensePlatePattern.test(value)) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('Biển số xe không hợp lệ!'));
+              }
+            }
+          ]}
+        >
+          <Input placeholder="Biển số xe" style={{ width: '30%' }} />
         </Form.Item>
       )
     },
