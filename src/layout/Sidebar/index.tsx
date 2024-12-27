@@ -58,7 +58,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             icon: <CarOutlined />,
             label: <Link to='/vehicles'>Vehicles</Link> // Link added
           },
-
+          {
+            key: 'vehicles-owner',
+            icon: <TruckOutlined />,
+            label: <Link to='/vehicles-owner'>Vehicles Owner</Link> // Link added
+          },
           {
             key: 'vehicles-using',
             icon: <CarOutlined />,

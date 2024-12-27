@@ -3,7 +3,7 @@ import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useLoading } from '@/context/LoadingContext'
 import { useAddDriverMutation, useQueryDriver } from '@/queries/driver'
 import { DataTypeDriver } from '@/types/DataType'
-import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType,Select } from 'antd'
+import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -89,24 +89,11 @@ const AddDriverPage: React.FC = () => {
     },
     {
       key: 'license',
-      label: 'Hạng Bằng Lái',
+      label: 'Biển số xe',
       value: (
-        <Form.Item
-        name="license"
-        rules={[{ required: true, message: 'Vui lòng chọn hạng bằng lái!' }]}
-      >
-        <Select
-          placeholder="Chọn hạng bằng lái"
-          style={{ width: '30%' }}
-        >
-          <Select.Option value="B2">B2</Select.Option>
-          <Select.Option value="C">C</Select.Option>
-          <Select.Option value="D">D</Select.Option>
-          <Select.Option value="E">E</Select.Option>
-          <Select.Option value="F">F</Select.Option>
-        </Select>
-      </Form.Item>
-      
+        <Form.Item name='license' rules={[{ required: true, message: 'Vui lòng nhập biển số xe!' }]}>
+          <Input placeholder='Nhập biển số xe' style={{ width: '30%' }} />
+        </Form.Item>
       )
     },
     {
@@ -118,37 +105,16 @@ const AddDriverPage: React.FC = () => {
       key: 'dob',
       label: 'Ngày sinh',
       value: (
-        <Form.Item
-          name='dob'
-          rules={[
-            { required: true, message: 'Vui lòng nhập ngày sinh!' },
-            {
-              validator: (_, value) => {
-                if (!value) {
-                  return Promise.reject('Vui lòng nhập ngày sinh!');
-                }
-                const today = new Date();
-                const selectedDate = value.toDate(); // Chuyển đổi moment object sang Date
-                const age = today.getFullYear() - selectedDate.getFullYear();
-                const isOldEnough =
-                  age > 18 || (age === 18 && today >= new Date(selectedDate.setFullYear(selectedDate.getFullYear() + 18)));
-    
-                return isOldEnough
-                  ? Promise.resolve()
-                  : Promise.reject('Tài xế phải trên 18 tuổi!');
-              },
-            },
-          ]}
-        >
+        <Form.Item name='dob' rules={[{ required: true, message: 'Vui lòng nhập ngày sinh!' }]}>
           <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
         </Form.Item>
-      ),
+      )
     },
     {
       key: 'status',
       label: 'Trạng thái',
       value: (
-        <Form.Item name='status' >
+        <Form.Item name='status' rules={[{ required: true, message: 'Vui lòng nhập trạng thái!' }]}>
           <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />
         </Form.Item>
       )

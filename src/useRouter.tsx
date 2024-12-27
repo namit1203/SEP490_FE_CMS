@@ -111,7 +111,7 @@ const staffRoutes = [
     component: <DetailPromotionPage />,
     allowedRoles: [RoleType.STAFF]
   },
-  { path: '/driver', component: <DriverPage />, allowedRoles: [RoleType.STAFF, RoleType.ADMIN] },
+  { path: '/driver', component: <DriverPage />, allowedRoles: [RoleType.STAFF] },
   { path: '/driver/edit', component: <EditDriverPage />, allowedRoles: [RoleType.STAFF] },
   { path: '/driver/add', component: <AddDriverPage />, allowedRoles: [RoleType.STAFF] },
   {
@@ -122,7 +122,7 @@ const staffRoutes = [
   {
     path: '/history-rent-driver',
     component: <HistoryRentDriverPage />,
-    allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER, RoleType.DRIVER]
+    allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER]
   },
   { path: '/cost-type', component: <CostTypePage />, allowedRoles: [RoleType.STAFF] },
   {
@@ -149,7 +149,7 @@ const staffRoutes = [
   {
     path: '/request',
     component: <RequestPage />,
-    allowedRoles: [RoleType.STAFF, RoleType.ADMIN, RoleType.DRIVER, RoleType.VEHICLE_OWNER]
+    allowedRoles: [RoleType.STAFF, RoleType.DRIVER, RoleType.VEHICLE_OWNER]
   },
   {
     path: '/request/details',

@@ -74,6 +74,7 @@ const PromotionPage: React.FC = () => {
       dataIndex: 'discount',
       key: 'discount',
       align: 'center',
+      render: (text) => <p>{text}%</p>,
       sorter: (a, b) => a.discount - b.discount,
       width: '20%'
     },

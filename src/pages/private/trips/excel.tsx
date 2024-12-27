@@ -85,7 +85,6 @@ const ExcelTripPage = () => {
       } else {
         message.error('Add failed')
       }
-      console.log('ok')
     } catch (error) {
       console.error('Error values:', error)
     }

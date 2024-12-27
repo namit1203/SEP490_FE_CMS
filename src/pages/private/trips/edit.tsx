@@ -38,7 +38,6 @@ const EditTripPage: React.FC = () => {
 
   const handleChange = (value: string) => {
     setSelectedValue(value)
-    console.log('Selected value:', value) // You can handle the selected value here
   }
 
   const [fields, setFields] = useState<Field[]>([])
@@ -163,7 +162,6 @@ const EditTripPage: React.FC = () => {
       status: values.status
     }
 
-    console.log(values)
 
     try {
       if (tripID) {

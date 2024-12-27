@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, message, Table } from 'antd'
 import { useExportRevenueMutation, useQueryRevenue } from '@/queries/revenue'
 import useColumnSearch from '@/hooks/useColumnSearch'
@@ -9,7 +9,7 @@ import { HttpStatusCode } from 'axios'
 import { DownloadOutlined } from '@ant-design/icons'
 
 const RevenuePage: React.FC = () => {
-  const { data, isLoading } = useQueryRevenue()
+  const { data, isLoading, refetch } = useQueryRevenue()
   const { getColumnSearchProps } = useColumnSearch()
 
   const revenueTicketData = data?.revenueTicketDTOs[0]?.listTicket || []
@@ -17,22 +17,24 @@ const RevenuePage: React.FC = () => {
   const rentDriverData = data?.totalPayementRentDrivers[0]?.paymentRentDriverDTOs || []
   const rentVehicleData = data?.totalPaymentRentVehicleDTOs[0]?.paymentRentVehicelDTOs || []
 
+  useEffect(() => {
+    refetch()
+  }, [refetch])
+
   const total = data?.totalRevenue
 
   const revenueTicketDataColumns = [
-   
-    generateColumn('vehicleOwner', 'Vehicle Owner', { width: '20%' }),
+    generateColumn('pricePromotion', 'Price Promotion', {
+      formatter: formatPrize,
+      width: '10%'
+    }),
+    generateColumn('vehicleOwner', 'Vehicle Owner', { width: '25%' }),
     generateColumn('liscenseVehicle', 'Liscense Vehicle', {
       searchable: true,
       getColumnSearchProps,
-      width: '20%'
+      width: '25%'
     }),
-    
-    generateColumn('typeOfTicket', 'Type Of Ticket', { width: '20%' }),
-    generateColumn('pricePromotion', 'Price Promotion', {
-      formatter: formatPrize,
-      width: '20%'
-    }),
+    generateColumn('typeOfTicket', 'Type Of Ticket', { width: '25%' }),
     generateColumn('typeOfPayment', 'Type Of Payment', { width: '25%' })
   ]
 
@@ -43,7 +45,6 @@ const RevenuePage: React.FC = () => {
     }),
     generateColumn('vehicleId', 'Vehicle Id'),
     generateColumn('vehicleOwner', 'Vehicle Owner'),
-    generateColumn('price', 'Price', { formatter: formatPrize }),
     generateColumn('createdAt', 'Date', { formatter: formatDate })
   ]
 
