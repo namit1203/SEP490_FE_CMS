@@ -32,7 +32,7 @@ const EditUserProfile = () => {
 
   const updateMutation = useUpdateUserMutation()
 
-  const order = ['fullName', 'username', 'email', 'dob', 'address', 'numberPhone', 'role', 'status', 'avatar']
+  const order = ['fullName', 'username', 'email', 'dob', 'address', 'numberPhone', 'status', 'avatar']
 
   const filteredFields = fieldUser
     .filter((field) => field.name && order.includes(field.name))

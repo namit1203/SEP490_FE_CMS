@@ -19,6 +19,7 @@ const UserProfilePage: React.FC = () => {
       { key: 'username', label: 'User Name', value: data?.username || 'N/A' },
       { key: 'fullName', label: 'Full Name', value: data?.fullName || 'N/A' },
       { key: 'email', label: 'Email ', value: data?.email || 'N/A' },
+      { key: 'role', label: 'Role ', value: data?.role || 'N/A' },
       { key: 'address', label: 'Address ', value: data?.address || 'N/A' },
       { key: 'numberPhone', label: 'Number Phone ', value: data?.numberPhone || 'N/A' },
       { key: 'liscense', label: 'Liscense ', value: data?.liscense || 'N/A' },

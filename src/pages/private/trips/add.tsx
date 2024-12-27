@@ -123,7 +123,7 @@ const AddTripPage: React.FC = () => {
           name: 'pointEndDetails',
           label: 'Point End Details',
           component: <Input />,
-          rules: [{ required: true, message: 'Vui lòng nhập điểm bắt đầu!' }]
+          rules: [{ required: true, message: 'Vui lòng nhập điểm kết thúc chi tiết!' }]
         },
         {
           name: 'timeEndDetails',
@@ -138,13 +138,12 @@ const AddTripPage: React.FC = () => {
               placeholder='Select Time' // Placeholder text for clarity
             />
           ),
-          rules: [{ required: true, message: 'Vui lòng nhập điểm bắt đầu!' }]
+          rules: [{ required: true, message: 'Vui lòng nhập thời gian kết thúc chi tiết!' }]
         },
         {
           name: 'description',
           label: 'Description',
           component: <Input />,
-          rules: [{ required: true, message: 'Vui lòng nhập điểm bắt đầu!' }]
         },
         {
           name: 'status',
@@ -259,7 +258,6 @@ const AddTripPage: React.FC = () => {
 
       // Step 6: If valid, proceed to submit
       if (isValid) {
-        console.log(outputData) // Log the outputData in desired format
         // message.success('Form submitted successfully')
         const response = await addMutation.mutateAsync(outputData)
         if (response.status === HttpStatusCode.Ok) {

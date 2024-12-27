@@ -1,12 +1,12 @@
 import { formatPrize, formatTime } from '@/helpers'
 import useColumnSearch from '@/hooks/useColumnSearch'
+import { useTableWithTotal } from '@/hooks/useTableWithTotal'
 import { useQueryHistoryRentVehicle } from '@/queries/history'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { SearchOutlined } from '@ant-design/icons'
 import { Button, DatePicker, Table, TableProps } from 'antd'
 import dayjs from 'dayjs'
-import React from 'react'
 
 interface DataType {
   key: string
@@ -136,10 +136,12 @@ const HistoryRentVehiclePage: React.FC = () => {
       render: (text) => <span>{formatTime(text)}</span>
     }
   ]
-  const dataSource = data?.map((item: any) => ({
-    ...item,
-    key: item.id || item.someUniqueField
-  }))
+
+  const { totalPrice, tableProps } = useTableWithTotal({
+    data: data || [],
+    columns,
+    priceKey: 'vehiclePrice' // Specify the price key which is exist in columns table
+  })
 
   return (
     <>
@@ -147,10 +149,8 @@ const HistoryRentVehiclePage: React.FC = () => {
         isLoading,
         content: (
           <>
-            <Table columns={columns} dataSource={dataSource} />
-            {/* <div>
-              Total : <span style={{ fontSize: 20 }}>{formatPrize(data?.total)}</span>
-            </div> */}
+            <Table {...tableProps} />
+            <p>Total: {formatPrize(totalPrice)}</p>
           </>
         )
       })}

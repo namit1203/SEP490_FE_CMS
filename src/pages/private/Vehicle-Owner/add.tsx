@@ -38,21 +38,11 @@ const AddVehicleOwnerPage: React.FC = () => {
       key: 'username',
       label: 'Tên đăng nhập',
       value: (
-        <Form.Item
-          name='username'
-          rules={[
-            { required: true, message: 'Vui lòng nhập tên đăng nhập!' },
-            {
-              pattern: /^\S*$/, // Regex kiểm tra không có khoảng trắng
-              message: 'Tên đăng nhập không được chứa khoảng trắng!',
-            },
-          ]}
-        >
+        <Form.Item name='username' rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}>
           <Input placeholder='Nhập tên đăng nhập' style={{ width: '30%' }} />
         </Form.Item>
-      ),
+      )
     },
-    
     {
       key: 'password',
       label: 'Mật khẩu',
@@ -122,7 +112,7 @@ const AddVehicleOwnerPage: React.FC = () => {
       key: 'status',
       label: 'Trạng thái',
       value: (
-        <Form.Item name='status' >
+        <Form.Item name='status' rules={[{ required: true, message: 'Vui lòng nhập trạng thái!' }]}>
           <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />
         </Form.Item>
       )

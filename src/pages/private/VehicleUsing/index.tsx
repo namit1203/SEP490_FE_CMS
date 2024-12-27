@@ -1,4 +1,3 @@
-import { formatPrize } from '@/helpers'
 import useColumnSearch from '@/hooks/useColumnSearch'
 import { useQueryVehiclesUsing } from '@/queries/vehicle-using'
 import { DataType } from '@/types/DataType'
@@ -47,7 +46,6 @@ const VehicleUsingPage: React.FC = () => {
       dataIndex: 'numberSeat',
       align: 'center',
       key: 'numberSeat',
-      render: (text) => <span>{formatPrize(text)}</span>,
       sorter: (a, b) => handlingTsUndefined(a.numberSeat) - handlingTsUndefined(b.numberSeat),
       width: '20%'
     },

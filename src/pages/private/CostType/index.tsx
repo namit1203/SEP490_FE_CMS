@@ -1,11 +1,10 @@
-import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { formatDate } from '@/helpers'
 import useColumnSearch from '@/hooks/useColumnSearch'
-import { useDeleteCostTypeMutation, useQueryCostType } from '@/queries/cost-type'
+import { useQueryCostType } from '@/queries/cost-type'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { PlusOutlined } from '@ant-design/icons'
 import type { TableProps } from 'antd'
-import { Button, message, Popconfirm, Space, Table } from 'antd'
+import { Button, Space, Table } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -19,28 +18,28 @@ interface DataType {
 }
 
 const CostTypePage: React.FC = () => {
-  const { data, isLoading, refetch } = useQueryCostType()
+  const { data, isLoading } = useQueryCostType()
 
-  const deleteMutaion = useDeleteCostTypeMutation()
+  // const deleteMutaion = useDeleteCostTypeMutation()
 
   const dataSource = data?.map((item: any) => ({
     ...item,
     key: item.id || item.someUniqueField
   }))
 
-  const handleFormDelete = async (id: number) => {
-    try {
-      const response = await deleteMutaion.mutateAsync({ id })
-      if (response.status === HttpStatusCode.Ok) {
-        message.success('Delete successfully')
-        refetch()
-      } else {
-        message.error('Delete failed')
-      }
-    } catch (error) {
-      console.error('Error deleting:', error)
-    }
-  }
+  // const handleFormDelete = async (id: number) => {
+  //   try {
+  //     const response = await deleteMutaion.mutateAsync({ id })
+  //     if (response.status === HttpStatusCode.Ok) {
+  //       message.success('Delete successfully')
+  //       refetch()
+  //     } else {
+  //       message.error('Delete failed')
+  //     }
+  //   } catch (error) {
+  //     console.error('Error deleting:', error)
+  //   }
+  // }
 
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -77,7 +76,7 @@ const CostTypePage: React.FC = () => {
           <Link to={`edit?id=${record.id}`}>
             <Button type='primary'>Edit</Button>
           </Link>
-          <Popconfirm
+          {/* <Popconfirm
             title='Are you sure to delete this item?'
             okText='Yes'
             cancelText='No'
@@ -88,7 +87,7 @@ const CostTypePage: React.FC = () => {
             <Button type='primary' danger>
               Delete
             </Button>
-          </Popconfirm>
+          </Popconfirm> */}
         </Space>
       )
     }

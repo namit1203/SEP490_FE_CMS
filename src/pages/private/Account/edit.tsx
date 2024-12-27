@@ -52,11 +52,13 @@ const EditAccountPage: React.FC = () => {
       value: (
         <Form.Item name='role' rules={[{ required: true, message: 'Vui lòng chọn Role!' }]}>
           <Select placeholder='Chọn Role' style={{ width: '30%' }}>
-            {roleData?.map((item: any) => (
-              <Select.Option key={item.id} value={item.id}>
-                {item.roleName}
-              </Select.Option>
-            ))}
+            {roleData
+              ?.filter((item: any) => item.status === true) // Only include items with status === true
+              .map((item: any) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.roleName}
+                </Select.Option>
+              ))}
           </Select>
         </Form.Item>
       )
