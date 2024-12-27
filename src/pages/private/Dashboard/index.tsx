@@ -3,7 +3,7 @@ import { formatPrize } from '@/helpers'
 import { useQueryRevenue } from '@/queries/revenue'
 import { useQueryUserProfile } from '@/queries/user-profile'
 import renderWithLoading from '@/utils/renderWithLoading'
-import { Button, Result } from 'antd'
+import { Button, Empty, Result } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
@@ -48,7 +48,6 @@ const DashBoardChartPage: React.FC = () => {
     marginBottom: 40
   }
 
-
   useEffect(() => {
     refetch()
   }, [refetch])
@@ -61,7 +60,6 @@ const DashBoardChartPage: React.FC = () => {
   ) {
     return <Empty />
   }
-
 
   const renderChart = (data: any[], barColor: string, title: string) => (
     <div style={chartStyle}>
