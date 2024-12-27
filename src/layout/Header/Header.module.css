@@ -1,8 +1,11 @@
-.header-test{
-    display: flex;
-    align-items: center;
+.header-test {
+  display: flex;
+  align-items: center;
 }
-.header-test .avatar{
-    margin-left:auto;
-    margin-right:25px;
+.header-test .avatar {
+  margin-left: auto;
+  margin-right: 25px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }

@@ -1,7 +1,8 @@
+import { useQueryUserProfile } from '@/queries/user-profile'
 import { useLocalStorage } from '@/utils/localStorage/localStorageService'
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons'
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { useQueryClient } from '@tanstack/react-query'
-import { Avatar, Button, theme } from 'antd'
+import { Avatar, Button, Tag, theme } from 'antd'
 import { Header } from 'antd/es/layout/layout'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './Header.module.css'
@@ -17,6 +18,8 @@ const HeaderLayout: React.FC<HeaderProps> = ({ collapsed, setCollapsed }) => {
   } = theme.useToken()
 
   const navigate = useNavigate()
+
+  const { data: account } = useQueryUserProfile()
 
   const queryClient = useQueryClient()
 
@@ -40,8 +43,10 @@ const HeaderLayout: React.FC<HeaderProps> = ({ collapsed, setCollapsed }) => {
         }}
       />
       <Link className={styles.avatar} to='user-profile'>
-        <Avatar size={39} icon={<UserOutlined />} />
+        <Avatar size={39} src={account?.avatar} />
+        <Tag color='blue'>{account?.username}</Tag>
       </Link>
+
       <Button onClick={() => handleLogout()} style={{ marginRight: '20px' }}>
         Log Out
       </Button>
