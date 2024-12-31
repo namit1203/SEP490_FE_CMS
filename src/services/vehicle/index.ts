@@ -33,6 +33,13 @@ class VehicleApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+  public GetCheckSeat({ checkDate }: { checkDate: string | null }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.VEHICLES.CHECK_SEAT_AVAILABLE({ checkDate }),
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
+
   public GetVehiclesDetails({ id }: { id: string | number | null }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.VEHICLES.VEHICLES_DETAILS({ id }),

@@ -15,6 +15,19 @@ export const useQueryTrips = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 
   })
 }
 
+export const useQueryTripConvenience = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['trips_convenience'],
+    queryFn: async () => {
+      const response = await tripsApiRequest.GetTripsConvenience()
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
+      }
+    }
+  })
+}
+
 export const useQueryTripDetail = (
   { id }: { id: string | number | null },
   options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
@@ -48,6 +61,13 @@ export const useAddTripMutation = (options?: UseMutationOptions<any, unknown, an
   return useMutation({
     ...options,
     mutationFn: (body: Omit<any, 'addTrip'>) => tripsApiRequest.AddTrip({ body })
+  })
+}
+
+export const useAddTripConvenienceMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: (body: Omit<any, 'addTripConvenience'>) => tripsApiRequest.AddTripConvenience({ body })
   })
 }
 

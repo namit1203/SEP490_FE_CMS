@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Button, message, Table } from 'antd'
+import { Button, Col, DatePicker, Form, message, Row, Select, Table } from 'antd'
 import { useExportRevenueMutation, useQueryRevenue } from '@/queries/revenue'
 import useColumnSearch from '@/hooks/useColumnSearch'
 import renderWithLoading from '@/utils/renderWithLoading'
@@ -7,9 +7,21 @@ import { generateColumn } from '@/utils/tableColumns'
 import { formatDate, formatPrize } from '@/helpers'
 import { HttpStatusCode } from 'axios'
 import { DownloadOutlined } from '@ant-design/icons'
+import { useQueryVehicles } from '@/queries/vehicle'
+import dayjs from 'dayjs'
+// import { useTableWithTotal } from '@/hooks/useTableWithTotal'
 
 const RevenuePage: React.FC = () => {
-  const { data, isLoading, refetch } = useQueryRevenue()
+  const [form] = Form.useForm()
+
+  const [queryParams, setQueryParams] = React.useState({
+    startDate: '',
+    endDate: '',
+    vehicleId: ''
+  })
+
+  const { data, isLoading, refetch } = useQueryRevenue(queryParams)
+  const { data: vehicleData } = useQueryVehicles()
   const { getColumnSearchProps } = useColumnSearch()
 
   const revenueTicketData = data?.revenueTicketDTOs[0]?.listTicket || []
@@ -45,6 +57,7 @@ const RevenuePage: React.FC = () => {
     }),
     generateColumn('vehicleId', 'Vehicle Id'),
     generateColumn('vehicleOwner', 'Vehicle Owner'),
+    generateColumn('price', 'Price', { formatter: formatPrize }),
     generateColumn('createdAt', 'Date', { formatter: formatDate })
   ]
 
@@ -112,12 +125,62 @@ const RevenuePage: React.FC = () => {
     }
   }
 
+  const onFinish = async (values: any) => {
+    try {
+      const formattedValues = {
+        ...values,
+        startDate: values.startDate === null ? '' : dayjs(values.startDate).format('YYYY-MM-DD'),
+        endDate: values.endDate === null ? '' : dayjs(values.endDate).format('YYYY-MM-DD')
+      }
+
+      // Update the query parameters
+      setQueryParams(formattedValues)
+
+      // Refetch the query with updated parameters
+      await refetch()
+
+      console.log('Fetched Data:', data)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
+
   return (
     <>
       {renderWithLoading({
         isLoading,
         content: (
           <>
+            <Form onFinish={onFinish} layout='horizontal' form={form}>
+              <Row gutter={16}>
+                <Col span={4}>
+                  <Form.Item label='Start Date' name='startDate'>
+                    <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
+                  </Form.Item>
+                </Col>
+                <Col span={4}>
+                  <Form.Item label='End Date' name='endDate'>
+                    <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
+                  </Form.Item>
+                </Col>
+                <Col span={3}>
+                  <Form.Item name='vehicleId'>
+                    <Select placeholder='Chọn xe' style={{ width: '80%' }} allowClear>
+                      {vehicleData?.map((item: any) => (
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.id} - {item.licensePlate}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={1}>
+                  <Button htmlType='submit' type='primary'>
+                    Tìm
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16, gap: 16 }}>
               <Button onClick={downloadFile} type='primary' icon={<DownloadOutlined />} ghost>
                 Export revenue

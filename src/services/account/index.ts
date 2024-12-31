@@ -15,6 +15,12 @@ class AccountApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+  public CreateAccount({ body }: { body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.ACCOUNT.CREATE_ACCOUNT,
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
   public GetAccountDetails({ id }: { id: string | number | null }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.ACCOUNT.GET_ACCOUNT_DETAILS({ id }),

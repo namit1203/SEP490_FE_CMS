@@ -83,6 +83,22 @@ export const useQueryVehiclesDetails = (
   })
 }
 
+export const useQueryCheckSeatAvailable = (
+  { checkDate }: { checkDate: string | null },
+  options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['check_seat', checkDate],
+    queryFn: async () => {
+      const response = await vehicleApiRequest.GetCheckSeat({ checkDate })
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
+      }
+    }
+  })
+}
+
 export const useAddVehiclesMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
   return useMutation({
     ...options,

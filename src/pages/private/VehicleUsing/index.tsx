@@ -4,9 +4,8 @@ import { DataType } from '@/types/DataType'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
 import renderWithLoading from '@/utils/renderWithLoading'
 import type { TableProps } from 'antd'
-import { Button, Popconfirm, Space, Table } from 'antd'
+import { Table } from 'antd'
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 const VehicleUsingPage: React.FC = () => {
   const { data, isLoading } = useQueryVehiclesUsing()
@@ -24,14 +23,21 @@ const VehicleUsingPage: React.FC = () => {
       key: 'driverName',
       ...useColumnSearch().getColumnSearchProps('driverName'),
       align: 'center',
-      width: '25%'
+      width: '15%'
     },
     {
       title: 'Biển số xe',
       dataIndex: 'licensePlate',
       key: 'licensePlate',
       align: 'center',
-      width: '25%'
+      width: '15%'
+    },
+    {
+      title: 'Kiểu xe',
+      dataIndex: 'vehicleTypeName',
+      key: 'vehicleTypeName',
+      align: 'center',
+      width: '15%'
     },
     {
       title: 'Mô tả xe',
@@ -56,24 +62,24 @@ const VehicleUsingPage: React.FC = () => {
       align: 'center',
       render: (status) => <p>{status ? 'Khả dụng' : 'Không khả dụng'}</p>,
       width: '20%'
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      align: 'center',
-      render: (_, record) => (
-        <Space size='middle'>
-          <Link to={`edit?id=${record.id}`}>
-            <Button type='primary'>Edit</Button>
-          </Link>
-          <Popconfirm title='Are you sure to delete this item?' okText='Yes' cancelText='No'>
-            <Button type='primary' danger>
-              Delete
-            </Button>
-          </Popconfirm>
-        </Space>
-      )
     }
+    // {
+    //   title: 'Action',
+    //   key: 'action',
+    //   align: 'center',
+    //   render: (_, record) => (
+    //     <Space size='middle'>
+    //       <Link to={`edit?id=${record.id}`}>
+    //         <Button type='primary'>Edit</Button>
+    //       </Link>
+    //       <Popconfirm title='Are you sure to delete this item?' okText='Yes' cancelText='No'>
+    //         <Button type='primary' danger>
+    //           Delete
+    //         </Button>
+    //       </Popconfirm>
+    //     </Space>
+    //   )
+    // }
   ]
 
   return (

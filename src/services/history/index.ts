@@ -3,15 +3,45 @@ import { APP_API_ENDPOINT } from '@/config/api'
 import { METHOD_TYPE } from '@/config/method'
 
 class HistoryApiRequest {
-  public GetListHistoryRentVehicle(): Promise<any> {
+  public GetListHistoryRentVehicle({
+    startDate,
+    endDate,
+    vehicleId
+  }: {
+    startDate: string
+    endDate: string
+    vehicleId: number | string
+  }): Promise<any> {
     return apiBaseServiceInstance.Http({
-      path: APP_API_ENDPOINT.HISTORY_RENT_VEHICLE.GET_HISTORY_RENT_VEHICLE,
+      path: APP_API_ENDPOINT.HISTORY_RENT_VEHICLE.GET_HISTORY_RENT_VEHICLE({
+        startDate,
+        endDate,
+        vehicleId
+      }),
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
-  public GetListHistoryRentDriver(): Promise<any> {
+  // public GetListHistoryRentDriver(): Promise<any> {
+  //   return apiBaseServiceInstance.Http({
+  //     path: APP_API_ENDPOINT.HISTORY_RENT_DRIVER.GET_HISTORY_RENT_DRIVER,
+  //     config: { method: METHOD_TYPE.GET, cors: false }
+  //   })
+  // }
+  public GetListHistoryRentDriver({
+    startDate,
+    endDate,
+    vehicleId
+  }: {
+    startDate: string
+    endDate: string
+    vehicleId: number | string
+  }): Promise<any> {
     return apiBaseServiceInstance.Http({
-      path: APP_API_ENDPOINT.HISTORY_RENT_DRIVER.GET_HISTORY_RENT_DRIVER,
+      path: APP_API_ENDPOINT.HISTORY_RENT_DRIVER.GET_HISTORY_RENT_DRIVER({
+        startDate,
+        endDate,
+        vehicleId
+      }),
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }

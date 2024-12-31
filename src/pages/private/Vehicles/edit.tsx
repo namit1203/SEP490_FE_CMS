@@ -1,7 +1,7 @@
 import UploadComponent from '@/components/upload'
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useLoading } from '@/context/LoadingContext'
-import { useQueryDriver } from '@/queries/driver'
+import { useQueryDriverWithoutVehicle } from '@/queries/driver'
 import {
   useQueryTypeOfVehicles,
   useQueryTypeVehiclesOwner,
@@ -25,7 +25,7 @@ const EditVehiclePage: React.FC = () => {
   const vehicleID = searchParams.get('id')
   const [form] = Form.useForm()
 
-  const { data: dataTypeDriver } = useQueryDriver()
+  const { data: dataTypeDriver, refetch: refetchDataTypeDriver } = useQueryDriverWithoutVehicle({ id: vehicleID })
   const { data: dataTypeOfVehicles } = useQueryTypeOfVehicles()
   const { data: dataTypeOfVehiclesOwner } = useQueryTypeVehiclesOwner()
 
@@ -58,7 +58,8 @@ const EditVehiclePage: React.FC = () => {
 
   useEffect(() => {
     refetch()
-  }, [vehicleID, refetch])
+    refetchDataTypeDriver()
+  }, [vehicleID, refetch, refetchDataTypeDriver])
 
   const tableData: TableData[] = [
     {
@@ -76,9 +77,6 @@ const EditVehiclePage: React.FC = () => {
       value: (
         <Form.Item name='driverId'>
           <Select placeholder='Chọn tài xế' style={{ width: '30%' }} allowClear>
-            <Select.Option key='no_driver' value={''}>
-              Không có tài xế
-            </Select.Option>
             {dataTypeDriver?.map((item: any) => (
               <Select.Option key={item.id} value={item.id}>
                 {item.userName}

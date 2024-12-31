@@ -15,6 +15,22 @@ export const useQueryDriver = (options?: Omit<UseQueryOptions<any>, 'queryKey' |
   })
 }
 
+export const useQueryDriverWithoutVehicle = (
+  { id }: { id: string | null },
+  options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['Driver_without_vehicle', id],
+    queryFn: async () => {
+      const response = await driverApiRequest.WithoutVehicle({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
+      }
+    }
+  })
+}
+
 export const useQueryDriverDetails = (
   { id }: { id: string | number | null },
   options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>

@@ -1,7 +1,7 @@
 import UploadComponent from '@/components/upload'
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useLoading } from '@/context/LoadingContext'
-import { useQueryDriver } from '@/queries/driver'
+import { useQueryDriverWithoutVehicle } from '@/queries/driver'
 import { useAddVehiclesMutation, useQueryTypeOfVehicles, useQueryTypeVehiclesOwner } from '@/queries/vehicle'
 import { DataTypeVehicle } from '@/types/DataType'
 import { useLocalStorage } from '@/utils/localStorage/localStorageService'
@@ -18,7 +18,7 @@ interface TableData {
 const AddVehiclePage: React.FC = () => {
   const [form] = Form.useForm()
 
-  const { data: dataTypeDriver } = useQueryDriver()
+  const { data: dataTypeDriver } = useQueryDriverWithoutVehicle({ id: null })
   const { data: dataTypeOfVehicles } = useQueryTypeOfVehicles()
   const { data: dataTypeOfVehiclesOwner } = useQueryTypeVehiclesOwner()
 

@@ -1,10 +1,11 @@
 import { formatPrize, formatTime } from '@/helpers'
 import useColumnSearch from '@/hooks/useColumnSearch'
 import { useQueryHistoryRentDriver } from '@/queries/history'
+import { useQueryVehicles } from '@/queries/vehicle'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { SearchOutlined } from '@ant-design/icons'
-import { Button, DatePicker, Table, TableProps } from 'antd'
+import { Button, Col, DatePicker, Form, Row, Select, Table, TableProps } from 'antd'
 import dayjs from 'dayjs'
 import React from 'react'
 
@@ -19,7 +20,16 @@ interface DataType {
 }
 
 const HistoryRentDriverPage: React.FC = () => {
-  const { data, isLoading } = useQueryHistoryRentDriver()
+  const [form] = Form.useForm()
+
+  const [queryParams, setQueryParams] = React.useState({
+    startDate: '',
+    endDate: '',
+    vehicleId: ''
+  })
+
+  const { data, isLoading, refetch } = useQueryHistoryRentDriver(queryParams)
+  const { data: vehicleData } = useQueryVehicles()
 
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -135,10 +145,26 @@ const HistoryRentDriverPage: React.FC = () => {
       render: (text) => <span>{formatTime(text)}</span>
     }
   ]
-  const dataSource = data?.map((item: any) => ({
-    ...item,
-    key: item.id || item.someUniqueField
-  }))
+
+  const onFinish = async (values: any) => {
+    try {
+      const formattedValues = {
+        ...values,
+        startDate: values.startDate === null ? '' : dayjs(values.startDate).format('YYYY-MM-DD')
+        // endDate: dayjs(values.endDate).format('YYYY-MM-DD')
+      }
+
+      // Update the query parameters
+      setQueryParams(formattedValues)
+
+      // Refetch the query with updated parameters
+      await refetch()
+
+      console.log('Fetched Data:', data)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
 
   return (
     <>
@@ -146,7 +172,47 @@ const HistoryRentDriverPage: React.FC = () => {
         isLoading,
         content: (
           <>
-            <Table columns={columns} dataSource={dataSource} />
+            <Form
+              initialValues={{
+                startDate: dayjs() // Set the default value for the DatePicker
+              }}
+              onFinish={onFinish}
+              layout='horizontal'
+              form={form}
+            >
+              <Row gutter={16}>
+                <Col span={4}>
+                  <Form.Item label='Create Date' name='startDate'>
+                    <DatePicker format='DD-MM-YYYY' />
+                  </Form.Item>
+                </Col>
+                {/* <Col span={4}>
+                  <Form.Item label='End Date' name='endDate'>
+                    <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
+                  </Form.Item>
+                </Col> */}
+                <Col span={4}>
+                  <Form.Item name='vehicleId'>
+                    <Select placeholder='Chọn xe' style={{ width: '80%' }} allowClear>
+                      {vehicleData?.map((item: any) => (
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.id} - {item.licensePlate}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={1}>
+                  <Button htmlType='submit' type='primary'>
+                    Tìm
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+            <Table
+              columns={columns}
+              dataSource={data?.paymentRentDriverDTOs.map((item: any) => ({ ...item, key: item.id }))}
+            />
             {/* <div>
               Total : <span style={{ fontSize: 20 }}>{formatPrize(data?.total)}</span>
             </div> */}

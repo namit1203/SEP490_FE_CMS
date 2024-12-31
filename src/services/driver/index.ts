@@ -9,6 +9,12 @@ class DriverApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+  public WithoutVehicle({ id }: { id: string | null }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.DRIVER.WITHOUT_VEHICLE({ id }),
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
   public GetDriversDetails({ id }: { id: string | number | null }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.DRIVER.DRIVER_DETAILS({ id }),

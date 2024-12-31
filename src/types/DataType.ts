@@ -1,3 +1,9 @@
+export interface FilterParams {
+  startDate?: string
+  endDate?: string
+  vehicleId?: number | string
+}
+
 export interface DataType {
   key: string
   id: number

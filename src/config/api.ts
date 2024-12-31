@@ -4,9 +4,11 @@ export const APP_API_ENDPOINT = Object.freeze({
     LOGIN_DRIVER: '/loginDriver'
   },
   TRIPS: {
+    GET_TRIPS_CONVENIENT: '/api/Trip/listTripConvenience',
     GET_TRIPS: '/api/Trip',
     GET_TYPE_OF_TRIPS: '/api/TypeOfTrip',
     ADD_TRIP: '/api/Trip/addTrip',
+    ADD_TRIP_CONVENIENT: '/api/Trip/addTripConvenience',
     ADD_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/addTripDetails/${id}`,
     UPDATE_TRIPS: ({ id }: { id: string | number | null }) => `/api/Trip/updateTrip/${id}`,
     UPDATE_STATUS_TRIP: ({ id }: { id: string | number | null }) => `/api/Trip/updateStatusTrip/${id}`,
@@ -24,6 +26,13 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_TRIP_DETAIL_ID: ({ id }: { id: string | number | null }) => `/api/TripDetails/GetTripDetailData/${id}`
   },
   VEHICLES: {
+    CHECK_SEAT_AVAILABLE: ({ checkDate }: { checkDate: string | null }) => {
+      const queryParams = new URLSearchParams()
+
+      if (checkDate) queryParams.append('date', checkDate)
+
+      return `/api/Vehicle/listNumberSeatAvaliable/date${queryParams.toString() ? '?' + queryParams.toString() : ''}`
+    },
     GET_NO_TRIPS: '/api/Vehicle/VehicleNoTrip',
     GET_VEHICLES: '/api/Vehicle/listVehicle',
     GET_VEHICLES_OWNER: '/api/User/listVehicleOwner',
@@ -57,10 +66,33 @@ export const APP_API_ENDPOINT = Object.freeze({
     DRIVER_DETAILS: ({ id }: { id: string | number | null }) => `/api/Driver/${id}`,
     BLOCK_DRIVER: ({ id }: { id: string | number | null }) => `/api/Driver/banDrive/${id}`,
     UPDATE_DRIVER: ({ id }: { id: string | number | null }) => `/api/Driver/${id}`,
-    ADD_DRIVER: '/api/Driver'
+    ADD_DRIVER: '/api/Driver',
+    WITHOUT_VEHICLE: ({ id }: { id: string | null }) => {
+      const queryParams = new URLSearchParams()
+
+      if (id) queryParams.append('id', id)
+
+      return `/api/Driver/driversWithoutVehicle/vehicleId${queryParams.toString() ? '?' + queryParams.toString() : ''}`
+    }
   },
   LOSS_COST_VEHICLE: {
-    GET_COST: '/api/LossCostVehicle/totalLossVehicel',
+    GET_COST: ({
+      startDate,
+      endDate,
+      vehicleId
+    }: {
+      startDate: string
+      endDate: string
+      vehicleId: number | string
+    }) => {
+      const queryParams = new URLSearchParams()
+
+      if (startDate) queryParams.append('startDate', startDate)
+      if (endDate) queryParams.append('endDate', endDate)
+      if (vehicleId) queryParams.append('vehicleId', vehicleId.toString())
+
+      return `/api/LossCostVehicle/totalLossVehicel/startDate/endDate/vehicleId${queryParams.toString() ? '?' + queryParams.toString() : ''}`
+    },
     DELETE_COST: ({ id }: { id: string | number | null }) => `/api/LossCostVehicle/deleteLossCost/id?id=${id}`,
     UPDATE_COST: ({ id }: { id: string | number | null }) => `/api/LossCostVehicle/updateLossCost/id?id=${id}`,
     ADD_COST: '/api/LossCostVehicle/addLossCostVehicle'
@@ -90,7 +122,23 @@ export const APP_API_ENDPOINT = Object.freeze({
   },
   TICKET: {
     GET_TICKET: '/api/Ticket',
-    GET_TOTAL_TICKET: '/api/Ticket/RevenueTicket',
+    GET_TOTAL_TICKET: ({
+      startDate,
+      endDate,
+      vehicleId
+    }: {
+      startDate: string
+      endDate: string
+      vehicleId: number | string
+    }) => {
+      const queryParams = new URLSearchParams()
+
+      if (startDate) queryParams.append('startDate', startDate)
+      if (endDate) queryParams.append('endDate', endDate)
+      if (vehicleId) queryParams.append('vehicleId', vehicleId.toString())
+
+      return `/api/Ticket/RevenueTicket/startDate/endDate/vehicleId${queryParams.toString() ? '?' + queryParams.toString() : ''}`
+    },
     CREATE_FOR_RENT_CAR: '/api/Ticket/createTicketForRentCar',
     UPDATE_TICKET: ({ id }: { id: string | number | null }) => `/api/Ticket/updateTicket/${id}`,
     TICKET_DETAILS: ({ id }: { id: string | number | null }) => `/api/Ticket/ticketById/${id}`,
@@ -109,7 +157,23 @@ export const APP_API_ENDPOINT = Object.freeze({
     }) => `/api/Ticket/GetTravelCarByRequest/${id}/startDate/endDate?startDate=${startDate}&endDate=${endDate}`
   },
   REVENUE: {
-    GET_REVENUE: '/api/Revenue/getRevenue',
+    GET_REVENUE: ({
+      startDate,
+      endDate,
+      vehicleId
+    }: {
+      startDate: string
+      endDate: string
+      vehicleId: number | string
+    }) => {
+      const queryParams = new URLSearchParams()
+
+      if (startDate) queryParams.append('startDate', startDate)
+      if (endDate) queryParams.append('endDate', endDate)
+      if (vehicleId) queryParams.append('vehicleId', vehicleId.toString())
+
+      return `/api/Revenue/getRevenue/startDate/endDate/vehicleId${queryParams.toString() ? '?' + queryParams.toString() : ''}`
+    },
     EXPORT_REVENUE: '/api/Revenue/exportRevenue'
   },
   REVIEWS: {
@@ -118,6 +182,7 @@ export const APP_API_ENDPOINT = Object.freeze({
   },
   ACCOUNT: {
     GET_ACCOUNT: '/api/Account/listAccount',
+    CREATE_ACCOUNT: '/api/User/createAccount',
     GET_ROLE: '/api/Account/listRole',
     ADD_ROLE: '/api/Role/addRole',
     REGISTER_VEHICLE_OWNER: `/api/Account/registerVehicleOwner`,
@@ -127,10 +192,26 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_ACCOUNT_DETAILS: ({ id }: { id: string | number | null }) => `/api/Account/detailsAccount/${id}`,
     DELETE_ACCOUNT: ({ id }: { id: string | number | null }) => `/api/Account/deleteAccount/id?id=${id}`,
     UPDATE_ACCOUNT: ({ id, newRoleId }: { id: string | number | null; newRoleId: string | number | null }) =>
-      `/api/Account/updateAccount/userId/newRoleId?userId=${id}&newRoleId=${newRoleId}`,
+      `/api/Account/updateAccount/userId/newRoleId?userId=${id}&newRoleId=${newRoleId}`
   },
   HISTORY_RENT_VEHICLE: {
-    GET_HISTORY_RENT_VEHICLE: '/api/HistoryRentVehicle/listHistoryRentVehicle',
+    GET_HISTORY_RENT_VEHICLE: ({
+      startDate,
+      endDate,
+      vehicleId
+    }: {
+      startDate: string
+      endDate: string
+      vehicleId: number | string
+    }) => {
+      const queryParams = new URLSearchParams()
+
+      if (startDate) queryParams.append('startDate', startDate)
+      if (endDate) queryParams.append('endDate', endDate)
+      if (vehicleId) queryParams.append('vehicleId', vehicleId.toString())
+
+      return `/api/PaymentRentVehicel/getPaymentRentVehicle/startDate/endDate/vehicleId${queryParams.toString() ? '?' + queryParams.toString() : ''}`
+    },
     GET_LIST_VEHICLE_RENT: ({ id }: { id: string | number | null }) =>
       `/api/HistoryRentVehicle/GetVehicleForDriverRent/${id}`,
     GET_LIST_VEHICLE_USE_RENT: ({ date }: { date: string | null }) =>
@@ -138,7 +219,23 @@ export const APP_API_ENDPOINT = Object.freeze({
     ADD_HISTORY_VEHICLE: '/api/HistoryRentVehicle/AddHistoryVehicle'
   },
   HISTORY_RENT_DRIVER: {
-    GET_HISTORY_RENT_DRIVER: '/api/HistoryRentDriver/listHistoryRentDriver',
+    GET_HISTORY_RENT_DRIVER: ({
+      startDate,
+      endDate,
+      vehicleId
+    }: {
+      startDate: string
+      endDate: string
+      vehicleId: number | string
+    }) => {
+      const queryParams = new URLSearchParams()
+
+      if (startDate) queryParams.append('startDate', startDate)
+      if (endDate) queryParams.append('endDate', endDate)
+      if (vehicleId) queryParams.append('vehicleId', vehicleId.toString())
+
+      return `/api/HistoryRentDriver/rent-details-with-total-for-owner/startDate/endDate/vehicleId${queryParams.toString() ? '?' + queryParams.toString() : ''}`
+    },
     GET_LIST_DRIVER_RENT: '/api/HistoryRentDriver/ListDriverRent',
     ADD_HISTORY_DRIVER: '/api/HistoryRentDriver/AddHistoryDriver'
   },

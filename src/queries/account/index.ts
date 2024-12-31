@@ -64,14 +64,14 @@ export const useUpdateRoleMutation = (
 export const useAddRoleMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
   return useMutation({
     ...options,
-    mutationFn: (body: Omit<any, 'addLossCost'>) => accountApiRequest.AddRole({ body })
+    mutationFn: (body: Omit<any, 'addRole'>) => accountApiRequest.AddRole({ body })
   })
 }
 
 export const useAddVehicleOwner = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
   return useMutation({
     ...options,
-    mutationFn: (body: Omit<any, 'addLossCost'>) => accountApiRequest.AddVehicleOwner({ body })
+    mutationFn: (body: Omit<any, 'AddVehicleOwner'>) => accountApiRequest.AddVehicleOwner({ body })
   })
 }
 
@@ -89,5 +89,12 @@ export const useDeleteRoleAccountMutation = (
   return useMutation({
     ...options,
     mutationFn: ({ id }: { id: string | number | null }) => accountApiRequest.DeleteRole({ id })
+  })
+}
+
+export const useCreateAccountMutation = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
+  return useMutation({
+    ...options,
+    mutationFn: (body: Omit<any, 'addCount'>) => accountApiRequest.CreateAccount({ body })
   })
 }
