@@ -9,9 +9,24 @@ class TicketApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
-  public GetTotalTicket(): Promise<any> {
+  // public GetTotalTicket(): Promise<any> {
+  //   return apiBaseServiceInstance.Http({
+  //     path: APP_API_ENDPOINT.TICKET.GET_TOTAL_TICKET,
+  //     config: { method: METHOD_TYPE.GET, cors: false }
+  //   })
+  // }
+
+  public GetTotalTicket({
+    startDate,
+    endDate,
+    vehicleId
+  }: {
+    startDate: string
+    endDate: string
+    vehicleId: number | string
+  }): Promise<any> {
     return apiBaseServiceInstance.Http({
-      path: APP_API_ENDPOINT.TICKET.GET_TOTAL_TICKET,
+      path: APP_API_ENDPOINT.TICKET.GET_TOTAL_TICKET({ startDate, endDate, vehicleId }),
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }

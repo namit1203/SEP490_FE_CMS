@@ -1,5 +1,6 @@
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import ticketApiRequest from '@/services/ticket'
+import { FilterParams } from '@/types/DataType'
 import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 export const useQueryTicket = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
@@ -14,15 +15,37 @@ export const useQueryTicket = (options?: Omit<UseQueryOptions<any>, 'queryKey' |
     }
   })
 }
-export const useQueryTicketTotal = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+// export const useQueryTicketTotal = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+//   return useQuery<any>({
+//     ...options,
+//     queryKey: ['Ticket_total'],
+//     queryFn: async () => {
+//       const response = await ticketApiRequest.GetTotalTicket()
+//       if (response.status === HttpStatusCode.Ok) {
+//         return response.data
+//       }
+//     }
+//   })
+// }
+
+export const useQueryTicketTotal = (
+  { startDate, endDate, vehicleId }: FilterParams,
+  options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
   return useQuery<any>({
     ...options,
-    queryKey: ['Ticket_total'],
+    queryKey: ['Ticket_total', { startDate, endDate, vehicleId }],
     queryFn: async () => {
-      const response = await ticketApiRequest.GetTotalTicket()
+      const response = await ticketApiRequest.GetTotalTicket({
+        startDate: startDate || '',
+        endDate: endDate || '',
+        vehicleId: vehicleId || ''
+      })
+
       if (response.status === HttpStatusCode.Ok) {
         return response.data
       }
+      throw new Error('Failed to fetch data')
     }
   })
 }

@@ -3,9 +3,24 @@ import { APP_API_ENDPOINT } from '@/config/api'
 import { METHOD_TYPE } from '@/config/method'
 
 class RevenueApiRequest {
-  public GetListRevenue(): Promise<any> {
+  // public GetListRevenue(): Promise<any> {
+  //   return apiBaseServiceInstance.Http({
+  //     path: APP_API_ENDPOINT.REVENUE.GET_REVENUE,
+  //     config: { method: METHOD_TYPE.GET, cors: false }
+  //   })
+  // }
+
+  public GetListRevenue({
+    startDate,
+    endDate,
+    vehicleId
+  }: {
+    startDate: string
+    endDate: string
+    vehicleId: number | string
+  }): Promise<any> {
     return apiBaseServiceInstance.Http({
-      path: APP_API_ENDPOINT.REVENUE.GET_REVENUE,
+      path: APP_API_ENDPOINT.REVENUE.GET_REVENUE({ startDate, endDate, vehicleId }),
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }

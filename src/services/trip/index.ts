@@ -9,6 +9,12 @@ class TripsApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+  public GetTripsConvenience(): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TRIPS.GET_TRIPS_CONVENIENT,
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
   public GetTripDetail({ id }: { id: string | number | null }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TRIPS.GET_TRIP_DETAIL({ id }),
@@ -25,6 +31,13 @@ class TripsApiRequest {
   public AddTrip({ body }: { body: any }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TRIPS.ADD_TRIP,
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
+
+  public AddTripConvenience({ body }: { body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TRIPS.ADD_TRIP_CONVENIENT,
       config: { method: METHOD_TYPE.POST, body, cors: false }
     })
   }
