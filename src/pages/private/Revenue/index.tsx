@@ -153,17 +153,17 @@ const RevenuePage: React.FC = () => {
           <>
             <Form onFinish={onFinish} layout='horizontal' form={form}>
               <Row gutter={16}>
-                <Col span={4}>
+                <Col span={6}>
                   <Form.Item label='Start Date' name='startDate'>
                     <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
                   </Form.Item>
                 </Col>
-                <Col span={4}>
+                <Col span={6}>
                   <Form.Item label='End Date' name='endDate'>
                     <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
                   </Form.Item>
                 </Col>
-                <Col span={3}>
+                <Col span={4}>
                   <Form.Item name='vehicleId'>
                     <Select placeholder='Chọn xe' style={{ width: '80%' }} allowClear>
                       {vehicleData?.map((item: any) => (
@@ -174,7 +174,7 @@ const RevenuePage: React.FC = () => {
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col span={1}>
+                <Col span={2}>
                   <Button htmlType='submit' type='primary'>
                     Tìm
                   </Button>

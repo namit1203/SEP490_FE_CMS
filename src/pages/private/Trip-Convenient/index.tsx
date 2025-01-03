@@ -1,16 +1,18 @@
 import { formatPrize } from '@/helpers'
 import useColumnSearch from '@/hooks/useColumnSearch'
-import { useQueryTripConvenience } from '@/queries/trip'
+import { useQueryTripConvenience, useUpdateStatusTripConvenientMutation } from '@/queries/trip'
 import { DataType } from '@/types/DataType'
 import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { PlusOutlined } from '@ant-design/icons'
-import { Button, Popconfirm, Space, Table, TableProps } from 'antd'
+import { Button, message, Popconfirm, Space, Table, TableProps } from 'antd'
+import { HttpStatusCode } from 'axios'
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const TripConvenientPage = () => {
   const { data, refetch, isLoading } = useQueryTripConvenience()
+  const updateStatusMutation = useUpdateStatusTripConvenientMutation()
 
   // Transform data source to ensure each record has a `key`
   const dataSource = data?.map((item: any) => ({
@@ -75,18 +77,32 @@ const TripConvenientPage = () => {
           </Link>
           <Popconfirm
             title='Are you sure to change status?'
-            // onConfirm={() => handleChangeStatus(record.key)}
+            onConfirm={() => handleChangeStatus(record.key)}
             okText='Yes'
             cancelText='No'
           >
             <Button type='primary' danger>
-              Delete
+              Change status
             </Button>
           </Popconfirm>
         </Space>
       )
     }
   ]
+
+  const handleChangeStatus = async (id: string) => {
+    try {
+      const response = await updateStatusMutation.mutateAsync({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        message.success('Update status successfully')
+        refetch()
+      } else {
+        message.error('Update status failed')
+      }
+    } catch (error) {
+      console.log('Error', error)
+    }
+  }
 
   return (
     <>
