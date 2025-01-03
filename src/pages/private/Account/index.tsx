@@ -3,7 +3,7 @@ import { useDeleteAccountMutation, useQueryAccount } from '@/queries/account'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { PlusOutlined } from '@ant-design/icons'
 import { Avatar, Button, message, Popconfirm, Space, Table, TableProps } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 interface DataType {
@@ -23,6 +23,10 @@ const AccountPage: React.FC = () => {
   const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)
 
   const deleteMutation = useDeleteAccountMutation()
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   const handleDeleteAccount = async (id: number) => {
     try {

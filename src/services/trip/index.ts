@@ -21,6 +21,14 @@ class TripsApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+
+  public GetTripConvenientDetail({ id }: { id: string | number | null }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TRIPS.GET_TRIP_CONVENIENT_DETAIL({ id }),
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
+
   public GetTypeOfTrips(): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TRIPS.GET_TYPE_OF_TRIPS,
@@ -48,6 +56,12 @@ class TripsApiRequest {
       config: { method: METHOD_TYPE.POST, body, cors: false }
     })
   }
+  public UpdateTripConvenient({ id, body }: { id: string | number | null; body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TRIPS.UPDATE_TRIPS_CONVENIENT({ id }),
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
 
   public ImportTripExcel({ id, body }: { id: string | number | null; body: any }): Promise<any> {
     return apiBaseServiceInstance.Http({
@@ -66,6 +80,12 @@ class TripsApiRequest {
   public UpdateStatusTrip({ id }: { id: string | number | null }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TRIPS.UPDATE_STATUS_TRIP({ id }),
+      config: { method: METHOD_TYPE.POST, cors: false }
+    })
+  }
+  public UpdateStatusTripConvenient({ id }: { id: string | number | null }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TRIPS.UPDATE_STATUS_TRIP_CONVENIENT({ id }),
       config: { method: METHOD_TYPE.POST, cors: false }
     })
   }

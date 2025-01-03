@@ -44,6 +44,22 @@ export const useQueryTripDetail = (
   })
 }
 
+export const useQueryTripConvenientDetail = (
+  { id }: { id: string | number | null },
+  options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['trip_convenient_detail', id],
+    queryFn: async () => {
+      const response = await tripsApiRequest.GetTripConvenientDetail({ id })
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
+      }
+    }
+  })
+}
+
 export const useQueryTypeOfTrips = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
   return useQuery<any>({
     ...options,
@@ -85,6 +101,20 @@ export const useUpdateTripMutation = (
   })
 }
 
+export const useUpdateTripConvenientMutation = (
+  options?: UseMutationOptions<
+    any, // Response type
+    unknown, // Error type
+    { id: string | number; body: any }, // Mutation variables type
+    unknown // Context type
+  >
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id, body }: { id: string | number; body: any }) => tripsApiRequest.UpdateTripConvenient({ id, body })
+  })
+}
+
 export const useImportExcel = (options?: UseMutationOptions<any, unknown, any, unknown>) => {
   return useMutation({
     ...options,
@@ -107,5 +137,14 @@ export const useUpdateStatusTripMutation = (
   return useMutation({
     ...options,
     mutationFn: ({ id }: { id: string | number | null }) => tripsApiRequest.UpdateStatusTrip({ id })
+  })
+}
+
+export const useUpdateStatusTripConvenientMutation = (
+  options?: UseMutationOptions<any, unknown, { id: string | number | null }, unknown>
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ id }: { id: string | number | null }) => tripsApiRequest.UpdateStatusTripConvenient({ id })
   })
 }

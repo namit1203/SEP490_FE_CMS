@@ -74,7 +74,7 @@ const CheckSeatPage = () => {
     try {
       const formattedValues = {
         ...values,
-        checkDate: values.checkDate === null ? '' : dayjs(values.checkDate).format('YYYY-MM-DD')
+        checkDate: dayjs(values.checkDate).format('YYYY-MM-DD')
       }
       // Update the query parameters
       setQueryParams(formattedValues)
@@ -97,7 +97,7 @@ const CheckSeatPage = () => {
             <Form onFinish={onFinish} layout='horizontal' form={form}>
               <Row gutter={16}>
                 <Col span={4}>
-                  <Form.Item label='Date' name='checkDate'>
+                  <Form.Item rules={[{ required: true, message: 'Vui lòng chọn ngày!' }]} label='Date' name='checkDate'>
                     <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
                 </Col>

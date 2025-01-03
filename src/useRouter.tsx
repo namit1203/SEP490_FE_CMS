@@ -36,6 +36,7 @@ import EditTicketPage from './pages/private/Ticket/edit'
 import TotalTicketPage from './pages/private/Total-Ticket'
 import TripConvenientPage from './pages/private/Trip-Convenient'
 import AddTripConvenientPage from './pages/private/Trip-Convenient/add'
+import EditTripConvenientPage from './pages/private/Trip-Convenient/edit'
 import ListTripDetailPage from './pages/private/trip-list-detail/list-trip-detail'
 import ListTripDetailAddPage from './pages/private/trip-list-detail/list-trip-detail-add'
 import ListTripDetailEditPage from './pages/private/trip-list-detail/list-trip-detail-edit'
@@ -52,6 +53,7 @@ import EditVehiclePage from './pages/private/Vehicles/edit'
 import ExcelVehiclePage from './pages/private/Vehicles/excel'
 import VehicleUsingPage from './pages/private/VehicleUsing'
 import LoginPage from './pages/public/login'
+
 // import AddVehicleOwnerPage from './pages/private/Vehicle-Owner/add'
 // import VehicleOwnerPage from './pages/private/Vehicle-Owner'
 // import EditVehicleOwnerPage from './pages/private/Vehicle-Owner/edit'
@@ -59,6 +61,7 @@ import LoginPage from './pages/public/login'
 const staffRoutes = [
   { path: '/trips-convenient', component: <TripConvenientPage />, allowedRoles: [RoleType.STAFF] },
   { path: '/trips-convenient/add', component: <AddTripConvenientPage />, allowedRoles: [RoleType.STAFF] },
+  { path: '/trips-convenient/edit', component: <EditTripConvenientPage />, allowedRoles: [RoleType.STAFF] },
   { path: '/trips', component: <TripsPages />, allowedRoles: [RoleType.STAFF] },
   { path: '/trips/add', component: <AddTripPage />, allowedRoles: [RoleType.STAFF] },
   { path: '/trips/excel', component: <ExcelTripPage />, allowedRoles: [RoleType.STAFF] },

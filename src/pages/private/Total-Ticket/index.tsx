@@ -140,8 +140,8 @@ const TotalTicketPage: React.FC = () => {
     try {
       const formattedValues = {
         ...values,
-        startDate: values.startDate === null ? '' : dayjs(values.startDate).format('YYYY-MM-DD'),
-        endDate: values.endDate === null ? '' : dayjs(values.endDate).format('YYYY-MM-DD')
+        startDate: dayjs(values.startDate).format('YYYY-MM-DD'),
+        endDate: dayjs(values.endDate).format('YYYY-MM-DD')
       }
 
       // Update the query parameters
@@ -163,19 +163,27 @@ const TotalTicketPage: React.FC = () => {
         content: (
           <>
             <Form onFinish={onFinish} layout='horizontal' form={form}>
-              <Row gutter={16}>
-                <Col span={4}>
-                  <Form.Item label='Start Date' name='startDate'>
-                    <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
+              <Row>
+                <Col span={6}>
+                  <Form.Item
+                    label='Start Date'
+                    name='startDate'
+                    rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}
+                  >
+                    <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
                 </Col>
-                <Col span={4}>
-                  <Form.Item label='End Date' name='endDate'>
-                    <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
+                <Col span={6}>
+                  <Form.Item
+                    label='End Date'
+                    name='endDate'
+                    rules={[{ required: true, message: 'Vui lòng chọn ngày kết thúc!' }]}
+                  >
+                    <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
                 </Col>
-                <Col span={3}>
-                  <Form.Item name='vehicleId'>
+                <Col span={5}>
+                  <Form.Item name='vehicleId' rules={[{ required: true, message: 'Vui lòng chọn xe!' }]}>
                     <Select placeholder='Chọn xe' style={{ width: '80%' }} allowClear>
                       {vehicleData?.map((item: any) => (
                         <Select.Option key={item.id} value={item.id}>
@@ -185,13 +193,14 @@ const TotalTicketPage: React.FC = () => {
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col span={1}>
+                <Col>
                   <Button htmlType='submit' type='primary'>
                     Tìm
                   </Button>
                 </Col>
               </Row>
             </Form>
+
             <Table columns={columns} dataSource={dataSource} />
             <div>
               Total : <span style={{ fontSize: 20 }}>{data?.total ? formatPrize(data.total) : '(Không)'}</span>

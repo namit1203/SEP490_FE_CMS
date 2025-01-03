@@ -153,28 +153,36 @@ const FixedCostPage: React.FC = () => {
           <>
             <Form onFinish={onFinish} layout='horizontal' form={form}>
               <Row gutter={16}>
-                <Col span={4}>
-                  <Form.Item label='Start Date' name='startDate'>
-                    <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
+                <Col span={6}>
+                  <Form.Item
+                    label='Start Date'
+                    name='startDate'
+                    rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}
+                  >
+                    <DatePicker format='DD-MM-YYYY' />
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item
+                    label='End Date'
+                    name='endDate'
+                    rules={[{ required: true, message: 'Vui lòng chọn ngày kết thúc!' }]}
+                  >
+                    <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
                 </Col>
                 <Col span={4}>
-                  <Form.Item label='End Date' name='endDate'>
-                    <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
-                  </Form.Item>
-                </Col>
-                <Col span={3}>
-                  <Form.Item name='vehicleId'>
+                  <Form.Item name='vehicleId' rules={[{ required: true, message: 'Vui lòng chọn xe!' }]}>
                     <Select placeholder='Chọn xe' style={{ width: '80%' }} allowClear>
                       {vehicleData?.map((item: any) => (
                         <Select.Option key={item.id} value={item.id}>
-                          {item.licensePlate}
+                          {item.id} - {item.licensePlate}
                         </Select.Option>
                       ))}
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col span={1}>
+                <Col span={2}>
                   <Button htmlType='submit' type='primary'>
                     Tìm
                   </Button>

@@ -11,8 +11,14 @@ export const APP_API_ENDPOINT = Object.freeze({
     ADD_TRIP_CONVENIENT: '/api/Trip/addTripConvenience',
     ADD_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/TripDetails/addTripDetails/${id}`,
     UPDATE_TRIPS: ({ id }: { id: string | number | null }) => `/api/Trip/updateTrip/${id}`,
+    UPDATE_TRIPS_CONVENIENT: ({ id }: { id: string | number | null }) =>
+      `/api/Trip/updateTripConvenience/id?tripId=${id}`,
     UPDATE_STATUS_TRIP: ({ id }: { id: string | number | null }) => `/api/Trip/updateStatusTrip/${id}`,
+    UPDATE_STATUS_TRIP_CONVENIENT: ({ id }: { id: string | number | null }) =>
+      `/api/Trip/updateStatusConvenience/id?tripId=${id}`,
     GET_TRIP_DETAIL: ({ id }: { id: string | number | null }) => `/api/Trip/getListTripById/${id}`,
+    GET_TRIP_CONVENIENT_DETAIL: ({ id }: { id: string | number | null }) =>
+      `/api/Trip/getTripConvenienceById/id?id=${id}`,
     IMPORT_TRIPS: ({ typeOfTrip }: { typeOfTrip: string | number | null }) =>
       `/api/Trip/importTrip/typeOfTrip?typeOfTrip=${typeOfTrip}`,
     CONFIRM_IMPORT_TRIPS: ({ typeOfTrip }: { typeOfTrip: string | number | null }) =>
