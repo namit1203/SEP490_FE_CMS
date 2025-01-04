@@ -49,6 +49,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             label: <Link to='/'>Dashboard</Link> // Link added
           },
           {
+            key: 'create-bus-tickets',
+            icon: <TruckOutlined />,
+            label: <Link to='/create-bus-tickets'>Create Bus Tickets</Link> // Link added
+          },
+          {
             key: 'trips',
             icon: <TruckOutlined />,
             label: <Link to='/trips'>Trips</Link> // Link added

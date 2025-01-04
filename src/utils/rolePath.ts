@@ -21,6 +21,7 @@ export const allowStaffRoute = [
 ]
 
 export const allowDriverRoute = [
+  'create-bus-tickets',
   'vehicles-using',
   'history-rent-vehicle',
   'request',

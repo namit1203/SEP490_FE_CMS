@@ -21,6 +21,18 @@ class VehicleApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
+  public GetStartPointVehicles(): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.VEHICLES.GET_START_POINT,
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
+  public GetEndPointVehicles({ startPoint }: { startPoint: string | number | null }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.VEHICLES.GET_END_POINT({ startPoint }),
+      config: { method: METHOD_TYPE.GET, cors: false }
+    })
+  }
   public GetTypeOfVehicles(): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.VEHICLES.TYPE_OF_VEHICLES,
