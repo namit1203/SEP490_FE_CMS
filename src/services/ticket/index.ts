@@ -68,10 +68,28 @@ class TicketApiRequest {
       config: { method: METHOD_TYPE.POST, cors: false }
     })
   }
+  public CreateTicketByBus({ body }: { body: any }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TICKET.CREATE_TICKET_BY_BUS,
+      config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
   public UpdateTicket({ id, body }: { id: string | number | null; body: any }): Promise<any> {
     return apiBaseServiceInstance.Http({
       path: APP_API_ENDPOINT.TICKET.UPDATE_TICKET({ id }),
       config: { method: METHOD_TYPE.POST, body, cors: false }
+    })
+  }
+  public GetCheckPrice({
+    pointStart,
+    pointEnd
+  }: {
+    pointStart: string | number | null
+    pointEnd: string | number | null
+  }): Promise<any> {
+    return apiBaseServiceInstance.Http({
+      path: APP_API_ENDPOINT.TICKET.CHECK_PRICE_BY_CREATE_TICKET({ pointStart, pointEnd }),
+      config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
 }

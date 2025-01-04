@@ -155,3 +155,32 @@ export const useExportVehiclesFromExcelMutation = () => {
     mutationFn: () => vehicleApiRequest.ExportVehicleExcel()
   })
 }
+
+export const useQueryGetStartPointVehicles = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['get_start_point_vehicles'],
+    queryFn: async () => {
+      const response = await vehicleApiRequest.GetStartPointVehicles()
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
+      }
+    }
+  })
+}
+
+export const useQueryGetEndPointVehicles = (
+  { startPoint }: { startPoint: string | number | null },
+  options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+  return useQuery<any>({
+    ...options,
+    queryKey: ['get_end_point_vehicles', startPoint],
+    queryFn: async () => {
+      const response = await vehicleApiRequest.GetEndPointVehicles({ startPoint })
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
+      }
+    }
+  })
+}

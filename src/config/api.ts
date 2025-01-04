@@ -42,6 +42,9 @@ export const APP_API_ENDPOINT = Object.freeze({
     GET_NO_TRIPS: '/api/Vehicle/VehicleNoTrip',
     GET_VEHICLES: '/api/Vehicle/listVehicle',
     GET_VEHICLES_OWNER: '/api/User/listVehicleOwner',
+    GET_START_POINT: `/api/Vehicle/getStartPointTripFromVehicle/vehicleId`,
+    GET_END_POINT: ({ startPoint }: { startPoint: string | number | null }) =>
+      `/api/Vehicle/getEndPointTripFromVehicle/startPoint/vehicleId?startPoint=${startPoint}`,
     DELETE_VEHICLES: ({ id }: { id: string | number | null }) => `/api/Vehicle/deleteVehicleByStatus/${id}`,
     DELETE_VEHICLES_OWNER: ({ id }: { id: string | number | null }) => `/api/Account/deleteVehicleOwner/${id}`,
     ADD_VEHICLES_STAFF: ({ id, isApprove }: { id: string | number | null; isApprove: boolean }) =>
@@ -128,6 +131,7 @@ export const APP_API_ENDPOINT = Object.freeze({
   },
   TICKET: {
     GET_TICKET: '/api/Ticket',
+    CREATE_TICKET_BY_BUS: '/api/Ticket/createTicketFromDriver/vehicleId/numberTicket',
     GET_TOTAL_TICKET: ({
       startDate,
       endDate,
@@ -160,7 +164,14 @@ export const APP_API_ENDPOINT = Object.freeze({
       id: string | number | null
       startDate: string | number | null
       endDate: string | number | null
-    }) => `/api/Ticket/GetTravelCarByRequest/${id}/startDate/endDate?startDate=${startDate}&endDate=${endDate}`
+    }) => `/api/Ticket/GetTravelCarByRequest/${id}/startDate/endDate?startDate=${startDate}&endDate=${endDate}`,
+    CHECK_PRICE_BY_CREATE_TICKET: ({
+      pointStart,
+      pointEnd
+    }: {
+      pointStart: string | number | null
+      pointEnd: string | number | null
+    }) => `/api/Ticket/getPriceFromPoint/pointStart/pointEnd/vehicleId?pointStart=${pointStart}&pointEnd=${pointEnd}`
   },
   REVENUE: {
     GET_REVENUE: ({

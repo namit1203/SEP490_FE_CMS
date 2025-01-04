@@ -9,6 +9,7 @@ import CheckSeatPage from './pages/private/CheckSeat'
 import CostTypePage from './pages/private/CostType'
 import AddCostTypePage from './pages/private/CostType/add'
 import EditCostTypePage from './pages/private/CostType/edit'
+import CreateBusTickets from './pages/private/Create-Bus-Tickets'
 import DriverPage from './pages/private/Driver'
 import AddDriverPage from './pages/private/Driver/add'
 import EditDriverPage from './pages/private/Driver/edit'
@@ -108,6 +109,11 @@ const staffRoutes = [
     path: '/check-seat',
     component: <CheckSeatPage />,
     allowedRoles: [RoleType.STAFF, RoleType.DRIVER]
+  },
+  {
+    path: '/create-bus-tickets',
+    component: <CreateBusTickets />,
+    allowedRoles: [RoleType.DRIVER]
   },
   { path: '/promotion', component: <PromotionPage />, allowedRoles: [RoleType.STAFF] },
   {

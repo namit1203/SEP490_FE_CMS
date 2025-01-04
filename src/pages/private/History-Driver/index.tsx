@@ -197,7 +197,7 @@ const HistoryRentDriverPage: React.FC = () => {
                     <Select placeholder='Chọn xe' style={{ width: '80%' }} allowClear>
                       {vehicleData?.map((item: any) => (
                         <Select.Option key={item.id} value={item.id}>
-                          {item.id} - {item.licensePlate}
+                          {item.licensePlate}
                         </Select.Option>
                       ))}
                     </Select>
