@@ -45,7 +45,7 @@ const EditCostTypePage: React.FC = () => {
         refetch()
         navigate('/cost-type')
       } else {
-        message.error('Update failed')
+        message.error(`${response.message}. ${response.details}`)
       }
     } finally {
       setIsLoading(false)

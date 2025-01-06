@@ -25,9 +25,8 @@ export const allowDriverRoute = [
   'vehicles-using',
   'history-rent-vehicle',
   'request',
-  'ticket',
   'ticket-not-paid',
-  'check-seat'
+
 ]
 
 export const allowVehicleOwnerRoute = [

@@ -1,4 +1,4 @@
-import logo from '@/assets/logo.png'
+import logo from '@/assets/logo.jpg'
 import { RoleType } from '@/enums/enum'
 import { useLocalStorage } from '@/utils/localStorage/localStorageService'
 import { allowAdminRoute, allowDriverRoute, allowStaffRoute, allowVehicleOwnerRoute } from '@/utils/rolePath'

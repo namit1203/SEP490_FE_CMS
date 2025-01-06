@@ -44,7 +44,8 @@ export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
   {
     name: 'description',
     label: 'Mô tả',
-    component: <TextArea />
+    component: <TextArea />,
+    rules: [{ required: true, message: 'Vui lòng nhập mô tả!' }]
   },
   {
     name: 'status',
