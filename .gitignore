@@ -25,5 +25,3 @@ tsconfig.node.tsbuildinfo
 *.njsproj
 *.sln
 *.sw?
-
-.codegpt

@@ -25,10 +25,10 @@ const RentDriverForm = ({ data, account }: { data: DataTypeRequest | undefined; 
   const [isCheck, setIsCheck] = useState<boolean>(false)
 
   const addMutation = useAddHistoryDriverMutation()
-
   const { data: driverData } = useQueryDriverRent({
-    enabled: data?.typeRequestId === ActionType.RENT_DRIVER
-  })
+    id: data?.requestId ?? null
+});
+
 
   const { data: requestData, refetch } = useQueryRequest()
 

@@ -58,19 +58,22 @@ export const useQueryHistoryRentDriver = (
     }
   })
 }
-export const useQueryDriverRent = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+
+export const useQueryDriverRent = (
+  { id }: { id: string | number | null },
+  options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
   return useQuery<any>({
     ...options,
-    queryKey: ['driver_rent'],
+    queryKey: ['vehicle_rent', id],
     queryFn: async () => {
-      const response = await historyApiRequest.GetListDriverRent()
+      const response = await historyApiRequest.GetListDriverRent({ id })
       if (response.status === HttpStatusCode.Ok) {
         return response.data
       }
     }
   })
 }
-
 export const useQueryVehicleRent = (
   { id }: { id: string | number | null },
   options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>

@@ -32,7 +32,11 @@ const EditFixedCostPage: React.FC = () => {
 
   const navigate = useNavigate()
 
-  const { data, refetch } = useQueryLossCost()
+  const { data, refetch } = useQueryLossCost({
+    startDate: '',
+    endDate: '',
+    vehicleId: ''
+  })
 
   const { data: vehicleData } = useQueryVehicles()
 

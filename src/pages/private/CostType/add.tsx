@@ -28,7 +28,7 @@ const AddCostTypePage: React.FC = () => {
         refetch()
         navigate('/cost-type')
       } else {
-        message.error('Add failed')
+        message.error(`${response.message}. ${response.details}`)
       }
     } catch (error) {
       console.error('Error values:', error)

@@ -45,9 +45,9 @@ class HistoryApiRequest {
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }
-  public GetListDriverRent(): Promise<any> {
+  public GetListDriverRent({ id }: { id: string | number | null }): Promise<any> {
     return apiBaseServiceInstance.Http({
-      path: APP_API_ENDPOINT.HISTORY_RENT_DRIVER.GET_LIST_DRIVER_RENT,
+      path: APP_API_ENDPOINT.HISTORY_RENT_DRIVER.GET_LIST_DRIVER_RENT({ id }),
       config: { method: METHOD_TYPE.GET, cors: false }
     })
   }

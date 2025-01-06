@@ -253,7 +253,9 @@ export const APP_API_ENDPOINT = Object.freeze({
 
       return `/api/HistoryRentDriver/rent-details-with-total-for-owner/startDate/endDate/vehicleId${queryParams.toString() ? '?' + queryParams.toString() : ''}`
     },
-    GET_LIST_DRIVER_RENT: '/api/HistoryRentDriver/ListDriverRent',
+    GET_LIST_DRIVER_RENT: ({ id }: { id: string | number | null }) =>
+      `/api/HistoryRentDriver/ListDriverRent/requestDetails?requestDetails=${id}`,
+  
     ADD_HISTORY_DRIVER: '/api/HistoryRentDriver/AddHistoryDriver'
   },
   USER_PROFILE: {

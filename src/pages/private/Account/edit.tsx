@@ -1,4 +1,4 @@
-import { useQueryAccount, useQueryAccountDetails, useQueryRole, useUpdateRoleAccountMutation } from '@/queries/account'
+import { useQueryAccountDetails, useQueryRole, useUpdateRoleAccountMutation } from '@/queries/account'
 import { DataTypeUser } from '@/types/DataType'
 import { Button, Col, Form, message, Row, Select, Table, TableColumnsType } from 'antd'
 import { HttpStatusCode } from 'axios'
@@ -20,9 +20,7 @@ const EditAccountPage: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const { data } = useQueryAccountDetails({ id: route_id })
-
-  const { refetch } = useQueryAccount()
+  const { data, refetch } = useQueryAccountDetails({ id: route_id })
 
   const { data: roleData } = useQueryRole()
 
@@ -33,6 +31,10 @@ const EditAccountPage: React.FC = () => {
   }
 
   const [form] = Form.useForm()
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   useEffect(() => {
     if (data) {
@@ -86,8 +88,7 @@ const EditAccountPage: React.FC = () => {
     try {
       const response = await updateMutation.mutateAsync({ id: route_id, newRoleId: values.role })
       if (response.status === HttpStatusCode.Ok) {
-        message.success('Update successfully')
-        refetch()
+        message.success(response?.data.message)
         navigate('/account')
       } else {
         message.error('Update failed')
