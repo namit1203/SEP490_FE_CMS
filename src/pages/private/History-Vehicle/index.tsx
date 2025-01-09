@@ -6,21 +6,69 @@ import { handlingTsUndefined } from '@/utils/handlingTsUndefined'
 import renderWithLoading from '@/utils/renderWithLoading'
 import { Button, Col, DatePicker, Form, Row, Select, Table, TableProps } from 'antd'
 import dayjs from 'dayjs'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
 interface DataType {
   key: string
-  vehiclevehiclePrice: number
+  licensePlate: string
   driverName: string
-  timeEnd: number
-  vehicelId: number
   price: number
   vehicleOwner: string
-  timeStart: string // ISO string for date-time
-  endStart: string // ISO string for date-time
   createdAt: string // ISO string for date-time
 }
+const checkLoginToken = () => {
+  // Constants for storage keys to avoid typos and enable easy updates
+  const STORAGE_KEYS = {
+    TOKEN: 'token',
+    PROFILE: 'profile'
+  };
 
+  // Helper function to clear auth data
+  const clearAuthData = () => {
+    localStorage.removeItem(STORAGE_KEYS.TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.PROFILE);
+  };
+
+  try {
+    const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+    
+    if (!token) {
+      return null;
+    }
+
+    // Validate token format
+    const tokenParts = token.split('.');
+    if (tokenParts.length !== 3) {
+      throw new Error('Invalid token format');
+    }
+
+    // Decode and parse token payload
+    const payload = tokenParts[1];
+    const tokenData = JSON.parse(atob(payload));
+
+    // Add buffer time (e.g., 60 seconds) to handle slight time differences
+    const EXPIRATION_BUFFER = 60 * 1000; // 60 seconds in milliseconds
+    const currentTime = Date.now();
+    const expirationTime = tokenData.exp * 1000;
+
+    if (!tokenData.exp) {
+      throw new Error('Token missing expiration');
+    }
+
+    if (expirationTime - EXPIRATION_BUFFER < currentTime) {
+      throw new Error('Token expired');
+    }
+
+    return token;
+
+  } catch (error) {
+    // Log error for debugging but don't expose details to client
+    
+    clearAuthData();
+    return null;
+  }
+};
 const HistoryRentVehiclePage: React.FC = () => {
   const [form] = Form.useForm()
 
@@ -33,14 +81,46 @@ const HistoryRentVehiclePage: React.FC = () => {
   const { data, isLoading, refetch } = useQueryHistoryRentVehicle(queryParams)
   const { data: vehicleData } = useQueryVehicles()
 
+  const [tableData, setTableData] = useState<DataType[]>([])
+
+  useEffect(() => {
+    const fetchLicensePlates = async () => {
+      if (data?.paymentRentVehicelDTOs) {
+        const updatedData = await Promise.all(
+          data.paymentRentVehicelDTOs.map(async (item: any) => {
+            try {
+              const response = await axios.get(
+                `https://boring-wiles.202-92-7-204.plesk.page/api/Vehicle/getInforVehicle/${item.vehicelId}`,
+                {
+                  headers: {
+                    Authorization: "Bearer " + checkLoginToken(),
+                  },
+                }
+              )
+              return {
+                ...item,
+                licensePlate: response.data.licensePlate,
+                key: item.vehicelId
+              }
+            } catch (error) {
+              console.error('Error fetching license plate:', error)
+              return { ...item, licensePlate: 'N/A', key: item.vehicelId }
+            }
+          })
+        )
+        setTableData(updatedData)
+      }
+    }
+    fetchLicensePlates()
+  }, [data])
+
   const columns: TableProps<DataType>['columns'] = [
     {
-      title: 'Vehicle Id',
-      dataIndex: 'vehicelId',
-      key: 'vehicelId',
+      title: 'License Plate',
+      dataIndex: 'licensePlate',
+      key: 'licensePlate',
       align: 'center',
-      ...useColumnSearch().getColumnSearchProps('vehicelId'),
-      sorter: (a, b) => handlingTsUndefined(a.vehicelId) - handlingTsUndefined(b.vehicelId),
+      ...useColumnSearch().getColumnSearchProps('licensePlate'),
       width: '20%'
     },
     {
@@ -78,14 +158,6 @@ const HistoryRentVehiclePage: React.FC = () => {
       render: (text) => <span>{formatTime(text)}</span>,
       width: '20%'
     }
-    // {
-    //   title: 'Thời gian kết thúc',
-    //   dataIndex: 'endStart',
-    //   key: 'endStart',
-    //   align: 'center',
-    //   sorter: (a, b) => new Date(a.endStart).getTime() - new Date(b.endStart).getTime(),
-    //   render: (text) => <span>{formatTime(text)}</span>
-    // }
   ]
 
   const onFinish = async (values: any) => {
@@ -94,16 +166,10 @@ const HistoryRentVehiclePage: React.FC = () => {
         ...values,
         startDate: values.startDate === null ? '' : dayjs(values.startDate).format('YYYY-MM-DD'),
         endDate: values.startDate === null ? '' : dayjs(values.endDate).format('YYYY-MM-DD')
-        // endDate: dayjs(values.endDate).format('YYYY-MM-DD')
       }
 
-      // Update the query parameters
       setQueryParams(formattedValues)
-
-      // Refetch the query with updated parameters
       await refetch()
-
-      console.log('Fetched Data:', data)
     } catch (error) {
       console.error('Error fetching data:', error)
     }
@@ -117,7 +183,7 @@ const HistoryRentVehiclePage: React.FC = () => {
           <>
             <Form
               initialValues={{
-                startDate: dayjs() // Set the default value for the DatePicker
+                startDate: dayjs()
               }}
               onFinish={onFinish}
               layout='horizontal'
@@ -152,10 +218,7 @@ const HistoryRentVehiclePage: React.FC = () => {
                 </Col>
               </Row>
             </Form>
-            <Table
-              dataSource={data?.paymentRentVehicelDTOs.map((item: any) => ({ ...item, key: item.vehicelId }))}
-              columns={columns}
-            />
+            <Table dataSource={tableData} columns={columns} />
             <p style={{ marginTop: 18 }}>Total: {formatPrize(data?.total)}</p>
           </>
         )

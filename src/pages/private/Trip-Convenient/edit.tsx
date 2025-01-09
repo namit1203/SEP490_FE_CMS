@@ -1,4 +1,5 @@
 import { useQueryTripConvenientDetail, useUpdateTripConvenientMutation } from '@/queries/trip'
+import { requiredDot } from '@/utils/fieldModalTable'
 import { Button, Col, DatePicker, Form, Input, InputNumber, message, Row, Switch, Table, TableColumnsType } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { HttpStatusCode } from 'axios'
@@ -8,21 +9,17 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 interface TableData {
   key: string
-  label: string
+  label: React.ReactNode
   value: JSX.Element | string | undefined
 }
 
 const EditTripConvenientPage: React.FC = () => {
   const [searchParams] = useSearchParams()
-
   const navigate = useNavigate()
-
   const route_id: string | number | null = searchParams.get('id')
-
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { data, refetch } = useQueryTripConvenientDetail({ id: route_id })
-
   const updateMutation = useUpdateTripConvenientMutation()
 
   if (route_id === null) {
@@ -35,11 +32,8 @@ const EditTripConvenientPage: React.FC = () => {
     if (data) {
       const updatedFormData = {
         ...data,
-        startTime: data.startTime
-          ? dayjs(data.startTime, 'HH:mm:ss') // Parse time-only format
-          : null
+        startTime: data.startTime ? dayjs(data.startTime, 'HH:mm:ss') : null
       }
-
       form.setFieldsValue(updatedFormData)
     }
   }, [data, form, route_id])
@@ -47,7 +41,7 @@ const EditTripConvenientPage: React.FC = () => {
   const tableData: TableData[] = [
     {
       key: 'name',
-      label: 'Tên chuyến đi',
+      label: requiredDot('Tên chuyến đi'),
       value: (
         <Form.Item name='name' rules={[{ required: true, message: 'Vui lòng nhập tên chuyến đi!' }]}>
           <Input placeholder='Nhập tên chuyến đi' style={{ width: '30%' }} />
@@ -56,20 +50,16 @@ const EditTripConvenientPage: React.FC = () => {
     },
     {
       key: 'startTime',
-      label: 'Giờ khởi hành',
+      label: requiredDot('Giờ khởi hành'),
       value: (
         <Form.Item name='startTime' rules={[{ required: true, message: 'Vui lòng nhập giờ khởi hành!' }]}>
-          <DatePicker
-            showTime={{ format: 'HH:mm:ss' }}
-            format='HH:mm:ss'
-            picker='time' // Use the 'time' picker to show only the time
-          />
+          <DatePicker showTime={{ format: 'HH:mm:ss' }} format='HH:mm:ss' picker='time' />
         </Form.Item>
       )
     },
     {
       key: 'description',
-      label: 'Mô tả',
+      label: requiredDot('Mô tả'),
       value: (
         <Form.Item name='description' rules={[{ required: true, message: 'Vui lòng nhập mô tả!' }]}>
           <TextArea placeholder='Nhập Mô tả' style={{ width: '30%' }} rows={2} />
@@ -78,7 +68,7 @@ const EditTripConvenientPage: React.FC = () => {
     },
     {
       key: 'price',
-      label: 'Giá',
+      label: requiredDot('Giá'),
       value: (
         <Form.Item name='price' rules={[{ required: true, message: 'Vui lòng nhập giá!' }]}>
           <InputNumber placeholder='Nhập giá' style={{ width: '30%' }} />
@@ -87,7 +77,7 @@ const EditTripConvenientPage: React.FC = () => {
     },
     {
       key: 'pointStart',
-      label: 'Điểm bắt đầu',
+      label: requiredDot('Điểm bắt đầu'),
       value: (
         <Form.Item name='pointStart' rules={[{ required: true, message: 'Vui lòng nhập điểm bắt đầu!' }]}>
           <Input placeholder='Nhập điểm bắt đầu' style={{ width: '30%' }} />
@@ -96,7 +86,7 @@ const EditTripConvenientPage: React.FC = () => {
     },
     {
       key: 'pointEnd',
-      label: 'Điểm kết thúc',
+      label: requiredDot('Điểm kết thúc'),
       value: (
         <Form.Item name='pointEnd' rules={[{ required: true, message: 'Vui lòng nhập điểm kết thúc!' }]}>
           <Input placeholder='Nhập điểm kết thúc' style={{ width: '30%' }} />
@@ -105,7 +95,7 @@ const EditTripConvenientPage: React.FC = () => {
     },
     {
       key: 'status',
-      label: 'Trạng thái',
+      label: requiredDot('Trạng thái'),
       value: (
         <Form.Item name='status' rules={[{ required: true, message: 'Vui lòng nhập trạng thái!' }]}>
           <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />
@@ -137,12 +127,9 @@ const EditTripConvenientPage: React.FC = () => {
         ...values,
         startTime: dayjs(values.startTime).format('HH:mm:ss')
       }
-
-      console.log(newValue)
-
       const response = await updateMutation.mutateAsync({ id: route_id, body: newValue })
       if (response.status === HttpStatusCode.Ok) {
-        message.success('Update successfully')
+        message.success(response.data)
         refetch()
         navigate('/trips-convenient')
       } else {

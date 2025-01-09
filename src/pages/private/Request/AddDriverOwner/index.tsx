@@ -2,6 +2,7 @@ import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useCreateRequestDriverMutation, useQueryRequest } from '@/queries/request'
 import { DataTypeCost } from '@/types/DataType'
 import { Button, DatePicker, Form, Input, InputNumber, message, Row, Select, Table, TableColumnsType } from 'antd'
+import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -69,7 +70,17 @@ const AddRequestDriverOwner: React.FC = () => {
       label: 'Ngày bắt đầu',
       value: (
         <Form.Item name='startTime' rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}>
-          <DatePicker showTime={{ format: 'HH:mm:ss' }} style={{ width: '30%' }} format='YYYY-MM-DD HH:mm:ss' />
+          <DatePicker
+            showTime={{ format: 'HH:mm:ss' }}
+            style={{ width: '30%' }}
+            format='YYYY-MM-DD HH:mm:ss'
+            disabledDate={(current) => {
+              const tomorrowStart = dayjs().add(0, 'day').startOf('day')
+
+              // Disable any date that is before tomorrow
+              return current.isBefore(tomorrowStart)
+            }}
+          />
         </Form.Item>
       )
     },
@@ -106,10 +117,10 @@ const AddRequestDriverOwner: React.FC = () => {
       const response = await addMutation.mutateAsync(values)
       if (response.status === HttpStatusCode.Ok) {
         refetch()
-        message.success('Accept successfully')
+        message.success(response.message)
         navigate('/request')
       } else {
-        message.error('Accept failed')
+        message.error(`${response.message}. ${response.details}`)
       }
     } catch (error) {
       console.error('Error values:', error)
