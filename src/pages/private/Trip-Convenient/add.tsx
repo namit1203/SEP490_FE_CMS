@@ -1,5 +1,6 @@
 import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useAddTripConvenienceMutation } from '@/queries/trip'
+import { requiredDot } from '@/utils/fieldModalTable'
 import { Button, Col, DatePicker, Form, Input, InputNumber, message, Row, Switch, Table, TableColumnsType } from 'antd'
 import dayjs from 'dayjs'
 import { useState } from 'react'
@@ -7,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 interface TableData {
   key: string
-  label: string
+  label: React.ReactNode
   value: JSX.Element | string | undefined
 }
 
@@ -23,7 +24,7 @@ const AddTripConvenientPage: React.FC = () => {
   const tableData: TableData[] = [
     {
       key: 'name',
-      label: 'Tên chuyến đi',
+      label: requiredDot('Tên chuyến đi'),
       value: (
         <Form.Item name='name' rules={[{ required: true, message: 'Vui lòng nhập tên chuyến đi!' }]}>
           <Input placeholder='Nhập tên chuyến đi' style={{ width: '30%' }} />
@@ -32,7 +33,7 @@ const AddTripConvenientPage: React.FC = () => {
     },
     {
       key: 'startTime',
-      label: 'Giờ xuất phát',
+      label: requiredDot('Giờ xuất phát'),
       value: (
         <Form.Item name='startTime' rules={[{ required: true, message: 'Vui lòng nhập giờ xuất phát!' }]}>
           <DatePicker showTime format='HH:mm:ss' picker='time' onChange={(date) => console.log(date?.toISOString())} />
@@ -41,7 +42,7 @@ const AddTripConvenientPage: React.FC = () => {
     },
     {
       key: 'description',
-      label: 'Mô tả',
+      label: requiredDot('Mô tả'),
       value: (
         <Form.Item name='description' rules={[{ required: true, message: 'Vui lòng nhập mô tả!' }]}>
           <Input placeholder='Nhập mô tả' style={{ width: '30%' }} />
@@ -50,7 +51,7 @@ const AddTripConvenientPage: React.FC = () => {
     },
     {
       key: 'price',
-      label: 'Giá',
+      label: requiredDot('Giá'),
       value: (
         <Form.Item name='price' rules={[{ required: true, message: 'Vui lòng nhập giá!' }]}>
           <InputNumber placeholder='Nhập giá' style={{ width: '30%' }} />
@@ -59,7 +60,7 @@ const AddTripConvenientPage: React.FC = () => {
     },
     {
       key: 'pointStart',
-      label: 'Điểm bắt đầu',
+      label: requiredDot('Điểm bắt đầu'),
       value: (
         <Form.Item name='pointStart' rules={[{ required: true, message: 'Vui lòng nhập điểm bắt đầu!' }]}>
           <Input placeholder='Nhập địa điểm bắt đầu' style={{ width: '30%' }} />
@@ -68,7 +69,7 @@ const AddTripConvenientPage: React.FC = () => {
     },
     {
       key: 'pointEnd',
-      label: 'Điểm kết thúc',
+      label: requiredDot('Điểm kết thúc'),
       value: (
         <Form.Item name='pointEnd' rules={[{ required: true, message: 'Vui lòng nhập điểm kết thúc!' }]}>
           <Input placeholder='Nhập địa điểm kết thúc' style={{ width: '30%' }} />
@@ -77,7 +78,7 @@ const AddTripConvenientPage: React.FC = () => {
     },
     {
       key: 'status',
-      label: 'Trạng thái',
+      label: requiredDot('Trạng thái'),
       value: (
         <Form.Item name='status' rules={[{ required: true, message: 'Vui lòng nhập trạng thái!' }]}>
           <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />

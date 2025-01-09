@@ -26,28 +26,36 @@ const AddDriverPage: React.FC = () => {
 
   const { refetch } = useQueryDriver()
 
+  const redAsterisk = <span style={{ color: 'red' }}>*</span> 
+
   const tableData: TableData[] = [
     {
       key: 'name',
-      label: 'Họ và tên',
+      label: <>Họ và tên {redAsterisk}</>,
       value: (
-        <Form.Item name='name' rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}>
+        <Form.Item
+          name='name'
+          rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
+        >
           <Input placeholder='Nhập họ và tên' style={{ width: '30%' }} />
         </Form.Item>
       )
     },
     {
       key: 'userName',
-      label: 'Tên đăng nhập',
+      label: <>Tên đăng nhập {redAsterisk}</>,
       value: (
-        <Form.Item name='userName' rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}>
+        <Form.Item
+          name='userName'
+          rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
+        >
           <Input placeholder='Nhập tên đăng nhập' style={{ width: '30%' }} />
         </Form.Item>
       )
     },
     {
       key: 'password',
-      label: 'Mật khẩu',
+      label: <>Mật khẩu {redAsterisk}</>,
       value: (
         <Form.Item
           name='password'
@@ -62,16 +70,19 @@ const AddDriverPage: React.FC = () => {
     },
     {
       key: 'email',
-      label: 'Email',
+      label: <>Email {redAsterisk}</>,
       value: (
-        <Form.Item name='email' rules={[{ required: true, message: 'Vui lòng nhập email!' }]}>
+        <Form.Item
+          name='email'
+          rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
+        >
           <Input placeholder='Nhập email' style={{ width: '30%' }} type='email' />
         </Form.Item>
       )
     },
     {
       key: 'numberPhone',
-      label: 'Số điện thoại',
+      label: <>Số điện thoại {redAsterisk}</>,
       value: (
         <Form.Item
           name='numberPhone'
@@ -89,32 +100,41 @@ const AddDriverPage: React.FC = () => {
     },
     {
       key: 'license',
-      label: 'Biển số xe',
+      label: <>Bằng lái xe {redAsterisk}</>,
       value: (
-        <Form.Item name='license' rules={[{ required: true, message: 'Vui lòng nhập biển số xe!' }]}>
-          <Input placeholder='Nhập biển số xe' style={{ width: '30%' }} />
+        <Form.Item
+          name='license'
+          rules={[{ required: true, message: 'Vui lòng nhập bằng lái xe!' }]}
+        >
+          <Input placeholder='Nhập bằng lái xe' style={{ width: '30%' }} />
         </Form.Item>
       )
     },
     {
       key: 'avatar',
-      label: 'Hình ảnh',
+      label: <>Hình ảnh {redAsterisk}</>,
       value: <UploadComponent fieldName='avatar' form={form} />
     },
     {
       key: 'dob',
-      label: 'Ngày sinh',
+      label: <>Ngày sinh {redAsterisk}</>,
       value: (
-        <Form.Item name='dob' rules={[{ required: true, message: 'Vui lòng nhập ngày sinh!' }]}>
+        <Form.Item
+          name='dob'
+          rules={[{ required: true, message: 'Vui lòng nhập ngày sinh!' }]}
+        >
           <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
         </Form.Item>
       )
     },
     {
       key: 'status',
-      label: 'Trạng thái',
+      label: <>Trạng thái {redAsterisk}</>,
       value: (
-        <Form.Item name='status' rules={[{ required: true, message: 'Vui lòng nhập trạng thái!' }]}>
+        <Form.Item
+          name='status'
+          rules={[{ required: true, message: 'Vui lòng nhập trạng thái!' }]}
+        >
           <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />
         </Form.Item>
       )

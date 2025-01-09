@@ -3,6 +3,13 @@ import { DataType, DataTypeUser } from '@/types/DataType'
 import { DatePicker, Input, InputNumber, Switch } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 
+export const requiredDot = (text: string) => (
+  <>
+    {text}
+    <span style={{ color: 'red', marginLeft: 4 }}>*</span>
+  </>
+)
+
 // muốn thêm fields nào vào trong modal form
 export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
   {

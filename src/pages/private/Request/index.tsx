@@ -165,11 +165,11 @@ const RequestPage: React.FC = () => {
         isLoading,
         content: (
           <>
-            {account && [RoleType.DRIVER, RoleType.VEHICLE_OWNER].includes(account?.role as RoleType) && (
+            {account && [RoleType.STAFF].includes(account?.role as RoleType) && (
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
                 <Link to='add'>
                   <Button type='primary' icon={<PlusOutlined />} ghost>
-                    {account?.role === RoleType.DRIVER ? 'Thuê xe' : 'Thuê tài xế'}
+                    {account?.role === RoleType.STAFF ? 'Thuê xe' : 'Thuê tài xế'}
                   </Button>
                 </Link>
               </div>

@@ -15,9 +15,9 @@ const CheckSeatPage = () => {
 
   //   console.log(data)
 
-  const dataSource = data?.map((item: any) => ({
+  const dataSource = data?.map((item: any, index: number) => ({
     ...item,
-    key: item.id || `${item.description}-${item.licensePlate}-${item.dateIncurred}`
+    key: index || `${item.description}-${item.licensePlate}-${item.dateIncurred}-${index}`
   }))
 
   const columns: TableProps<any>['columns'] = [
@@ -26,8 +26,20 @@ const CheckSeatPage = () => {
       dataIndex: 'dateTime',
       key: 'dateTime',
       align: 'center',
-      sorter: (a, b) => Date.parse(a.dateTime) - Date.parse(b.dateTime),
-      width: '20%'
+      sorter: (a, b) => {
+        const convertToSeconds = (time: any) => {
+          const [hours, minutes, seconds] = time.split(':').map(Number)
+          return hours * 3600 + minutes * 60 + seconds
+        }
+
+        const aSeconds = convertToSeconds(a.dateTime)
+        const bSeconds = convertToSeconds(b.dateTime)
+
+        // Ensure the sort works correctly by comparing the total seconds
+        return aSeconds - bSeconds
+      },
+      width: '20%',
+      sortDirections: ['ascend', 'descend', 'ascend']
     },
     {
       title: 'Mô tả',
