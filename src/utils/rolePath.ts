@@ -13,7 +13,7 @@ export const allowStaffRoute = [
   'fixed-cost',
   'request',
   'revenue',
-  'ticket',
+  // 'ticket',
   'total-ticket',
   'ticket-not-paid',
   'reviews',
