@@ -179,7 +179,7 @@ const staffRoutes = [
   {
     path: '/request/add',
     component: <AddRequestRentVehiclePage />,
-    allowedRoles: [RoleType.STAFF]
+    allowedRoles: [RoleType.STAFF, RoleType.DRIVER]
   },
   { path: '/revenue', component: <RevenuePage />, allowedRoles: [RoleType.STAFF, RoleType.VEHICLE_OWNER] },
   {

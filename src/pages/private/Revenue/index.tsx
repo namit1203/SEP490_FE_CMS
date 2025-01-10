@@ -24,10 +24,12 @@ const RevenuePage: React.FC = () => {
   const { data: vehicleData } = useQueryVehicles()
   const { getColumnSearchProps } = useColumnSearch()
 
-  const revenueTicketData = data?.revenueTicketDTOs[0]?.listTicket || []
-  const totalLossCosts = data?.totalLossCosts[0]?.listLossCostVehicle || []
-  const rentDriverData = data?.totalPayementRentDrivers[0]?.paymentRentDriverDTOs || []
-  const rentVehicleData = data?.totalPaymentRentVehicleDTOs[0]?.paymentRentVehicelDTOs || []
+  const revenueTicketData = data?.revenueTicketDTOs[0] || []
+  const totalLossCosts = data?.totalLossCosts[0] || []
+  const rentDriverData = data?.totalPayementRentDrivers[0] || []
+  const rentVehicleData = data?.totalPaymentRentVehicleDTOs[0] || []
+
+  console.log(rentDriverData)
 
   useEffect(() => {
     refetch()
@@ -85,15 +87,15 @@ const RevenuePage: React.FC = () => {
   ]
 
   const generateDataSource = (data: any[], uniqueKey: string) =>
-    data.map((item: any, index: number) => ({
+    data?.map((item: any, index: number) => ({
       ...item,
       key: item[uniqueKey] || index
     }))
 
-  const revenueTicketSource = generateDataSource(revenueTicketData, 'id')
-  const rentDriverSource = generateDataSource(rentDriverData, 'id')
-  const rentVehicleSource = generateDataSource(rentVehicleData, 'id')
-  const lossCostSource = generateDataSource(totalLossCosts, 'id')
+  const revenueTicketSource = generateDataSource(revenueTicketData?.listTicket, 'id')
+  const rentDriverSource = generateDataSource(rentDriverData?.paymentRentDriverDTOs, 'id')
+  const rentVehicleSource = generateDataSource(rentVehicleData?.paymentRentVehicelDTOs, 'id')
+  const lossCostSource = generateDataSource(totalLossCosts?.listLossCostVehicle, 'id')
 
   const updateMutation = useExportRevenueMutation()
 
@@ -154,13 +156,21 @@ const RevenuePage: React.FC = () => {
             <Form onFinish={onFinish} layout='horizontal' form={form}>
               <Row gutter={16}>
                 <Col span={6}>
-                  <Form.Item label='Start Date' name='startDate'>
-                    <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
+                  <Form.Item
+                    rules={[{ required: true, message: 'Vui lòng chọn ngày!' }]}
+                    label='Start Date'
+                    name='startDate'
+                  >
+                    <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
                 </Col>
                 <Col span={6}>
-                  <Form.Item label='End Date' name='endDate'>
-                    <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
+                  <Form.Item
+                    rules={[{ required: true, message: 'Vui lòng chọn ngày!' }]}
+                    label='End Date'
+                    name='endDate'
+                  >
+                    <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
                 </Col>
                 <Col span={4}>
@@ -189,18 +199,30 @@ const RevenuePage: React.FC = () => {
             <div>
               <h4 style={{ fontSize: 24, marginBottom: 30 }}>Ticket</h4>
               <Table columns={revenueTicketDataColumns} dataSource={revenueTicketSource} />
+              <div style={{ fontSize: 15, marginBottom: 30 }}>
+                Total : <span>{formatPrize(revenueTicketData?.total)}</span>
+              </div>
             </div>
             <div>
               <h4 style={{ fontSize: 24, marginBottom: 30 }}>Rent Driver</h4>
               <Table columns={rentDriverDataColumns} dataSource={rentDriverSource} />
+              <div style={{ fontSize: 15, marginBottom: 30 }}>
+                Total : <span>{formatPrize(rentDriverData?.total)}</span>
+              </div>
             </div>
             <div>
               <h4 style={{ fontSize: 24, marginBottom: 30 }}>Rent Vehicle</h4>
               <Table columns={rentVehicleDataColumns} dataSource={rentVehicleSource} />
+              <div style={{ fontSize: 15, marginBottom: 30 }}>
+                Total : <span>{formatPrize(rentVehicleData?.total)}</span>
+              </div>
             </div>
             <div>
               <h4 style={{ fontSize: 24, marginBottom: 30 }}>Lost Cost</h4>
               <Table columns={lossCostDataColumns} dataSource={lossCostSource} />
+              <div style={{ fontSize: 15, marginBottom: 30 }}>
+                Total : <span>{formatPrize(totalLossCosts?.totalCost)}</span>
+              </div>
             </div>
             <div>
               Total : <span style={{ fontSize: 20 }}>{formatPrize(total)}</span>
