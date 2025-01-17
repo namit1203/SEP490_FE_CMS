@@ -157,7 +157,7 @@ const FixedCostPage: React.FC = () => {
                   <Form.Item
                     label='Start Date'
                     name='startDate'
-                    rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}
+                  
                   >
                     <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
@@ -166,13 +166,13 @@ const FixedCostPage: React.FC = () => {
                   <Form.Item
                     label='End Date'
                     name='endDate'
-                    rules={[{ required: true, message: 'Vui lòng chọn ngày kết thúc!' }]}
+                   
                   >
                     <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
                 </Col>
                 <Col span={4}>
-                  <Form.Item name='vehicleId' rules={[{ required: true, message: 'Vui lòng chọn xe!' }]}>
+                  <Form.Item name='vehicleId' rules={[{ required: false, message: 'Vui lòng chọn xe!' }]}>
                     <Select placeholder='Chọn xe' style={{ width: '80%' }} allowClear>
                       {vehicleData?.map((item: any) => (
                         <Select.Option key={item.id} value={item.id}>
