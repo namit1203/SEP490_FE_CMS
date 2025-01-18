@@ -57,6 +57,19 @@ const HistoryRentDriverPage: React.FC = () => {
       ...useColumnSearch().getColumnSearchProps('vehicleOwner'),
       render: (text) => <span>{text ?? 'null'}</span>,
       width: '20%'
+    },
+    {
+      title: 'Thời gian khởi tạo',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      align: 'center',
+      ...useColumnSearch().getColumnSearchProps('createdAt'),
+      render: (text) => {
+        if (!text) return <span>null</span>;
+        const formattedDate = dayjs(text).format('HH:mm - DD/MM');
+        return <span>{formattedDate}</span>;
+      },
+      width: '20%'
     }
     // {
     //   title: 'Thời gian bắt đầu',
@@ -178,7 +191,7 @@ const HistoryRentDriverPage: React.FC = () => {
                   <Form.Item
                     label='Start Date'
                     name='startDate'
-                    rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}
+                    rules={[{ required: false, message: 'Vui lòng chọn ngày bắt đầu!' }]}
                   >
                     <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
@@ -187,13 +200,13 @@ const HistoryRentDriverPage: React.FC = () => {
                   <Form.Item
                     label='End Date'
                     name='endDate'
-                    rules={[{ required: true, message: 'Vui lòng chọn ngày kết thúc!' }]}
+                    rules={[{ required: false, message: 'Vui lòng chọn ngày kết thúc!' }]}
                   >
                     <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
                 </Col>
                 <Col span={4}>
-                  <Form.Item name='vehicleId' rules={[{ required: true, message: 'Vui lòng chọn xe!' }]}>
+                  <Form.Item name='vehicleId' rules={[{ required: false, message: 'Vui lòng chọn xe!' }]}>
                     <Select placeholder='Chọn xe' style={{ width: '80%' }} allowClear>
                       {vehicleData?.map((item: any) => (
                         <Select.Option key={item.id} value={item.id}>

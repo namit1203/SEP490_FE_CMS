@@ -128,12 +128,27 @@ const AddDriverPage: React.FC = () => {
       value: (
         <Form.Item
           name='dob'
-          rules={[{ required: true, message: 'Vui lòng nhập ngày sinh!' }]}
+          rules={[
+            { required: true},
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value) {
+                  return Promise.reject(new Error('Vui lòng nhập ngày sinh!'));
+                }
+                const age = Math.abs(new Date().getFullYear() - value.year());
+                if (age >= 24) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('Người dùng phải lớn hơn 24 tuổi!'));
+              },
+            }),
+          ]}
         >
           <DatePicker format='DD-MM-YYYY' onChange={(date) => console.log(date?.toISOString())} />
         </Form.Item>
       )
     },
+    
     {
       key: 'status',
       label: <>Trạng thái {redAsterisk}</>,

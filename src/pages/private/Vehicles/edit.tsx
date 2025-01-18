@@ -102,13 +102,45 @@ const EditVehiclePage: React.FC = () => {
     },
     {
       key: 'licensePlate',
-      label: 'Biển số xe',
+      label: (
+        <span>
+          <span style={{ color: 'red' }}>*</span> Biển số xe
+        </span>
+      ),
       value: (
-        <Form.Item name='licensePlate' rules={[{ required: true, message: 'Vui lòng nhập Biển số xe!' }]}>
-          <Input placeholder='Biển số xe' style={{ width: '30%' }} />
+        <Form.Item
+          name="licensePlate"
+          rules={[
+            { required: true, message: 'Vui lòng nhập Biển số xe!' },
+            {
+              validator(_, value) {
+                if (!value) {
+                  return Promise.resolve();
+                }
+    
+                // Regular expression to validate 99A-99999 format
+                const licensePlateRegex = /^[0-9]{2}[A-Z]-[0-9]{5}$/;
+    
+                if (!licensePlateRegex.test(value)) {
+                  return Promise.reject(new Error('Biển số xe phải theo định dạng 99A-99999!'));
+                }
+    
+                // Check that the license plate does not start with 80
+                const startsWith80 = value.startsWith('80');
+                if (startsWith80) {
+                  return Promise.reject(new Error('Biển số xe không được bắt đầu bằng 80!'));
+                }
+    
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
+          <Input placeholder="Biển số xe" style={{ width: '30%' }} />
         </Form.Item>
-      )
+      ),
     },
+    
     {
       key: 'vehicleTypeId',
       label: 'Nhà xe',
