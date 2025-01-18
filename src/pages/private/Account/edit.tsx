@@ -25,7 +25,14 @@ const EditAccountPage: React.FC = () => {
   const { data: roleData } = useQueryRole()
 
   const updateMutation = useUpdateRoleAccountMutation()
-
+  const addAsterisk = (label: string, isRequired: boolean) => {
+    return (
+      <>
+        {label}
+        {isRequired && <span style={{ color: 'red' }}> *</span>}
+      </>
+    )
+  }
   if (route_id === null) {
     throw new Error('Invalid cost type ID')
   }
@@ -50,12 +57,12 @@ const EditAccountPage: React.FC = () => {
     { key: 'address', label: 'Địa chỉ', value: data?.address || 'N/A' },
     {
       key: 'role',
-      label: 'Quyền',
+      label: addAsterisk('Quyền', true), // Thêm dấu sao đỏ
       value: (
         <Form.Item name='role' rules={[{ required: true, message: 'Vui lòng chọn Role!' }]}>
           <Select placeholder='Chọn Role' style={{ width: '30%' }}>
             {roleData
-              ?.filter((item: any) => item.status === true) // Only include items with status === true
+              ?.filter((item: any) => item.status === true) // Chỉ lấy các item có status === true
               .map((item: any) => (
                 <Select.Option key={item.id} value={item.id}>
                   {item.roleName}
@@ -66,6 +73,7 @@ const EditAccountPage: React.FC = () => {
       )
     }
   ]
+  
 
   const columns: TableColumnsType<TableData> = [
     {
