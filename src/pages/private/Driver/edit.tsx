@@ -3,7 +3,7 @@ import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useLoading } from '@/context/LoadingContext'
 import { useQueryDriver, useQueryDriverDetails, useUpdateDriverMutation } from '@/queries/driver'
 import { DataTypeDriver } from '@/types/DataType'
-import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType,Select } from 'antd'
+import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType,Select, } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -13,7 +13,7 @@ interface TableData {
   label: string
   value: JSX.Element | string | undefined
 }
-
+const redAsterisk = <span style={{ color: 'red' }}>*</span> 
 const EditDriverPage: React.FC = () => {
   const [searchParams] = useSearchParams()
 
