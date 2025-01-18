@@ -137,25 +137,26 @@ const TotalTicketPage: React.FC = () => {
       key: item?.id || item?.someUniqueField || ''
     })) || []
 
-  const onFinish = async (values: any) => {
-    try {
-      const formattedValues = {
-        ...values,
-        startDate: dayjs(values.startDate).format('YYYY-MM-DD'),
-        endDate: dayjs(values.endDate).format('YYYY-MM-DD')
+    const onFinish = async (values: any) => {
+      try {
+        const formattedValues = {
+          ...values,
+          startDate: values.startDate ? dayjs(values.startDate).format('YYYY-MM-DD') : null,
+          endDate: values.endDate ? dayjs(values.endDate).format('YYYY-MM-DD') : null
+        };
+    
+        // Cập nhật query parameters
+        setQueryParams(formattedValues);
+    
+        // Refetch dữ liệu với các tham số mới
+        await refetch();
+    
+        console.log('Fetched Data:', data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
-
-      // Update the query parameters
-      setQueryParams(formattedValues)
-
-      // Refetch the query with updated parameters
-      await refetch()
-
-      console.log('Fetched Data:', data)
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-  }
+    };
+    
 
   return (
     <>
@@ -169,7 +170,7 @@ const TotalTicketPage: React.FC = () => {
                   <Form.Item
                     label='Start Date'
                     name='startDate'
-                    rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}
+                    rules={[{ required: false, message: 'Vui lòng chọn ngày bắt đầu!' }]}
                   >
                     <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
@@ -178,13 +179,13 @@ const TotalTicketPage: React.FC = () => {
                   <Form.Item
                     label='End Date'
                     name='endDate'
-                    rules={[{ required: true, message: 'Vui lòng chọn ngày kết thúc!' }]}
+                    rules={[{ required: false, message: 'Vui lòng chọn ngày kết thúc!' }]}
                   >
                     <DatePicker format='DD-MM-YYYY' />
                   </Form.Item>
                 </Col>
                 <Col span={5}>
-                  <Form.Item name='vehicleId' rules={[{ required: true, message: 'Vui lòng chọn xe!' }]}>
+                  <Form.Item name='vehicleId' rules={[{ required: false, message: 'Vui lòng chọn xe!' }]}>
                     <Select placeholder='Chọn xe' style={{ width: '80%' }} allowClear>
                       {vehicleData?.map((item: any) => (
                         <Select.Option key={item.id} value={item.id}>

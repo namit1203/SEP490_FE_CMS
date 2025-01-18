@@ -2,7 +2,7 @@ import { ModalFormProps } from '@/components/Modal/ModalForm'
 import { DataType, DataTypeUser } from '@/types/DataType'
 import { DatePicker, Input, InputNumber, Switch } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-
+import dayjs from 'dayjs'
 export const requiredDot = (text: string) => (
   <>
     {text}
@@ -91,13 +91,33 @@ export const fieldModalTable: ModalFormProps<DataType>['fields'] = [
   {
     name: 'startDate',
     label: 'Thời gian bắt đầu khuyến mãi',
-    component: <DatePicker format='DD-MM-YYYY' />,
+    component:<DatePicker
+    showTime={{ format: 'HH:mm:ss' }}
+    
+    format='YYYY-MM-DD HH:mm:ss'
+    disabledDate={(current) => {
+      const tomorrowStart = dayjs().add(0, 'day').startOf('day')
+
+      // Disable any date that is before tomorrow
+      return current.isBefore(tomorrowStart)
+    }}
+  />,
     rules: [{ required: true, message: 'Vui lòng nhập Thời gian bắt đầu khuyến mãi!' }]
   },
   {
     name: 'endDate',
     label: 'Thời gian kết thúc khuyến mãi',
-    component: <DatePicker format='DD-MM-YYYY' />,
+    component: <DatePicker
+    showTime={{ format: 'HH:mm:ss' }}
+
+    format='YYYY-MM-DD HH:mm:ss'
+    disabledDate={(current) => {
+      const tomorrowStart = dayjs().add(0, 'day').startOf('day')
+
+      // Disable any date that is before tomorrow
+      return current.isBefore(tomorrowStart)
+    }}
+  />,
     rules: [{ required: true, message: 'Vui lòng nhập Thời gian kết thúc khuyến mãi!' }]
   },
   {

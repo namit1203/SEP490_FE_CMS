@@ -157,7 +157,7 @@ const RevenuePage: React.FC = () => {
               <Row gutter={16}>
                 <Col span={6}>
                   <Form.Item
-                    rules={[{ required: true, message: 'Vui lòng chọn ngày!' }]}
+                    rules={[{ required: false, message: 'Vui lòng chọn ngày!' }]}
                     label='Start Date'
                     name='startDate'
                   >
@@ -166,7 +166,7 @@ const RevenuePage: React.FC = () => {
                 </Col>
                 <Col span={6}>
                   <Form.Item
-                    rules={[{ required: true, message: 'Vui lòng chọn ngày!' }]}
+                    rules={[{ required: false, message: 'Vui lòng chọn ngày!' }]}
                     label='End Date'
                     name='endDate'
                   >

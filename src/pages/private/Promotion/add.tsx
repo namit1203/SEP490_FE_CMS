@@ -8,6 +8,7 @@ import { Form, Button, message } from 'antd'
 import { HttpStatusCode } from 'axios'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import moment from 'moment'
 
 const AddPromotionPage: React.FC = () => {
   const [form] = Form.useForm()
