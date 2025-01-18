@@ -3,7 +3,7 @@ import { HttpStatusCode } from '@/constants/httpStatusCode.enum'
 import { useLoading } from '@/context/LoadingContext'
 import { useAddDriverMutation, useQueryDriver } from '@/queries/driver'
 import { DataTypeDriver } from '@/types/DataType'
-import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType } from 'antd'
+import { Button, Col, DatePicker, Form, Input, message, Row, Switch, Table, TableColumnsType, Select } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -104,12 +104,19 @@ const AddDriverPage: React.FC = () => {
       value: (
         <Form.Item
           name='license'
-          rules={[{ required: true, message: 'Vui lòng nhập bằng lái xe!' }]}
+          rules={[{ required: true, message: 'Vui lòng chọn bằng lái xe!' }]}
         >
-          <Input placeholder='Nhập bằng lái xe' style={{ width: '30%' }} />
+          <Select placeholder='Chọn bằng lái xe' style={{ width: '30%' }}>
+            <Select.Option value='B2'>B2</Select.Option>
+            <Select.Option value='C'>C</Select.Option>
+            <Select.Option value='D'>D</Select.Option>
+            <Select.Option value='E'>E</Select.Option>
+            <Select.Option value='F'>F</Select.Option>
+          </Select>
         </Form.Item>
       )
     },
+    
     {
       key: 'avatar',
       label: <>Hình ảnh {redAsterisk}</>,
