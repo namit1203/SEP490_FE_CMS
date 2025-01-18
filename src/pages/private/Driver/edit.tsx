@@ -55,7 +55,7 @@ const EditDriverPage: React.FC = () => {
   const tableData: TableData[] = [
     {
       key: 'name',
-      label: 'Họ và tên',
+      label: <>Họ và tên {redAsterisk}</>,
       value: (
         <Form.Item name='name' rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}>
           <Input placeholder='Nhập họ và tên' style={{ width: '30%' }} />
@@ -64,7 +64,7 @@ const EditDriverPage: React.FC = () => {
     },
     {
       key: 'userName',
-      label: 'Tên đăng nhập',
+      label: <>Tên đăng nhập {redAsterisk}</>,
       value: (
         <Form.Item name='userName' rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}>
           <Input placeholder='Nhập tên đăng nhập' style={{ width: '30%' }} />
@@ -73,7 +73,7 @@ const EditDriverPage: React.FC = () => {
     },
     {
       key: 'email',
-      label: 'Email',
+      label: <>Email {redAsterisk}</>,
       value: (
         <Form.Item name='email' rules={[{ required: true, message: 'Vui lòng nhập email!' }]}>
           <Input placeholder='Nhập email' style={{ width: '30%' }} type='email' />
@@ -82,7 +82,7 @@ const EditDriverPage: React.FC = () => {
     },
     {
       key: 'numberPhone',
-      label: 'Số điện thoại',
+      label: <>Số điện thoại {redAsterisk}</>,
       value: (
         <Form.Item
           name='numberPhone'
