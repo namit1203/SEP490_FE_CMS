@@ -69,11 +69,15 @@ const CreateBusTickets: React.FC = () => {
     () => [
       {
         key: 'pointStart',
-        label: 'Điểm bắt đầu',
+        label: (
+          <span>
+            <span style={{ color: 'red' }}>*</span> Điểm bắt đầu
+          </span>
+        ),
         value: (
-          <Form.Item name='pointStart' rules={[{ required: true, message: 'Vui lòng chọn điểm bắt đầu!' }]}>
+          <Form.Item name="pointStart" rules={[{ required: true, message: 'Vui lòng chọn điểm bắt đầu!' }]}>
             <Select
-              placeholder='Chọn điểm bắt đầu'
+              placeholder="Chọn điểm bắt đầu"
               style={{ width: '30%' }}
               onChange={handleChange('startPoint')}
               loading={loadingStartPoint}
@@ -89,10 +93,18 @@ const CreateBusTickets: React.FC = () => {
       },
       {
         key: 'pointEnd',
-        label: 'Điểm kết thúc',
+        label: (
+          <span>
+            <span style={{ color: 'red' }}>*</span> Điểm kết thúc
+          </span>
+        ),
         value: (
-          <Form.Item name='pointEnd' rules={[{ required: true, message: 'Vui lòng chọn điểm kết thúc!' }]}>
-            <Select placeholder='Chọn điểm kết thúc' style={{ width: '30%' }} onChange={handleChange('endPoint')}>
+          <Form.Item name="pointEnd" rules={[{ required: true, message: 'Vui lòng chọn điểm kết thúc!' }]}>
+            <Select
+              placeholder="Chọn điểm kết thúc"
+              style={{ width: '30%' }}
+              onChange={handleChange('endPoint')}
+            >
               {endPoint?.map((item: any) => (
                 <Select.Option key={item.id} value={item.id}>
                   {item.name}
@@ -109,7 +121,7 @@ const CreateBusTickets: React.FC = () => {
           <>
             <span>{priceTicket || '(Không)'}</span>
             <Button
-              type='default'
+              type="default"
               danger
               style={{ marginLeft: '40px' }}
               onClick={handleCheckPrice}
@@ -123,22 +135,30 @@ const CreateBusTickets: React.FC = () => {
       },
       {
         key: 'numberTicket',
-        label: 'Số vé',
+        label: (
+          <span>
+            <span style={{ color: 'red' }}>*</span> Số vé
+          </span>
+        ),
         value: (
-          <Form.Item name='numberTicket' rules={[{ required: true, message: 'Vui lòng nhập số vé!' }]}>
-            <InputNumber style={{ width: '30%' }} placeholder='nhập số vé' />
+          <Form.Item name="numberTicket" rules={[{ required: true, message: 'Vui lòng nhập số vé!' }]}>
+            <InputNumber style={{ width: '30%' }} placeholder="Nhập số vé" />
           </Form.Item>
         )
       },
       {
         key: 'typeOfPayment',
-        label: 'Chọn phương thức thanh toán',
+        label: (
+          <span>
+            <span style={{ color: 'red' }}>*</span> Chọn phương thức thanh toán
+          </span>
+        ),
         value: (
           <Form.Item
-            name='typeOfPayment'
+            name="typeOfPayment"
             rules={[{ required: true, message: 'Vui lòng chọn phương thức thanh toán!' }]}
           >
-            <Select placeholder='Chọn phương thức thanh toán' style={{ width: '30%' }}>
+            <Select placeholder="Chọn phương thức thanh toán" style={{ width: '30%' }}>
               {typeOfPayment.map((item) => (
                 <Select.Option key={item.id} value={item.id}>
                   {item.value}
@@ -149,9 +169,9 @@ const CreateBusTickets: React.FC = () => {
         )
       }
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [startPoint, endPoint, priceTicket, loadingStartPoint, loadingPrice, selectedPoints]
   )
+  
 
   const columns: TableColumnsType<TableData> = useMemo(
     () => [

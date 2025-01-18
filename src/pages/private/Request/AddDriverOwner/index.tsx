@@ -11,6 +11,7 @@ interface TableData {
   label: string
   value: string | number | JSX.Element | undefined
 }
+
 const AddRequestDriverOwner: React.FC = () => {
   const [form] = Form.useForm()
 
@@ -21,41 +22,68 @@ const AddRequestDriverOwner: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { refetch } = useQueryRequest()
-
   const tableData: TableData[] = [
     {
       key: 'price',
-      label: 'Giá tiền',
+      label: (
+        <>
+          Giá tiền <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
-        <Form.Item name='price' rules={[{ required: true, message: 'Vui lòng nhập giá tiền!' }]}>
-          <InputNumber style={{ width: '30%' }} placeholder='nhập giá tiền' />
+        <Form.Item
+          name="price"
+          rules={[{ required: true, message: 'Vui lòng nhập giá tiền!' }]}
+        >
+          <InputNumber style={{ width: '30%' }} placeholder="nhập giá tiền" />
         </Form.Item>
       )
     },
     {
       key: 'startLocation',
-      label: 'Điểm đến',
+      label: (
+        <>
+          Điểm đến <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
-        <Form.Item name='startLocation' rules={[{ required: true, message: 'Vui lòng nhập điểm đến!' }]}>
-          <Input placeholder='nhập điểm đến' style={{ width: '30%' }} />
+        <Form.Item
+          name="startLocation"
+          rules={[{ required: true, message: 'Vui lòng nhập điểm đến!' }]}
+        >
+          <Input placeholder="nhập điểm đến" style={{ width: '30%' }} />
         </Form.Item>
       )
     },
     {
       key: 'endLocation',
-      label: 'Điểm đi',
+      label: (
+        <>
+          Điểm đi <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
-        <Form.Item name='endLocation' rules={[{ required: true, message: 'Vui lòng nhập điểm đi!' }]}>
-          <Input placeholder='nhập điểm đi' style={{ width: '30%' }} />
+        <Form.Item
+          name="endLocation"
+          rules={[{ required: true, message: 'Vui lòng nhập điểm đi!' }]}
+        >
+          <Input placeholder="nhập điểm đi" style={{ width: '30%' }} />
         </Form.Item>
       )
     },
     {
       key: 'seats',
-      label: 'Chọn số ghế',
+      label: (
+        <>
+          Chọn số ghế <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
-        <Form.Item name='seats' rules={[{ required: true, message: 'Vui lòng chọn xe!' }]}>
-          <Select placeholder='Chọn xe' style={{ width: '30%' }}>
+        <Form.Item
+          name="seats"
+          rules={[{ required: true, message: 'Vui lòng chọn số ghế!' }]}
+        >
+          <Select placeholder="Chọn xe" style={{ width: '30%' }}>
             {['5', '7', '29', '45'].map((item) => (
               <Select.Option key={item} value={item}>
                 {item}
@@ -67,17 +95,22 @@ const AddRequestDriverOwner: React.FC = () => {
     },
     {
       key: 'startTime',
-      label: 'Ngày bắt đầu',
+      label: (
+        <>
+          Ngày bắt đầu <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
-        <Form.Item name='startTime' rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}>
+        <Form.Item
+          name="startTime"
+          rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}
+        >
           <DatePicker
             showTime={{ format: 'HH:mm:ss' }}
             style={{ width: '30%' }}
-            format='YYYY-MM-DD HH:mm:ss'
+            format="YYYY-MM-DD HH:mm:ss"
             disabledDate={(current) => {
               const tomorrowStart = dayjs().add(0, 'day').startOf('day')
-
-              // Disable any date that is before tomorrow
               return current.isBefore(tomorrowStart)
             }}
           />
@@ -86,14 +119,27 @@ const AddRequestDriverOwner: React.FC = () => {
     },
     {
       key: 'endTime',
-      label: 'Ngày kết thúc',
+      label: (
+        <>
+          Ngày kết thúc <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
-        <Form.Item name='endTime' rules={[{ required: true, message: 'Vui lòng chọn ngày kết thúc!' }]}>
-          <DatePicker showTime={{ format: 'HH:mm:ss' }} style={{ width: '30%' }} format='YYYY-MM-DD HH:mm:ss' />
+        <Form.Item
+          name="endTime"
+          rules={[{ required: true, message: 'Vui lòng chọn ngày kết thúc!' }]}
+        >
+          <DatePicker
+            showTime={{ format: 'HH:mm:ss' }}
+            style={{ width: '30%' }}
+            format="YYYY-MM-DD HH:mm:ss"
+          />
         </Form.Item>
       )
     }
   ]
+  
+  
 
   const columns: TableColumnsType<TableData> = [
     {
@@ -110,6 +156,7 @@ const AddRequestDriverOwner: React.FC = () => {
       render: (_, record) => <>{record.value}</>
     }
   ]
+
   const handleFormSubmit = async (values: DataTypeCost) => {
     if (isLoading) return
     setIsLoading(true)
@@ -132,10 +179,10 @@ const AddRequestDriverOwner: React.FC = () => {
 
   return (
     <>
-      <Form form={form} onFinish={handleFormSubmit} layout='vertical'>
+      <Form form={form} onFinish={handleFormSubmit} layout="vertical" requiredMark="required">
         <Table columns={columns} dataSource={tableData} pagination={false} bordered />
-        <Row justify='start' gutter={16} style={{ marginTop: '16px' }}>
-          <Button type='primary' htmlType='submit' loading={isLoading} disabled={isLoading} style={{ marginTop: 16 }}>
+        <Row justify="start" gutter={16} style={{ marginTop: '16px' }}>
+          <Button type="primary" htmlType="submit" loading={isLoading} disabled={isLoading} style={{ marginTop: 16 }}>
             Thuê xe
           </Button>
         </Row>
