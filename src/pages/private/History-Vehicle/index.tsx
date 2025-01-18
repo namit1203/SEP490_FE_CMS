@@ -164,8 +164,8 @@ const HistoryRentVehiclePage: React.FC = () => {
     try {
       const formattedValues = {
         ...values,
-        startDate: values.startDate === null ? '' : dayjs(values.startDate).format('YYYY-MM-DD'),
-        endDate: values.startDate === null ? '' : dayjs(values.endDate).format('YYYY-MM-DD')
+             startDate: values.startDate ? dayjs(values.startDate).format('YYYY-MM-DD') : null,
+               endDate: values.endDate ? dayjs(values.endDate).format('YYYY-MM-DD') : null,
       }
 
       setQueryParams(formattedValues)

@@ -10,7 +10,14 @@ interface TableData {
   label: string
   value: JSX.Element | string | undefined
 }
-
+const addAsterisk = (label: string, isRequired: boolean) => {
+  return (
+    <>
+      {label}
+      {isRequired && <span style={{ color: 'red' }}> *</span>}
+    </>
+  )
+}
 const AddAccountPage: React.FC = () => {
   const navigate = useNavigate()
 
@@ -27,7 +34,7 @@ const AddAccountPage: React.FC = () => {
   const tableData: TableData[] = [
     {
       key: 'fullName',
-      label: 'Họ và tên',
+      label: addAsterisk('Họ và tên', true),
       value: (
         <Form.Item name='fullName' rules={[{ required: true, message: 'Vui lòng nhập fullName' }]}>
           <Input style={{ width: '30%' }} placeholder='Nhập fullName' />
@@ -36,7 +43,7 @@ const AddAccountPage: React.FC = () => {
     },
     {
       key: 'username',
-      label: 'Username',
+      label: addAsterisk('Username', true),
       value: (
         <Form.Item name='username' rules={[{ required: true, message: 'Vui lòng nhập username' }]}>
           <Input style={{ width: '30%' }} placeholder='Nhập username' />
@@ -45,7 +52,7 @@ const AddAccountPage: React.FC = () => {
     },
     {
       key: 'email',
-      label: 'Email',
+      label: addAsterisk('Email', true),
       value: (
         <Form.Item
           name='email'
@@ -60,7 +67,7 @@ const AddAccountPage: React.FC = () => {
     },
     {
       key: 'password',
-      label: 'Mật khẩu',
+      label: addAsterisk('Mật khẩu', true),
       value: (
         <Form.Item
           name='password'
@@ -75,7 +82,7 @@ const AddAccountPage: React.FC = () => {
     },
     {
       key: 'numberPhone',
-      label: 'Số điện thoại',
+      label: addAsterisk('Số điện thoại', true),
       value: (
         <Form.Item
           name='numberPhone'
@@ -93,12 +100,12 @@ const AddAccountPage: React.FC = () => {
     },
     {
       key: 'role',
-      label: 'Quyền',
+      label: addAsterisk('Quyền', true),
       value: (
         <Form.Item name='roleId' rules={[{ required: true, message: 'Vui lòng chọn Role!' }]}>
           <Select placeholder='Chọn Role' style={{ width: '30%' }}>
             {roleData
-              ?.filter((item: any) => item.status === true) // Only include items with status === true
+              ?.filter((item: any) => item.status === true)
               .map((item: any) => (
                 <Select.Option key={item.id} value={item.id}>
                   {item.roleName}
@@ -109,7 +116,6 @@ const AddAccountPage: React.FC = () => {
       )
     }
   ]
-
   const columns: TableColumnsType<TableData> = [
     {
       title: 'Key',

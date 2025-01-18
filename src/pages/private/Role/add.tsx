@@ -10,7 +10,14 @@ interface TableData {
   label: string
   value: JSX.Element | string | undefined
 }
-
+const addAsterisk = (label: string, isRequired: boolean) => {
+  return (
+    <>
+      {label}
+      {isRequired && <span style={{ color: 'red' }}> *</span>}
+    </>
+  )
+}
 const AddRolePage: React.FC = () => {
   const navigate = useNavigate()
 
@@ -25,7 +32,7 @@ const AddRolePage: React.FC = () => {
   const tableData: TableData[] = [
     {
       key: 'roleName',
-      label: 'Quyền',
+      label: addAsterisk('Quyền', true),
       value: (
         <Form.Item name='roleName' rules={[{ required: true, message: 'Vui lòng chọn Role!' }]}>
           <Input style={{ width: '30%' }} placeholder='Chọn Role' />
@@ -34,7 +41,7 @@ const AddRolePage: React.FC = () => {
     },
     {
       key: 'status',
-      label: 'Trạng thái',
+      label: addAsterisk('Trạng thái', true),
       value: (
         <Form.Item name='status' rules={[{ required: true, message: 'Vui lòng nhập trạng thái!' }]}>
           <Switch checkedChildren='Khả dụng' unCheckedChildren='Không khả dụng' />
