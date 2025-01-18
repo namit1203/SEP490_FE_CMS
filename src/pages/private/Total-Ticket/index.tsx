@@ -61,7 +61,8 @@ const TotalTicketPage: React.FC = () => {
       dataIndex: 'pricePromotion',
       key: 'pricePromotion',
       ...useColumnSearch().getColumnSearchProps('pricePromotion'),
-      render: (text) => emptyValue(text),
+       render: (text) => <span>{formatPrize(text)}</span>,
+   
       align: 'center',
       width: '15%'
     },

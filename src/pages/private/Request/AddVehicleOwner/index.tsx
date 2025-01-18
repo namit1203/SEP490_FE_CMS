@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 interface TableData {
   key: string
-  label: string
+  label: JSX.Element
   value: string | number | JSX.Element | undefined
 }
 
@@ -28,7 +28,11 @@ const AddRequestVehicleOwner: React.FC = () => {
   const tableData: TableData[] = [
     {
       key: 'vehicleId',
-      label: 'Biển số xe',
+      label: (
+        <>
+          Biển số xe <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
         <Form.Item name='vehicleId' rules={[{ required: true, message: 'Vui lòng chọn xe!' }]}>
           <Select
@@ -52,7 +56,11 @@ const AddRequestVehicleOwner: React.FC = () => {
     },
     {
       key: 'price',
-      label: 'Giá tiền',
+      label: (
+        <>
+          Giá tiền <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
         <Form.Item name='price' rules={[{ required: true, message: 'Vui lòng nhập giá tiền!' }]}>
           <InputNumber style={{ width: '30%' }} placeholder='nhập giá tiền' />
@@ -61,7 +69,11 @@ const AddRequestVehicleOwner: React.FC = () => {
     },
     {
       key: 'startLocation',
-      label: 'Điểm đến',
+      label: (
+        <>
+          Điểm đến <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
         <Form.Item name='startLocation' rules={[{ required: true, message: 'Vui lòng nhập điểm đến!' }]}>
           <Input placeholder='nhập điểm đến' style={{ width: '30%' }} />
@@ -70,7 +82,11 @@ const AddRequestVehicleOwner: React.FC = () => {
     },
     {
       key: 'endLocation',
-      label: 'Điểm đi',
+      label: (
+        <>
+          Điểm đi <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
         <Form.Item name='endLocation' rules={[{ required: true, message: 'Vui lòng nhập điểm đi!' }]}>
           <Input placeholder='nhập điểm đi' style={{ width: '30%' }} />
@@ -79,7 +95,7 @@ const AddRequestVehicleOwner: React.FC = () => {
     },
     {
       key: 'seats',
-      label: 'Số ghế',
+      label: <>Số ghế</>,
       value: (
         <Form.Item name='seats'>
           <Input placeholder='Số ghế' disabled style={{ width: '30%' }} />
@@ -88,7 +104,11 @@ const AddRequestVehicleOwner: React.FC = () => {
     },
     {
       key: 'startTime',
-      label: 'Ngày bắt đầu',
+      label: (
+        <>
+          Ngày bắt đầu <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
         <Form.Item name='startTime' rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}>
           <DatePicker showTime={{ format: 'HH:mm:ss' }} style={{ width: '30%' }} format='YYYY-MM-DD HH:mm:ss' />
@@ -97,7 +117,11 @@ const AddRequestVehicleOwner: React.FC = () => {
     },
     {
       key: 'endTime',
-      label: 'Ngày kết thúc',
+      label: (
+        <>
+          Ngày kết thúc <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
         <Form.Item name='endTime' rules={[{ required: true, message: 'Vui lòng chọn ngày kết thúc!' }]}>
           <DatePicker showTime={{ format: 'HH:mm:ss' }} style={{ width: '30%' }} format='YYYY-MM-DD HH:mm:ss' />

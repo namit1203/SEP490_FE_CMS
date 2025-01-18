@@ -11,7 +11,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 interface TableData {
   key: string
-  label: string
+  label: string | JSX.Element
   value: JSX.Element | string | undefined
 }
 
@@ -58,16 +58,24 @@ const EditFixedCostPage: React.FC = () => {
   const tableData: TableData[] = [
     {
       key: 'description',
-      label: 'Mô tả',
+      label: (
+        <>
+          Mô tả <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
-        <Form.Item name='description'>
+        <Form.Item name='description' rules={[{ required: true, message: 'Vui lòng nhập mô tả!' }]}>
           <TextArea style={{ width: '30%' }} />
         </Form.Item>
       )
     },
     {
       key: 'price',
-      label: 'Giá chi phí',
+      label: (
+        <>
+          Giá chi phí <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
         <Form.Item name='price' rules={[{ required: true, message: 'Vui lòng nhập giá chi phí!' }]}>
           <InputNumber style={{ width: '30%' }} />
@@ -76,7 +84,11 @@ const EditFixedCostPage: React.FC = () => {
     },
     {
       key: 'vehicleId',
-      label: 'Biển số xe',
+      label: (
+        <>
+          Biển số xe <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
         <Form.Item name='vehicleId' rules={[{ required: true, message: 'Vui lòng chọn xe!' }]}>
           <Select placeholder='Chọn xe' style={{ width: '30%' }}>
@@ -91,7 +103,11 @@ const EditFixedCostPage: React.FC = () => {
     },
     {
       key: 'lossCostTypeId',
-      label: 'Loại chi phí',
+      label: (
+        <>
+          Loại chi phí <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
         <Form.Item name='lossCostTypeId' rules={[{ required: true, message: 'Vui lòng chọn loại chi phí!' }]}>
           <Select placeholder='Chọn loại chi phí' style={{ width: '30%' }}>
@@ -106,7 +122,11 @@ const EditFixedCostPage: React.FC = () => {
     },
     {
       key: 'dateIncurred',
-      label: 'Ngày phát sinh',
+      label: (
+        <>
+          Ngày phát sinh <span style={{ color: 'red' }}>*</span>
+        </>
+      ),
       value: (
         <Form.Item name='dateIncurred' rules={[{ required: true, message: 'Vui lòng chọn ngày phát sinh!' }]}>
           <DatePicker
