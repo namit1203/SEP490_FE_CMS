@@ -133,8 +133,8 @@ const RevenuePage: React.FC = () => {
     try {
       const formattedValues = {
         ...values,
-        startDate: values.startDate === null ? '' : dayjs(values.startDate).format('YYYY-MM-DD'),
-        endDate: values.endDate === null ? '' : dayjs(values.endDate).format('YYYY-MM-DD')
+        startDate: values.startDate ? dayjs(values.startDate).format('YYYY-MM-DD') : null,
+        endDate: values.endDate ? dayjs(values.endDate).format('YYYY-MM-DD') : null,
       }
 
       // Update the query parameters
